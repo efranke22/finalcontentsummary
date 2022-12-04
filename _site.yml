@@ -5,8 +5,8 @@ description: |
 output_dir: "_site"
 navbar:
   right:
-    - text: "Genetics background"
-      href: geneticsBackground.html
+    - text: "Data and cleaning"
+      href: data.html
     - text: "GWAS"
       href: gwas.html
     - text: "Multiple Testing"

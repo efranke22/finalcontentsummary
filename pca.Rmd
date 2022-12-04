@@ -8,22 +8,40 @@ site: distill::distill_website
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## R Markdown
+While so far I have mostly talked about using statistics to identify SNPs associated with a particular trait, this is not the only thing statistical geneticists do. Companies like [23andMe](https://www.23andme.com) or [AncestryDNA](https://www.ancestry.com) profit by selling DNA testing kits and returning the customer with a comprehensive ancestry breakdown. How do they do this?
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+What genetic ancestry does is look at the ancestral origin of the genetic material we actually inherited. While we often think of being "1/4 Irish" or "1/8 North African", we don't actually inherit exactly 1/4 of our grandparents' genetic material. As DNA is passed from one generation to the next, **recombination** events happen that shuffle up the genetic material. So while we have the same *genealogical ancestry* as our siblings, *genetic ancestry* isn't the same. We can think of our genetic ancestry in two ways - locally and globally. **Local ancestry** refers to inheriting a specific part of your genome from an ancestor of a particular category. **Global ancestry** looks across the whole genome and refers to inheriting a *proportion* of your genome from an ancestor of a particular category. 
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+There are difficulties to determining someone's local and global ancestry. It is hard to figure out which ancestor you got each portion of your genome from, and you need good information about which ancestry categories those ancestors belonged to. Due to these challenges, the focus is more on which segments of your genome are *similar* to individuals from a specific category. There are still challenges with this, which include how to define "similarity", at what level to define categories (Swedish vs Scandinavian vs European), and finding people from each category to compare your genome to. The two large classes of statistical methods that are used to infer genetic similarity are machine learning tools (including PCA, regression forests, and support vector machines) and model-based, biologically informed approaches (including bayesian methods, maximum likelihood estimation, and others).
 
-```{r cars}
-summary(cars)
-```
+### The Genetic Ancestry of African Americans, Latinos, and European Americans across the U.S.
 
-## Including Plots
+To learn more about genetic ancestry, we read a paper in class titled "The Genetic Ancestry of African Americans, Latinos, and European Americans Across the United States" published in 2015 and written by Katarzyna Bryc, Eric Y. Durand, Michael J. Macpherson, David Reich, and Joanna Mountain. This study looks at the genetic ancestry of 5,269 African-Americans, 8,663 Latinos, and 148,789 European Americans who are 23andMe customers and shows that historical interactions between the groups are present in the genetic-ancestry of Americans today. This paper was very dense, but I had a few main takeaways from it. 
 
-You can also embed plots, for example:
+First, the authors used what they called "Ancestry Composition" which assigns ancestry labels to short local phased genomic regions and produces local ancestry proportions and confidence scores. This method provides ancestry proportions for several worldwide populations at each window the genome. If a window has a majority of a continental ancestry (>51%), that window is counted in the number of windows inherited from the ancestry. So to estimate the proportion of a particular ancestry someone is, you divide the number of windows of that ancestry they have by the total number of windows studied.
 
-```{r pressure, echo=FALSE}
-plot(pressure)
-```
+The authors also wanted to understand the time frame of admixture events, and to do so they used simple admixture models and grid search optimization. With this method and their ancestry composition method described above, they were able to come up with some interesting results. They were able to find differences in ancestry proportions between slave and free states and learned 1/5 of Africans have Native American ancestry. For the Latino group, they saw high levels of Iberian ancestry appear in areas of high Native American ancestry. Additionally, the noted that European ancestry not homogenous across US, which likely reflects immigration patterns of different ethnic groups.
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+### Genetic Ancestry and its confounding role in GWAS
+
+Genetic ancestry is not only studied to determine whether or not we can see historical interactions present in the genetics of Americans today. Genetic ancestry is also important because it is a potential **confounding variable** in GWAS. When we are trying to determine if a particular SNP has a relationship with our trait of interest, we have to keep in mind the role of ancestry. Ancestry has a relationship with genotypes because the allele frequency of the SNP we're testing differs across ancestral populations. Additionally, ancestry can have a relationship with our trait of interest - environmental factors or causal SNPs in other parts of the genome can differ across ancestry groups.
+
+Knowing that genetic ancestry is a confounding variable, we should adjust for it in our GWAS models with the following equation, where $y$ is the trait, $x_j$ is the number of minor alleles at position $j$, and $\pi$ is the genetic ancestry. 
+
+$$E[y|x_j, \pi] = \alpha + \beta_j x_j + \gamma\pi \\$$
+
+Before completing the GWAS, we will need to *infer* genetic ancestry using one of the methods mentioned earlier. Here we will use PCA.
+
+### PCA background 
+
+Principal component analysis (PCA) is a widely used technique for **dimension reduction**. Dimension reduction aims to represent the information within our data with fewer variables, which is perfect for genetic data where we have millions of SNPs. With PCA, we are specifically looking for **linear transformation** of our data that explains the most variability. This linear representation is composed of **principal components**, or PCs. These PCs are new variables that are a linear combinations of our original SNPs:
+
+$$PC_1 = a_{11}x_1 + a_{12}x_2 + \cdots + a_{1p}x_p$$
+$$PC_2 = a_{21}x_1 + a_{22}x_2 + \cdots + a_{2p}x_p$$
+$$....$$
+$$PC_p = a_{p1}x_1 + a_{p2}x_2 + \cdots + a_{pp}x_p$$
+
+The number of the PC has some meaning to it - $PC_1$ is the component that explains the most variability in our data when all possible linear combinations are considered. In other words, it has the highest variance. $PC_2$ has the next highest variance, subject to the constraint of being orthogonal to, or uncorrelated with, $PC_1$. Next is $PC_3$, which is orthogonal to $PC_2$, and so forth. 
+
+Other important terminology related to PCs are scores and loadings. **Loadings** are the coefficients $a_{11}, a_{22}$, etc, which represent the contribution of each of the original variables to the new PC. **Scores** are the values that PCs take when you multiply the loading $a_{pp}$ by the value at that SNP, $x_p$.
+

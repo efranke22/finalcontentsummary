@@ -8,22 +8,151 @@ site: distill::distill_website
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## R Markdown
+# Introducing Multiple Testing
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+In the plot Manhattan plot created using RStudio we were able to visually pick out the SNP that we know to be associated with the trait of interest. However, in a real GWAS we do know which SNPs are associated with the trait of interest so this is not the case. As a result, we need a way to decide if a p-value is small enough to be *statistically significant* and/or to warrant follow-up.  
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+Reading through some scientific articles, I have seen a wide variety of thresholds be used. These thresholds largely fall between $5 \times 10^{-7}$ on the higher end and $1 \times 10^{-9}$ on the lower end, which are obviously much smaller than the conventionally accepted $0.05$ threshold. Why is this, and how can we determine which threshold to use? 
 
-```{r cars}
-summary(cars)
+## Hypothesis Testing Background
+
+Before getting into thresholds, it is important to understand the basics of hypothesis testing. The goal is to make a decision between two conflicting theories, which are labeled as the null and alternative hypothesis. In this situation, the null hypothesis $H_0$ is that the specific SNP *is not* associated with the trait of interest. The alternative hypothesis $H_A$ is that the specific SNP *is* associated with the trait of interest. Each SNP is tested independently for a relationship with the trait, and if the p-value resulting from the test falls below the chosen threshold then $H_0$ can be rejected. 
+
+The example below shows a test of SNP number 830,000 in this dataset. Its p-value is $0.34$, indicating that at the threshold of $5 \times 10^{-7}$ we would fail to reject the null hypothesis and conclude this SNP to not be associated with our trait of interest (which we rightfully know to be true in this simulation).
+
+```{r}
+set.seed(453)
+snp1mod <- lm(y ~ X.clean[,830000])
+tidy(snp1mod)
 ```
 
-## Including Plots
+Another key piece of information related to hypothesis testing is errors. Ideally, we want to reject $H_0$ when it is wrong and accept $H_0$ when it is right, but unfortunately this does not always happen. We call rejecting the null hypothesis $H_0$ when it is true a **type I error**, and failing to reject the alternative hypothesis when it is true a **type II error**. For a given test, the probability of making a type I error is $\alpha$, our chosen threshold, meaning the probability of making a type I error is in our control. Type II errors are depend on a larger number of factors. The probability of committing a type II error is 1 minus the power of the test, where power is the probability of correctly rejecting the null hypothesis. To increase the power of a test, you can increase $\alpha$ (though this increases type I error rate) and/or increase the sample size (here the number of people in our study).
 
-You can also embed plots, for example:
+In the context of the data, would be it better to commit a type I or type II error? In this situation, committing a type I error would mean concluding a SNP is associated with the trait of interest when in reality it is not, and committing a type II error would mean concluding a SNP is has no relationship to the trait of interest when it actually does. A harm of the type I error is investing additional time and money into studying that particular SNP and/or incorrectly giving those impacted by the disease hope that you are discovering potential causes of it. For a type II error, you are denoting SNPs associated with the trait of interest as insignificant and passing up key information that could be useful in solving a disease. The harms of both are highly unfortunate, however I would lean more on the side of minimizing the occurrence of type II errors which in turn would mean using a threshold on the slightly higher end. 
 
-```{r pressure, echo=FALSE}
-plot(pressure)
+## Getting back into the threshold
+
+As mentioned earlier, thresholds in genetic studies commonly fall between $5 \times 10^{-7}$ and $1 \times 10^{-9}$. Why is this?
+
+Let's say we are running tests for association with our trait of interest on just the 100,766 SNPs in chromosome 1 and for simplicity that the tests are **independent**. If we are conducting a test on just the first of those SNPs and use $\alpha = 0.05$, the probability of making a type I error is 0.05. However, the probability of making a type I error in all **100,766 tests** needed for the SNPs of the first chromosome is 
+$$P(\text{at least 1 Type I error}) = 1 - P(\text{no error test 1}) \times... \times P(\text{no error test 100,766})$$
+$$ = 1 - [1-0.05]^{100,766} = \text{essentially } 1$$
+
+With a threshold of 0.05 and independent tests, the probability of having at least one type I error (or the **family-wise error rate (FWER)**) for SNPs on chromosome 1 is essentially 100% as shown above. This makes it obvious that a smaller threshold is needed. If we were to use $5 \times 10^{-7}$, this probability would fall to right around 0.05!
+
+$$ = 1 - [1-0.0000005]^{100,766} = 0.04913$$
+
+The threshold $5 \times 10^{-7}$ didn't just appear out of thin air. Statisticians came up with this threshold using what is called the **Bonferroni Correction**, which is a technique that gives a new significance threshold by dividing the desired family wise error rate by the number of tests conducted. Therefore, with our data if we wanted a 5% probability of a type I error on chromosome 1 we would use the threshold $4.962 \times 10^{-7}$.
+
+$$ \text{Bonferroni threshold} = \frac{\text{FWER}}{\text{ # tests}} = \frac{0.05}{100,766} = 4.962 \times 10^{-7}$$
+
+If we wanted a 5% probability of a type I error across **all** chromosomes we would decrease the threshold to $3.867 \times 10^{-8}$ as there are 1,293,000 SNPs in this dataset.
+
+$$ \text{Bonferroni threshold} = \frac{\text{FWER}}{\text{ # tests}} = \frac{0.05}{1,293,100} = 3.867 \times 10^{-8}$$
+
+### Accounting for correlation
+
+#### Nearby SNPs are correlated
+
+We just came to the conclusion that for our dataset we would use a threshold of $3.867 \times 10^{-8}$ to determine whether or a not SNP may have a relationship with the trait of interest. However, in doing this we made one key assumption, which is that our tests are independent from one another. Unfortunately, this is certainly not the case due to **linkage disequalibrium**, which as stated in [Science Direct](https://www.sciencedirect.com/topics/neuroscience/linkage-disequilibrium) is the idea that two markers in close physical proximity are correlated in a population and are in association more than would be expected with random assortment. This concept of correlated SNPs is demonstrated by the plot below, which plots the linkage disequalibrium matrix for the first 200 SNPs on chromosome 1. 
+
+```{r}
+chr1_200 <- SNP[1:323, 1:200]
+hapmap.ld <- ld(chr1_200, depth = 199, stats = "R.squared", symmetric = TRUE)
+color.pal <- natparks.pals("Acadia", 10)
+image(hapmap.ld, lwd = 0, cuts = 9, col.regions = color.pal, colorkey = TRUE)
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+If you look closely, you can see that along the diagonal there is a higher concentration of orange, meaning that neighboring SNPs are highly correlated with one another. However, this is a little hard to see because of all the white lines. White isn't a color on the correlation legend, so why are they there?
+
+The white lines are occurring at monomorphic SNPs. If we wanted to calculate the correlation between two SNPs (X and Y) we would use the following equation:
+
+$$r = \frac{\sum_{i=1}^n(x_i -
+\bar{x})(y_i - \bar{y})}{\sqrt{\sum_{i=1}^n(x_i - \bar{x})^2
+\sum_{i=1}^n(y_i - \bar{y})^2}}$$
+
+If we consider SNP X to be monomorphic, that means there are 0 copies of the minor allele for all people in our dataset. In the equation above, that means $x_1 = ... = x_{323} = 0$. This means the sample average $\bar{x}$ is also 0 and thus $x_i - \bar{x} = 0 - 0 = 0$ for individuals $i = 1, \dots, 323$. Plugging this information in, we get an undefined correlation and is what the white represents. 
+
+$$r = \frac{\sum_{i=1}^{323} 0 \times (y_i -
+\bar{y})}{\sqrt{0 \times \sum_{i=1}^{323}(y_i - \bar{y})^2}} =
+\frac{0}{0}$$
+
+Removing the monomorphic SNPs from our LD matrix gets rid of over 120 monomorphic SNPs and better shows how highly correlated nearby SNPs are. 
+```{r}
+#get monomorphic SNPs only
+maf_chr1_200 <- col.summary(chr1_200)$MAF
+mono <- which(maf_chr1_200 == 0)
+
+# calculate LD on polymorphic SNPs only
+hapmap.ld.nomono <- ld(chr1_200[,-mono], depth = 199-length(mono), stats = "R.squared", symmetric = TRUE)
+
+# plot 
+image(hapmap.ld.nomono, lwd = 0, cuts = 9, col.regions = color.pal, colorkey = TRUE)
+```
+
+#### Getting a threshold with simulation
+
+To see how the correlation impacts our threshold for a given FWER, we can use simulation. The process for simulation goes as follows: 
+
+1. Simulate a null trait, meaning a trait not associated with any of the SNPs. \
+2. Run GWAS to test the association between the simulated null trait and each SNP in our dataset. After that record the smallest p-value from this GWAS. \
+3. Repeat steps 1 and 2 many times. In real genetic studies, this is usually on the scale of 1,000-10,000 times. \
+4. Look at the p-values saved from those simulation replicates. Sort them from smallest to largest and find the number at which 5% (desired FWER) of p-values are smaller than that number. This is the significance threshold. \
+
+This process is very computationally expensive, especially when 10,000 replications are completed. Each dataset has a different level of correlation between SNPs which is why there is no one widely accepted threshold for a given number of SNPs. This process can take over a month on a personal computer and as a result people working in statistical genetics professionally connect to multiple remote computers or some kind of super computer to run their code (I am still learning about this). For this example, we will complete only 1,000 replications and use the polymorphics SNPs from only the first 500 SNPs of chromosome 1. After removing monomorphic SNPs, 211 polymorphic SNPs remain. 
+
+```{r}
+# make genotype matrix into form of 0, 1, and 2s
+snp_500 <- as(SNP2, "numeric")
+dim(snp_500)
+
+# calculate MAF
+maf <- col.summary(SNP2)$MAF
+
+# find monomorphic SNPs
+monomorphic <- which(maf == 0) 
+
+# filter genotype matrix to remove monomorphic SNPs
+snp_500 <- snp_500[,-monomorphic]
+
+# check the dimensions after filtering
+dim(snp_500)
+```
+
+The code for the simulation is shown below. To minimize computation, I used the `mclapply()` function from the parallel package. This allows me to split computation across all four cores of my computer. When I used `replicate()`, running 1,000 replications took 7 minutes and 30 seconds. With `mclapply()`, the process took just shy of 5 minutes for a reduction of about 33%. In other instances that I have used `mclapply()`, the reduction has been closer to 60% so I think it varies with what it you are doing and what else is running on your computer. Overall, if we wanted to complete 10,000 replications across all SNPs the benefits of `mclapply()` would still be nowhere near enough, but it a nice tip to have when running things that take less than a couple hours. 
+
+```{r, cache = TRUE}
+do_one_sim<- function(i){
+  
+  # simulate null trait
+  y <- rnorm(n = 323, mean = 0, sd = 1)
+  
+  # implement GWAS
+  pvals <- c()
+  for(i in 1:211){
+    mod <- lm(y ~ snp_500[,i])
+    pvals[i] <- tidy(mod)$p.value[2]
+  }
+  # record smallest p-value
+  min(pvals)
+}
+
+# Run code with mclapply()
+set.seed(494)
+simresmclapply <- mclapply(1:1000, do_one_sim, mc.cores = 4) 
+quantile(simresmclapply %>% as.data.frame(), 0.05)
+
+# Run code with replicate()
+set.seed(494)
+simres3 <- replicate(1000, do_one_sim())
+```
+
+From this simulation we learn that the optimal threshold for this specific set of data is 0.00039. Using the Bonferroni correction on the same set of SNPs would have yielded a threshold of $\frac{0.05}{211} = 0.00024$. Due to tests being correlated, we are effectively conducting fewer tests which results in the simulated threshold being higher than the Bonferroni corrected threshold which treats the tests independently (in this case, they really aren't too different but its possible that using a larger number of SNPs would better highlight their correlation and you'd see more of a difference). This exemplifies that the Bonferroni correction is too conservative - it suggests a significance threshold that is smaller than we truly need it to be. As a result, we get more type II errors and lower power. As I mentioned earlier, the harm of type II errors is that they conclude a SNP is has no relationship to the trait of interest when in reality it does, causing researchers to potentially miss out on key information to helping solve a disease. Thus, if I had the needed time and resources when running GWAS in real life I would lean towards choosing a threshold using simulation instead of Bonferroni. 
+
+
+
+
+
+
+
+

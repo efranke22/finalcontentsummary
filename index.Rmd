@@ -7,9 +7,16 @@ site: distill::distill_website
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
-
-# Learn more about creating websites with Distill at:
-# https://rstudio.github.io/distill/website.html
-
 ```
 
+In this website, I talk about how to execute genetic wide association studies in RStudio and the software PLINK, multiple testing, genetic ancestry and principal component analysis, and some of the ethics behind statistical genetics. I recommend following along in the order of tabs listed above.
+
+To get started, you'll have to have a little background on genetics. Check out the following "need-to-know" information about **genetic variants** (what the study of statistical genetics is based around).
+
+![](images/geneticvariants.png)
+
+To learn more, switch over to the [Data and Cleaning](https://statgensummary.netlify.app/data.html) tab!
+
+### Site acknowledgements
+
+Thank you to [R-bloggers](https://www.r-bloggers.com/2017/10/genome-wide-association-studies-in-r/) for providing the data for this analysis. Also I would like to give a big thank you to my professor Kelsey Grinde for teaching me several of the concepts on this site and helping me learn the PLINK software!

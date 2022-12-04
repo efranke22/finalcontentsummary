@@ -88,29 +88,29 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 
 
   <!--radix_placeholder_meta_tags-->
-  <title>Home: Genetic Wide Association Studies (GWAS)</title>
+  <title>Home: Data and Data Cleaning</title>
 
-  <meta property="description" itemprop="description" content="stuff about GWAS"/>
+  <meta property="description" itemprop="description" content="This section introduces my data and how I cleaned up it for later analysis."/>
 
 
 
   <!--  https://developers.facebook.com/docs/sharing/webmasters#markup -->
-  <meta property="og:title" content="Home: Genetic Wide Association Studies (GWAS)"/>
+  <meta property="og:title" content="Home: Data and Data Cleaning"/>
   <meta property="og:type" content="article"/>
-  <meta property="og:description" content="stuff about GWAS"/>
+  <meta property="og:description" content="This section introduces my data and how I cleaned up it for later analysis."/>
   <meta property="og:locale" content="en_US"/>
   <meta property="og:site_name" content="Home"/>
 
   <!--  https://dev.twitter.com/cards/types/summary -->
   <meta property="twitter:card" content="summary"/>
-  <meta property="twitter:title" content="Home: Genetic Wide Association Studies (GWAS)"/>
-  <meta property="twitter:description" content="stuff about GWAS"/>
+  <meta property="twitter:title" content="Home: Data and Data Cleaning"/>
+  <meta property="twitter:description" content="This section introduces my data and how I cleaned up it for later analysis."/>
 
   <!--/radix_placeholder_meta_tags-->
   <!--radix_placeholder_rmarkdown_metadata-->
 
   <script type="text/json" id="radix-rmarkdown-metadata">
-  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","site"]}},"value":[{"type":"character","attributes":{},"value":["Genetic Wide Association Studies (GWAS)"]},{"type":"character","attributes":{},"value":["stuff about GWAS"]},{"type":"character","attributes":{},"value":["distill::distill_website"]}]}
+  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","site"]}},"value":[{"type":"character","attributes":{},"value":["Data and Data Cleaning"]},{"type":"character","attributes":{},"value":["This section introduces my data and how I cleaned up it for later analysis."]},{"type":"character","attributes":{},"value":["distill::distill_website"]}]}
   </script>
   <!--/radix_placeholder_rmarkdown_metadata-->
   <!--radix_placeholder_navigation_in_header-->
@@ -2094,7 +2094,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <!--radix_placeholder_front_matter-->
 
 <script id="distill-front-matter" type="text/json">
-{"title":"Genetic Wide Association Studies (GWAS)","description":"stuff about GWAS","authors":[]}
+{"title":"Data and Data Cleaning","description":"This section introduces my data and how I cleaned up it for later analysis.","authors":[]}
 </script>
 
 <!--/radix_placeholder_front_matter-->
@@ -2119,17 +2119,278 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <!--/radix_placeholder_site_before_body-->
 
 <div class="d-title">
-<h1>Genetic Wide Association Studies (GWAS)</h1>
+<h1>Data and Data Cleaning</h1>
 <!--radix_placeholder_categories-->
 <!--/radix_placeholder_categories-->
-<p>stuff about GWAS</p>
+<p>This section introduces my data and how I cleaned up it for later analysis.</p>
 </div>
 
 
 <div class="d-article">
-<p>On the <a href="https://statgensummary.netlify.app">home page</a>, I introduced <strong>genetic variants</strong>. We can study these genetic variants with something known as a <strong>Genetic- Wide Association Study (GWAS)</strong>.</p>
-<p><img src="images/gwas.png" /></p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
+<p>Throughout this site, I will go through examples of how to perform statistical techniques to better understand genetic data. To do this, I will rely on a publicly available dataset I downloaded from <a href="https://www.r-bloggers.com/2017/10/genome-wide-association-studies-in-r/">R-bloggers</a>, which includes 323 individuals (110 Chinese, 105 Indian and 108 Malay) and 2,527,458 SNPs.</p>
+<h2 id="data-loading-and-organization">Data Loading and Organization</h2>
+<p>The following code chunks outline the steps of importing the genetic data.</p>
+<p>Load libraries:</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'>snpStats</span><span class='op'>)</span></span>
+<span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://tidyverse.tidyverse.org'>tidyverse</a></span><span class='op'>)</span></span>
+<span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://broom.tidymodels.org/'>broom</a></span><span class='op'>)</span></span>
+<span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/kevinsblake/NatParksPalettes'>NatParksPalettes</a></span><span class='op'>)</span></span>
+<span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'>parallel</span><span class='op'>)</span></span>
+<span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://ggobi.github.io/ggally/'>GGally</a></span><span class='op'>)</span>     </span></code></pre>
+</div>
+</div>
+<p>Load data for the Chinese, Indian, and Malay individuals and combine them into one <code>SnpMatrix</code>. This process uses <code>read.plink()</code>, which reads a genotype matrix, information on the study’s individuals, and information on the SNPs.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='fu'><a href='https://rdrr.io/r/base/load.html'>load</a></span><span class='op'>(</span><span class='st'>"GWAStutorial-master/conversionTable.RData"</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='va'>pathM</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='st'>"GWAStutorial-master/public/Genomics/108Malay_2527458snps"</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>".bed"</span>, <span class='st'>".bim"</span>, <span class='st'>".fam"</span><span class='op'>)</span>, sep <span class='op'>=</span> <span class='st'>""</span><span class='op'>)</span></span>
+<span><span class='va'>SNP_M</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/snpStats/man/read.plink.html'>read.plink</a></span><span class='op'>(</span><span class='va'>pathM</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>]</span>, <span class='va'>pathM</span><span class='op'>[</span><span class='fl'>2</span><span class='op'>]</span>, <span class='va'>pathM</span><span class='op'>[</span><span class='fl'>3</span><span class='op'>]</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='va'>pathI</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='st'>"GWAStutorial-master/public/Genomics/105Indian_2527458snps"</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>".bed"</span>, <span class='st'>".bim"</span>, <span class='st'>".fam"</span><span class='op'>)</span>, sep <span class='op'>=</span> <span class='st'>""</span><span class='op'>)</span></span>
+<span><span class='va'>SNP_I</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/snpStats/man/read.plink.html'>read.plink</a></span><span class='op'>(</span><span class='va'>pathI</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>]</span>, <span class='va'>pathI</span><span class='op'>[</span><span class='fl'>2</span><span class='op'>]</span>, <span class='va'>pathI</span><span class='op'>[</span><span class='fl'>3</span><span class='op'>]</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='va'>pathC</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='st'>"GWAStutorial-master/public/Genomics/110Chinese_2527458snps"</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>".bed"</span>, <span class='st'>".bim"</span>, <span class='st'>".fam"</span><span class='op'>)</span>, sep <span class='op'>=</span> <span class='st'>""</span><span class='op'>)</span></span>
+<span><span class='va'>SNP_C</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/snpStats/man/read.plink.html'>read.plink</a></span><span class='op'>(</span><span class='va'>pathC</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>]</span>, <span class='va'>pathC</span><span class='op'>[</span><span class='fl'>2</span><span class='op'>]</span>, <span class='va'>pathC</span><span class='op'>[</span><span class='fl'>3</span><span class='op'>]</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='va'>SNP</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>rbind</a></span><span class='op'>(</span><span class='va'>SNP_M</span><span class='op'>$</span><span class='va'>genotypes</span>, <span class='va'>SNP_I</span><span class='op'>$</span><span class='va'>genotypes</span>, <span class='va'>SNP_C</span><span class='op'>$</span><span class='va'>genotypes</span><span class='op'>)</span></span></code></pre>
+</div>
+</div>
+<p>Execute additional data preparation steps recommended by R-bloggers site.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='co'># Take one bim map (all 3 maps are based on the same ordered set of SNPs)</span></span>
+<span><span class='va'>map</span> <span class='op'>&lt;-</span> <span class='va'>SNP_M</span><span class='op'>$</span><span class='va'>map</span></span>
+<span><span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>colnames</a></span><span class='op'>(</span><span class='va'>map</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"chromosome"</span>, <span class='st'>"snp.name"</span>, <span class='st'>"cM"</span>, <span class='st'>"position"</span>, <span class='st'>"allele.1"</span>, <span class='st'>"allele.2"</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='co'># Rename SNPs present in the conversion table into rs IDs</span></span>
+<span><span class='va'>mappedSNPs</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://generics.r-lib.org/reference/setops.html'>intersect</a></span><span class='op'>(</span><span class='va'>map</span><span class='op'>$</span><span class='va'>SNP</span>, <span class='fu'><a href='https://rdrr.io/r/base/names.html'>names</a></span><span class='op'>(</span><span class='va'>conversionTable</span><span class='op'>)</span><span class='op'>)</span></span>
+<span><span class='va'>newIDs</span> <span class='op'>&lt;-</span> <span class='va'>conversionTable</span><span class='op'>[</span><span class='fu'><a href='https://rdrr.io/r/base/match.html'>match</a></span><span class='op'>(</span><span class='va'>map</span><span class='op'>$</span><span class='va'>SNP</span><span class='op'>[</span><span class='va'>map</span><span class='op'>$</span><span class='va'>SNP</span> <span class='op'><a href='https://rdrr.io/r/base/match.html'>%in%</a></span> <span class='va'>mappedSNPs</span><span class='op'>]</span>, <span class='fu'><a href='https://rdrr.io/r/base/names.html'>names</a></span><span class='op'>(</span><span class='va'>conversionTable</span><span class='op'>)</span><span class='op'>)</span><span class='op'>]</span></span>
+<span><span class='va'>map</span><span class='op'>$</span><span class='va'>SNP</span><span class='op'>[</span><span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>rownames</a></span><span class='op'>(</span><span class='va'>map</span><span class='op'>)</span> <span class='op'><a href='https://rdrr.io/r/base/match.html'>%in%</a></span> <span class='va'>mappedSNPs</span><span class='op'>]</span> <span class='op'>&lt;-</span> <span class='va'>newIDs</span></span></code></pre>
+</div>
+</div>
+<h2 id="exploratory-data-analysis">Exploratory Data Analysis</h2>
+<p>First, get information about the genotype data. As stated earlier, we have 323 individuals and 2,527,458 SNPs.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>SNP</span></span></code></pre>
+</div>
+<pre><code>A SnpMatrix with  323 rows and  2527458 columns
+Row names:  M11062205 ... M11082406 
+Col names:  rs4477212 ... kgp22743944 </code></pre>
+</div>
+<p>Next, look at the information we have on the individuals in the study. Theoretically, this gives information on family relationships with <code>pedigree</code>, <code>father</code>, and <code>mother</code>, but the <code>father</code> and <code>mother</code> variables contain only missing values. We also have information on the individual’s binary sex, with <code>1</code> representing male and <code>2</code> female. The <code>affected</code> column represents if the individual had the trait of interest or not, but we are not given that information in this data set so we will simulate a trait later in this analysis.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>individuals</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>rbind</a></span><span class='op'>(</span><span class='va'>SNP_M</span><span class='op'>$</span><span class='va'>fam</span>, <span class='va'>SNP_I</span><span class='op'>$</span><span class='va'>fam</span>, <span class='va'>SNP_C</span><span class='op'>$</span><span class='va'>fam</span><span class='op'>)</span></span>
+<span><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>individuals</span><span class='op'>)</span></span></code></pre>
+</div>
+<pre><code>           pedigree    member father mother sex affected
+M11062205 M11062205 M11062205     NA     NA   2       NA
+M11050406 M11050406 M11050406     NA     NA   1       NA
+M11050407 M11050407 M11050407     NA     NA   1       NA
+M11070602 M11070602 M11070602     NA     NA   2       NA
+M11060912 M11060912 M11060912     NA     NA   2       NA
+M11060920 M11060920 M11060920     NA     NA   2       NA</code></pre>
+</div>
+<p>Finally, we can look at the information we have on each SNP. This tells us a few things:</p>
+<ul>
+<li><code>chromosome</code> is the number chromosome (typically 1-23) that the SNP is located on.<br />
+
+<ul>
+<li><code>1</code> is the largest chromosome (most SNPs) and chromosome size typically decreases from there.</li>
+</ul></li>
+<li><code>snp.name</code> is the name of the SNP<br />
+</li>
+<li><code>cM</code> stands for <em>centiMorgans</em>, which is a unit for genetic distance. It represents an estimate of how far SNPs are from one another along the genome.<br />
+</li>
+<li><code>position</code> tells us the base pair position of the SNP, with position being being the first nucleotide in our DNA sequence.<br />
+
+<ul>
+<li>This number restarts from 1 at each chromosome.<br />
+</li>
+</ul></li>
+<li><code>allele.1</code> is one of the alleles at this SNP, here the minor allele.<br />
+</li>
+<li><code>allele.2</code> is the other allele at this SNP, here the major allele.<br />
+</li>
+</ul>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>map</span><span class='op'>)</span></span></code></pre>
+</div>
+<pre><code>            chromosome    snp.name cM position allele.1 allele.2
+rs4477212            1   rs4477212 NA    82154     &lt;NA&gt;        A
+kgp15717912          1 kgp15717912 NA   534247     &lt;NA&gt;        C
+kgp7727307           1  kgp7727307 NA   569624     &lt;NA&gt;        C
+kgp15297216          1 kgp15297216 NA   723918     &lt;NA&gt;        G
+rs3094315            1   rs3094315 NA   752566        G        A
+rs3131972            1   rs3131972 NA   752721        A        G</code></pre>
+</div>
+<h2 id="data-cleaning">Data Cleaning</h2>
+<p>One useful piece of information not contained in the data is the <strong>minor allele frequency (MAF)</strong>. This represents the frequency of the minor allele in the dataset. We can add this to our SNP information using the <code>snpstats</code> package and add MAF to <code>map</code>, our dataframe that gives us SNP information.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='co'>#calculate MAF</span></span>
+<span><span class='va'>maf</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/snpStats/man/row.summary.html'>col.summary</a></span><span class='op'>(</span><span class='va'>SNP</span><span class='op'>)</span><span class='op'>$</span><span class='va'>MAF</span></span>
+<span></span>
+<span><span class='co'># add new MAF variable to map</span></span>
+<span><span class='va'>map</span> <span class='op'>&lt;-</span> <span class='va'>map</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
+<span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>MAF <span class='op'>=</span> <span class='va'>maf</span><span class='op'>)</span></span>
+<span><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>map</span><span class='op'>)</span></span></code></pre>
+</div>
+<pre><code>            chromosome    snp.name cM position allele.1 allele.2
+rs4477212            1   rs4477212 NA    82154     &lt;NA&gt;        A
+kgp15717912          1 kgp15717912 NA   534247     &lt;NA&gt;        C
+kgp7727307           1  kgp7727307 NA   569624     &lt;NA&gt;        C
+kgp15297216          1 kgp15297216 NA   723918     &lt;NA&gt;        G
+rs3094315            1   rs3094315 NA   752566        G        A
+rs3131972            1   rs3131972 NA   752721        A        G
+                    MAF
+rs4477212   0.000000000
+kgp15717912 0.000000000
+kgp7727307  0.001572327
+kgp15297216 0.000000000
+rs3094315   0.139318885
+rs3131972   0.233746130</code></pre>
+</div>
+<p>Just looking at the MAF for the first six SNPs in our data, we see that in some cases the minor allele frequency is 0. This means that the SNP is <strong>monomorphic</strong> - everyone in the dataset has the same genotype at these positions. We will remove these monomorphic SNPs - if everyone has the same alleles at a SNP, there is no variation and we cannot find an association between the minor allele and the trait.</p>
+<p>It can also help to think about why we remove SNPs with a MAF of 0 in a mathematical way. If we are trying to fit a line between the trait of interest and SNP 1, we could model this in the following formats, with linear regression listed first and matrix notation second.</p>
+<p><span class="math display">\[E[Y|\text{SNP1}] = \beta_0 + \beta1 \text{SNP1}\]</span>
+<span class="math display">\[E[\bf{y}|\bf{X}] = \boldsymbol{\beta} X\]</span></p>
+<p>Further exploring the matrix format, it would look like this:
+<span class="math display">\[X\boldsymbol{\beta} = \begin{bmatrix}
+1 &amp; 0 \\
+1 &amp; 0 \\
+. &amp; . \\
+. &amp; . \\
+\end{bmatrix}
+\begin{bmatrix}
+\beta_0\\
+\beta_1 \\
+\end{bmatrix}\]</span></p>
+<p>Executing this multiplication, we just get <span class="math inline">\(1 * \beta_0 = 0\)</span>. The is problematic because we have linear dependence. You can get the column of minor allele counts by multiplying the intercept column by 0 - in other words, the minor allele count column is a linear combination of the intercept column. This makes our design matrix not be full rank, making <span class="math inline">\(X^TX\)</span> not invertible and the least squares estimator not defined.</p>
+<p>Given all these reasons, we remove SNPs with a MAF of 0 using the code below.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>map</span> <span class='op'>&lt;-</span> <span class='va'>map</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
+<span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>maf</span> <span class='op'>&gt;</span><span class='fl'>0</span> <span class='op'>)</span></span>
+<span></span>
+<span><span class='fu'><a href='https://rdrr.io/r/base/dim.html'>dim</a></span><span class='op'>(</span><span class='va'>map</span><span class='op'>)</span></span></code></pre>
+</div>
+<pre><code>[1] 1651345       7</code></pre>
+</div>
+<p>After filtering, we have 1,651,345 SNPs remaining. Therefore, we removed 876,113 SNPs.</p>
+<p>However, we are not done cleaning the data. Below, when looking at the first six rows of <code>map</code>, we see two <code>NA</code> values for <code>allele.1</code>. In these rows, the minor allele frequency is not quite 0, but it is very small. In fact, in the first row of this data frame the MAF is <code>1/646</code>, or <code>0.00157</code>. This represents that out of the 646 alleles studied (2 alleles for each of the 323 people in the data), there was only one minor allele. On SNP 4 in the data, there were only 3 minor alleles (<code>3/646 = 0.00465</code>).</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>map</span><span class='op'>)</span></span></code></pre>
+</div>
+<pre><code>            chromosome    snp.name cM position allele.1 allele.2
+kgp7727307           1  kgp7727307 NA   569624     &lt;NA&gt;        C
+rs3094315            1   rs3094315 NA   752566        G        A
+rs3131972            1   rs3131972 NA   752721        A        G
+kgp6703048           1  kgp6703048 NA   754063        T        G
+kgp15557302          1 kgp15557302 NA   757691     &lt;NA&gt;        T
+kgp12112772          1 kgp12112772 NA   759036        A        G
+                    MAF
+kgp7727307  0.001572327
+rs3094315   0.139318885
+rs3131972   0.233746130
+kgp6703048  0.027950311
+kgp15557302 0.004658385
+kgp12112772 0.026397516</code></pre>
+</div>
+<p>Why did the study put <code>NA</code> values instead of the one minor allele found? Perhaps they are worried of a machine reading error given that the minor allele was detected only a couple of times, or maybe there was another reason. To better understand these missing values, I created the density plots below.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>map</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
+<span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>missing <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>as.factor</a></span><span class='op'>(</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/case_when.html'>case_when</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/NA.html'>is.na</a></span><span class='op'>(</span><span class='va'>allele.1</span><span class='op'>)</span> <span class='op'>~</span> <span class='st'>"Allele 1 missing"</span>, </span>
+<span>                             <span class='cn'>TRUE</span> <span class='op'>~</span> <span class='st'>"Allele 1 Recorded"</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggplot.html'>ggplot</a></span><span class='op'>(</span><span class='fu'><a href='https://ggplot2.tidyverse.org/reference/aes.html'>aes</a></span><span class='op'>(</span>x<span class='op'>=</span><span class='va'>MAF</span><span class='op'>)</span><span class='op'>)</span><span class='op'>+</span></span>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/geom_density.html'>geom_density</a></span><span class='op'>(</span>alpha <span class='op'>=</span> <span class='fl'>0.5</span>, fill <span class='op'>=</span> <span class='st'>"cadetblue3"</span><span class='op'>)</span><span class='op'>+</span></span>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/ggtheme.html'>theme_classic</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>+</span></span>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/facet_wrap.html'>facet_wrap</a></span><span class='op'>(</span><span class='op'>~</span><span class='va'>missing</span>, scales <span class='op'>=</span> <span class='st'>"free"</span><span class='op'>)</span><span class='op'>+</span></span>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/labs.html'>labs</a></span><span class='op'>(</span>x <span class='op'>=</span> <span class='st'>"Minor allele frequency"</span>, y <span class='op'>=</span> <span class='st'>"density"</span><span class='op'>)</span><span class='op'>+</span></span>
+<span>  <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/theme.html'>theme</a></span><span class='op'>(</span>axis.title <span class='op'>=</span> <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/element.html'>element_text</a></span><span class='op'>(</span>family <span class='op'>=</span> <span class='st'>"mono"</span><span class='op'>)</span>, </span>
+<span>        strip.background <span class='op'>=</span> <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/element.html'>element_blank</a></span><span class='op'>(</span><span class='op'>)</span>, </span>
+<span>        strip.text <span class='op'>=</span> <span class='fu'><a href='https://ggplot2.tidyverse.org/reference/element.html'>element_text</a></span><span class='op'>(</span>family <span class='op'>=</span> <span class='st'>"mono"</span><span class='op'>)</span><span class='op'>)</span></span></code></pre>
+</div>
+<p><img src="data_files/figure-html5/unnamed-chunk-10-1.png" width="624" /></p>
+</div>
+<p>These plots really surprised me. Initially my plan was just to remove all SNPs with a MAF &lt; 1%, figuring that would filter out all SNPs with an <code>NA</code> value for allele 1. However, in the plot above on the left we see that while the majority of allele 1 missing SNPs have a MAF &lt; 1%, some have a MAF close to 11%, meaning about <code>71/646</code> minor alleles <em>were</em> detected yet an <code>NA</code> value was still recorded. While I have a very minimal understanding of gene reading machinery, I would not guess that this <code>NA</code> is not a machine reading error but rather that something else is going on. Given this information, I decided to compromise and remove all SNPs with a MAF &lt; 3%, as well as all other SNPs with an <code>NA</code> value for allele 1. This brings us from 1,651,345 SNPs to 1,293,100 SNPs.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>map.clean</span> <span class='op'>&lt;-</span> <span class='va'>map</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
+<span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>MAF</span> <span class='op'>&gt;</span> <span class='fl'>0.03</span>, </span>
+<span>         <span class='op'>!</span><span class='fu'><a href='https://rdrr.io/r/base/NA.html'>is.na</a></span><span class='op'>(</span><span class='va'>allele.1</span><span class='op'>)</span><span class='op'>)</span></span>
+<span><span class='fu'><a href='https://rdrr.io/r/base/dim.html'>dim</a></span><span class='op'>(</span><span class='va'>map.clean</span><span class='op'>)</span></span></code></pre>
+</div>
+<pre><code>[1] 1293100       7</code></pre>
+</div>
+<p>One downside to this whole process of removing SNPs with small MAFs is that a major goal of GWAS studies is detect to rare variations on SNPs that could be associated with the trait of interest. Removing SNPs where the MAF is small may result in removing critical data to the study. This is trade off emphasizes that having more people in your GWAS is helpful and important in forming meaningful results about potentially rare variants.</p>
+<p>Before moving on, we must complete one final data cleaning step. The <code>snpstats</code> package uses a format in which genotypes are coded as 01, 02, and 03, with 00 representing missing values.<br />
+</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>SNP</span><span class='op'>@</span><span class='va'>.Data</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>5</span>,<span class='fl'>1</span><span class='op'>:</span><span class='fl'>5</span><span class='op'>]</span></span></code></pre>
+</div>
+<pre><code>          rs4477212 kgp15717912 kgp7727307 kgp15297216 rs3094315
+M11062205        03          03         03          03        03
+M11050406        03          03         03          03        03
+M11050407        03          03         03          03        03
+M11070602        03          03         03          03        02
+M11060912        03          03         03          03        03</code></pre>
+</div>
+<p>We will convert this to a 0, 1, and 2 format. Now the matrix represents the number of major alleles each person has at each SNP.<br />
+</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>X</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/methods/as.html'>as</a></span><span class='op'>(</span><span class='va'>SNP</span>, <span class='st'>"numeric"</span><span class='op'>)</span></span>
+<span><span class='va'>X</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>5</span>, <span class='fl'>1</span><span class='op'>:</span><span class='fl'>5</span><span class='op'>]</span></span></code></pre>
+</div>
+<pre><code>          rs4477212 kgp15717912 kgp7727307 kgp15297216 rs3094315
+M11062205         2           2          2           2         2
+M11050406         2           2          2           2         2
+M11050407         2           2          2           2         2
+M11070602         2           2          2           2         1
+M11060912         2           2          2           2         2</code></pre>
+</div>
+<p>We also must remove the SNPs with a MAF &lt; 3% and those missing allele 1 from our genotypic matrix X.<br />
+</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>X.clean</span> <span class='op'>&lt;-</span> <span class='va'>X</span><span class='op'>[</span>,<span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>colnames</a></span><span class='op'>(</span><span class='va'>X</span><span class='op'>)</span> <span class='op'><a href='https://rdrr.io/r/base/match.html'>%in%</a></span> <span class='va'>map.clean</span><span class='op'>$</span><span class='va'>snp.name</span><span class='op'>]</span></span>
+<span><span class='fu'><a href='https://rdrr.io/r/base/dim.html'>dim</a></span><span class='op'>(</span><span class='va'>X.clean</span><span class='op'>)</span></span></code></pre>
+</div>
+<pre><code>[1]     323 1293100</code></pre>
+</div>
+<h2 id="trait-simulation">Trait Simulation</h2>
+<p>As discussed earlier, the <code>affected</code> column in our individuals dataset is completely missing values. Therefore, for the purposes of demonstrating how to conduct a GWAS, we will simulate a trait using a random SNP of interest. I randomly chose SNP <em>rs3131972</em>. This SNP is located on chromosome 1 near gene FAM87B. A is the major allele in comparison to G, matching what we see in our data. The minor allele frequency is 23.4%.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>map</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
+<span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>snp.name</span> <span class='op'>==</span> <span class='st'>"rs3131972"</span><span class='op'>)</span></span></code></pre>
+</div>
+<pre><code>          chromosome  snp.name cM position allele.1 allele.2
+rs3131972          1 rs3131972 NA   752721        A        G
+                MAF
+rs3131972 0.2337461</code></pre>
+</div>
+<p>To create a quantitative trait <code>y</code> we will use information dependent on the genotype at this SNP plus random noise that is normally distributed with a mean of 0 and standard deviation of 0.6. Choosing a standard deviation is somewhat arbitrary, but I decided to go on the smaller side here to better ensure our causal SNP stands out in the final results.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>n</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span><span class='op'>(</span><span class='va'>X</span><span class='op'>)</span></span>
+<span><span class='va'>y</span> <span class='op'>&lt;-</span> <span class='va'>X</span><span class='op'>[</span>,<span class='st'>'rs3131972'</span><span class='op'>]</span> <span class='op'>+</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='va'>n</span>, <span class='fl'>0</span>, <span class='fl'>1.5</span><span class='op'>)</span></span>
+<span><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>y</span><span class='op'>)</span></span></code></pre>
+</div>
+<pre><code>M11062205 M11050406 M11050407 M11070602 M11060912 M11060920 
+1.6856538 0.3229503 1.4618636 1.8482662 2.3327924 1.9123311 </code></pre>
+</div>
+<p>Check out the <a href="https://statgensummary.netlify.app/gwas.html">GWAS tab</a> to see how we will use this trait!</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
 </div>
@@ -2137,6 +2398,15 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <div class="d-appendix">
 </div>
 
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
 
 <!--radix_placeholder_site_after_body-->
 <!--/radix_placeholder_site_after_body-->
