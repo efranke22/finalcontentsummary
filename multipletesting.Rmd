@@ -1,6 +1,6 @@
 ---
 title: "Multiple Testing"
-description: "stuff about multiple testing"
+description: "What it is, why we need it, and how to do it in RStudio and PLINK"
 site: distill::distill_website
 ---
 
@@ -150,7 +150,9 @@ simres3 <- replicate(1000, do_one_sim())
 
 From this simulation we learn that the optimal threshold for this specific set of data is 0.00039. Using the Bonferroni correction on the same set of SNPs would have yielded a threshold of $\frac{0.05}{211} = 0.00024$. Due to tests being correlated, we are effectively conducting fewer tests which results in the simulated threshold being higher than the Bonferroni corrected threshold which treats the tests independently. In this case, the two thresholds really aren't too different but its possible that using a larger number of SNPs would better highlight their correlation and you'd see more of a difference. We will see if this is the case when we use PLINK to determine a threshold. Overall, the simulation process exemplifies that the Bonferroni correction is too conservative - it suggests a significance threshold that is smaller than we truly need it to be. As a result, we get more type II errors and lower power. As I mentioned earlier, the harm of type II errors is that they conclude a SNP is has no relationship to the trait of interest when in reality it does, causing researchers to potentially miss out on key information in helping solve a disease. Thus, if you have time to determine a threshold using simulation instead of Bonferroni, I recommend doing so. 
 
+# Using PLINK for Multiple Hypothesis Testing
 
+Running 1,000 replications on this entire dataset took only about 20 minutes in PLINK, which is obviously a huge reduction in computational time. 20 days is 20 x 24 x 60 minutes, or 28,800 minutes. So 20 minutes to get a threshold through PLINK is about 1/1440 the time!
 
 
 

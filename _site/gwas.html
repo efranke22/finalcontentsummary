@@ -90,27 +90,27 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   <!--radix_placeholder_meta_tags-->
   <title>Home: Genetic Wide Association Studies (GWAS)</title>
 
-  <meta property="description" itemprop="description" content="stuff about GWAS"/>
+  <meta property="description" itemprop="description" content="What it is and how to do it in RStudio and PLINK"/>
 
 
 
   <!--  https://developers.facebook.com/docs/sharing/webmasters#markup -->
   <meta property="og:title" content="Home: Genetic Wide Association Studies (GWAS)"/>
   <meta property="og:type" content="article"/>
-  <meta property="og:description" content="stuff about GWAS"/>
+  <meta property="og:description" content="What it is and how to do it in RStudio and PLINK"/>
   <meta property="og:locale" content="en_US"/>
   <meta property="og:site_name" content="Home"/>
 
   <!--  https://dev.twitter.com/cards/types/summary -->
   <meta property="twitter:card" content="summary"/>
   <meta property="twitter:title" content="Home: Genetic Wide Association Studies (GWAS)"/>
-  <meta property="twitter:description" content="stuff about GWAS"/>
+  <meta property="twitter:description" content="What it is and how to do it in RStudio and PLINK"/>
 
   <!--/radix_placeholder_meta_tags-->
   <!--radix_placeholder_rmarkdown_metadata-->
 
   <script type="text/json" id="radix-rmarkdown-metadata">
-  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","site"]}},"value":[{"type":"character","attributes":{},"value":["Genetic Wide Association Studies (GWAS)"]},{"type":"character","attributes":{},"value":["stuff about GWAS"]},{"type":"character","attributes":{},"value":["distill::distill_website"]}]}
+  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","site"]}},"value":[{"type":"character","attributes":{},"value":["Genetic Wide Association Studies (GWAS)"]},{"type":"character","attributes":{},"value":["What it is and how to do it in RStudio and PLINK"]},{"type":"character","attributes":{},"value":["distill::distill_website"]}]}
   </script>
   <!--/radix_placeholder_rmarkdown_metadata-->
   <!--radix_placeholder_navigation_in_header-->
@@ -2094,7 +2094,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <!--radix_placeholder_front_matter-->
 
 <script id="distill-front-matter" type="text/json">
-{"title":"Genetic Wide Association Studies (GWAS)","description":"stuff about GWAS","authors":[]}
+{"title":"Genetic Wide Association Studies (GWAS)","description":"What it is and how to do it in RStudio and PLINK","authors":[]}
 </script>
 
 <!--/radix_placeholder_front_matter-->
@@ -2122,14 +2122,267 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <h1>Genetic Wide Association Studies (GWAS)</h1>
 <!--radix_placeholder_categories-->
 <!--/radix_placeholder_categories-->
-<p>stuff about GWAS</p>
+<p>What it is and how to do it in RStudio and PLINK</p>
 </div>
 
 
 <div class="d-article">
-<p>On the <a href="https://statgensummary.netlify.app">home page</a>, I introduced <strong>genetic variants</strong>. We can study these genetic variants with something known as a <strong>Genetic- Wide Association Study (GWAS)</strong>.</p>
+<div class="layout-chunk" data-layout="l-body">
+
+</div>
+<div class="layout-chunk" data-layout="l-body">
+
+</div>
+<p>On the <a href="https://statgensummary.netlify.app">home page</a>, I introduced <strong>genetic variants</strong>. We can study these genetic variants with something known as a <strong>Genetic - Wide Association Study (GWAS)</strong>. The overarching goal of a GWAS is to help us understand which SNPs might be causally associated with our trait of interest, which can be particularly important and helpful when trying to find a cure for a disease or understand why certain people get that disease.</p>
 <p><img src="images/gwas.png" /></p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
+<p>Using the trait we developed in the <a href="https://statgensummary.netlify.app/data.html">Data</a> tab, we can implement <strong>marginal regression</strong> to run GWAS on our data. If you haven’t yet looked through the Data section, it would be useful to do now in order to understand the context of this GWAS.</p>
+<h1 id="gwas-in-rstudio">GWAS in RStudio</h1>
+<p>We developed our trait of interest around causal SNP, <em>rs3131972</em>, which we know to be located on chromosome 1. However, in a real genetic study we would not know where the casual SNP(s) we are looking for are located. Therefore, we’d need to run a GWAS to see if there are variants are associated with the trait and if so, where. To do this we will use <em>marginal regression</em>.</p>
+<p>For each SNP, we will fit a model with the SNP as the single independent variable and the trait of interest as the dependent variable. Looking at our first three SNPs, the models can be created like this:</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>494</span><span class='op'>)</span></span>
+<span><span class='va'>snp1mod</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>y</span> <span class='op'>~</span> <span class='va'>X.clean</span><span class='op'>[</span>,<span class='fl'>1</span><span class='op'>]</span><span class='op'>)</span></span>
+<span><span class='va'>snp2mod</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>y</span> <span class='op'>~</span> <span class='va'>X.clean</span><span class='op'>[</span>,<span class='fl'>2</span><span class='op'>]</span><span class='op'>)</span></span>
+<span><span class='va'>snp3mod</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>y</span> <span class='op'>~</span> <span class='va'>X.clean</span><span class='op'>[</span>,<span class='fl'>3</span><span class='op'>]</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='fu'>tidy</span><span class='op'>(</span><span class='va'>snp1mod</span><span class='op'>)</span></span></code></pre>
+</div>
+<pre><code># A tibble: 2 × 5
+  term         estimate std.error statistic      p.value
+  &lt;chr&gt;           &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;        &lt;dbl&gt;
+1 (Intercept)   -0.0126     0.302   -0.0416 0.967       
+2 X.clean[, 1]   0.978      0.169    5.80   0.0000000158</code></pre>
+</div>
+<p>Each of these models produces an estimate for the coefficient on the SNP. For example, the coefficient for <code>snp1mod</code> is 1.08. The way we might interpret this is that for every additional minor allele (G for example) that you carry at that position, the trait of interest changes by about 1.08 units. If the trait we were measuring was height, we would expect your height to increase about 1.08 inches for every additional minor allele (a value of either 0, 1, or 2) at SNP 1. This is obviously pretty extreme, but you understand the idea.</p>
+<h2 id="analyze-chromosome-1">Analyze chromosome 1</h2>
+<p>Obviously, we cannot do the process above by hand for over one million SNPs. However, we can do this with a loop! We will start first with all SNPs located on chromosome 1.</p>
+<p>First, pick out these SNPs using <code>which()</code>.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>chromosome1.snps</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/which.html'>which</a></span><span class='op'>(</span><span class='va'>map.clean</span><span class='op'>$</span><span class='va'>chromosome</span> <span class='op'>==</span> <span class='fl'>1</span><span class='op'>)</span></span>
+<span><span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span><span class='op'>(</span><span class='va'>chromosome1.snps</span><span class='op'>)</span></span></code></pre>
+</div>
+<pre><code>[1] 100766</code></pre>
+</div>
+<p>Next, loop through each of the SNPs, fitting a linear regression model at each one. For each model, we’ll record the estimates (<code>betas</code>), standard errors (<code>ses</code>), test statistics (<code>tstats</code>) and p-values (<code>pvals</code>) for the coefficient of interest, which is the slope.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='co'># set up empty vectors for storing the results</span></span>
+<span><span class='va'>betas</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='op'>)</span></span>
+<span><span class='va'>ses</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='op'>)</span></span>
+<span><span class='va'>tstats</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='op'>)</span></span>
+<span><span class='va'>pvals</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='co'># loop through SNPs in chromosme 1</span></span>
+<span><span class='kw'>for</span><span class='op'>(</span><span class='va'>i</span> <span class='kw'>in</span> <span class='va'>chromosome1.snps</span><span class='op'>)</span><span class='op'>{</span></span>
+<span>  <span class='co'># fit model</span></span>
+<span>  <span class='va'>mod</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>y</span> <span class='op'>~</span> <span class='va'>X.clean</span><span class='op'>[</span>,<span class='va'>i</span><span class='op'>]</span><span class='op'>)</span></span>
+<span>  <span class='co'># get coefficient information</span></span>
+<span>  <span class='va'>coefinfo</span> <span class='op'>&lt;-</span> <span class='fu'>tidy</span><span class='op'>(</span><span class='va'>mod</span><span class='op'>)</span></span>
+<span>  <span class='co'># record estimate, SE, test stat, and p-value</span></span>
+<span>  <span class='va'>betas</span><span class='op'>[</span><span class='va'>i</span><span class='op'>]</span> <span class='op'>&lt;-</span> <span class='va'>coefinfo</span><span class='op'>$</span><span class='va'>estimate</span><span class='op'>[</span><span class='fl'>2</span><span class='op'>]</span></span>
+<span>  <span class='va'>ses</span><span class='op'>[</span><span class='va'>i</span><span class='op'>]</span> <span class='op'>&lt;-</span> <span class='va'>coefinfo</span><span class='op'>$</span><span class='va'>std.error</span><span class='op'>[</span><span class='fl'>2</span><span class='op'>]</span></span>
+<span>  <span class='va'>tstats</span><span class='op'>[</span><span class='va'>i</span><span class='op'>]</span> <span class='op'>&lt;-</span> <span class='va'>coefinfo</span><span class='op'>$</span><span class='va'>statistic</span><span class='op'>[</span><span class='fl'>2</span><span class='op'>]</span></span>
+<span>  <span class='va'>pvals</span><span class='op'>[</span><span class='va'>i</span><span class='op'>]</span> <span class='op'>&lt;-</span> <span class='va'>coefinfo</span><span class='op'>$</span><span class='va'>p.value</span><span class='op'>[</span><span class='fl'>2</span><span class='op'>]</span></span>
+<span><span class='op'>}</span></span></code></pre>
+</div>
+</div>
+<p>After completing the loop, we add our results to our map data frame that contains information about each SNP:</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='co'># start with the map info for the chr 1 SNPs</span></span>
+<span><span class='va'>chr1.results</span> <span class='op'>&lt;-</span> <span class='va'>map.clean</span> <span class='op'>%&gt;%</span></span>
+<span>  <span class='fu'><a href='https://rdrr.io/r/stats/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>chromosome</span> <span class='op'>==</span> <span class='fl'>1</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='co'># then add betas, SEs, etc.</span></span>
+<span><span class='va'>chr1.results</span> <span class='op'>&lt;-</span> <span class='va'>chr1.results</span> <span class='op'>%&gt;%</span></span>
+<span>  <span class='fu'>mutate</span><span class='op'>(</span>Estimate <span class='op'>=</span> <span class='va'>betas</span>,</span>
+<span>         Std.Error <span class='op'>=</span> <span class='va'>ses</span>,</span>
+<span>         Test.Statistic <span class='op'>=</span> <span class='va'>tstats</span>,</span>
+<span>         P.Value <span class='op'>=</span> <span class='va'>pvals</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='co'># look at results</span></span>
+<span><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>chr1.results</span><span class='op'>)</span></span></code></pre>
+</div>
+<pre><code>            chromosome    snp.name cM position allele.1 allele.2
+rs3094315            1   rs3094315 NA   752566        G        A
+rs3131972            1   rs3131972 NA   752721        A        G
+exm2268640           1  exm2268640 NA   762320        T        C
+kgp3709449           1  kgp3709449 NA   771967        A        G
+kgp15275285          1 kgp15275285 NA   774047        A        G
+kgp5225889           1  kgp5225889 NA   779322        G        A
+                   MAF   Estimate Std.Error Test.Statistic
+rs3094315   0.13931889  0.9782628 0.1686493       5.800573
+rs3131972   0.23374613  0.9983550 0.1448057       6.894448
+exm2268640  0.09627329  0.5434766 0.2178257       2.495007
+kgp3709449  0.11490683  0.8697466 0.1810295       4.804448
+kgp15275285 0.14241486 -0.2383669 0.1599812      -1.489968
+kgp5225889  0.12229102  0.8810804 0.1769315       4.979782
+                 P.Value
+rs3094315   1.583433e-08
+rs3131972   2.877123e-11
+exm2268640  1.309910e-02
+kgp3709449  2.389118e-06
+kgp15275285 1.372146e-01
+kgp5225889  1.041390e-06</code></pre>
+</div>
+<p>Lastly, we can plot the results. We take the log of the p-value in order to better identify SNPs with small p-values, and then take the negative of this to flip the plot and make it look like the typical Manhattan plot. We see a gap in the middle of the plot where the <strong>centromere</strong> of chromosome 1 is located. Centromeres are difficult to genotype so we don’t get any data in this area. The causal SNP is easy to spot colored in navy blue with a <span class="math inline">\(-\text{log}_{10}\)</span>(p-value) close to 12.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>chr1.results</span> <span class='op'>%&gt;%</span></span>
+<span>  <span class='fu'>mutate</span><span class='op'>(</span>minuslogp <span class='op'>=</span> <span class='op'>-</span><span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log10</a></span><span class='op'>(</span><span class='va'>P.Value</span><span class='op'>)</span>, </span>
+<span>         causalSNP <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>as.factor</a></span><span class='op'>(</span><span class='fu'>case_when</span><span class='op'>(</span><span class='va'>snp.name</span> <span class='op'>==</span> <span class='st'>"rs3131972"</span> <span class='op'>~</span> <span class='fl'>1</span>, </span>
+<span>                               <span class='cn'>TRUE</span> <span class='op'>~</span> <span class='fl'>0</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span></span>
+<span>  <span class='fu'>ggplot</span><span class='op'>(</span><span class='fu'>aes</span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>position</span>, y <span class='op'>=</span> <span class='va'>minuslogp</span>, color <span class='op'>=</span> <span class='va'>causalSNP</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span></span>
+<span>  <span class='fu'>geom_point</span><span class='op'>(</span><span class='op'>)</span> <span class='op'>+</span> </span>
+<span>  <span class='fu'>scale_color_manual</span><span class='op'>(</span>values <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"goldenrod"</span>, <span class='st'>"navy"</span><span class='op'>)</span><span class='op'>)</span><span class='op'>+</span></span>
+<span>  <span class='fu'>labs</span><span class='op'>(</span>x <span class='op'>=</span> <span class='st'>'position (bp)'</span>, y <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/expression.html'>expression</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='st'>'-log'</span><span class='op'>[</span><span class='fl'>10</span><span class='op'>]</span>,<span class='st'>'(p-value)'</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span> </span>
+<span>  <span class='fu'>scale_x_continuous</span><span class='op'>(</span>labels <span class='op'>=</span> <span class='fu'>scales</span><span class='fu'>::</span><span class='va'><a href='https://scales.r-lib.org/reference/comma.html'>comma</a></span><span class='op'>)</span><span class='op'>+</span></span>
+<span>  <span class='fu'>theme_classic</span><span class='op'>(</span><span class='op'>)</span><span class='op'>+</span></span>
+<span>  <span class='fu'>theme</span><span class='op'>(</span>legend.position <span class='op'>=</span> <span class='st'>"none"</span><span class='op'>)</span></span></code></pre>
+</div>
+</div>
+<p><img src="images/chr1plot.png" /></p>
+<h2 id="analyze-all-chromosomes">Analyze all chromosomes</h2>
+<p>Finally, we can analyze all chromosomes. To do this, we simply loop over the SNPs in all chromosomes instead of just those in chromosome 1.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='co'># set up empty vectors for storing results</span></span>
+<span><span class='va'>betas</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='op'>)</span></span>
+<span><span class='va'>ses</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='op'>)</span></span>
+<span><span class='va'>tstats</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='op'>)</span></span>
+<span><span class='va'>pvals</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='co'># loop through all SNPs</span></span>
+<span><span class='kw'>for</span><span class='op'>(</span><span class='va'>i</span> <span class='kw'>in</span> <span class='fl'>1</span><span class='op'>:</span><span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>ncol</a></span><span class='op'>(</span><span class='va'>X.clean</span><span class='op'>)</span><span class='op'>)</span><span class='op'>{</span> </span>
+<span>  <span class='co'># fit model</span></span>
+<span>  <span class='va'>mod</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>y</span> <span class='op'>~</span> <span class='va'>X.clean</span><span class='op'>[</span>,<span class='va'>i</span><span class='op'>]</span><span class='op'>)</span></span>
+<span>  <span class='co'># get coefficient information</span></span>
+<span>  <span class='va'>coefinfo</span> <span class='op'>&lt;-</span> <span class='fu'>tidy</span><span class='op'>(</span><span class='va'>mod</span><span class='op'>)</span></span>
+<span>  <span class='co'># record estimate, SE, test stat, and p-value</span></span>
+<span>  <span class='va'>betas</span><span class='op'>[</span><span class='va'>i</span><span class='op'>]</span> <span class='op'>&lt;-</span> <span class='va'>coefinfo</span><span class='op'>$</span><span class='va'>estimate</span><span class='op'>[</span><span class='fl'>2</span><span class='op'>]</span></span>
+<span>  <span class='va'>ses</span><span class='op'>[</span><span class='va'>i</span><span class='op'>]</span> <span class='op'>&lt;-</span> <span class='va'>coefinfo</span><span class='op'>$</span><span class='va'>std.error</span><span class='op'>[</span><span class='fl'>2</span><span class='op'>]</span></span>
+<span>  <span class='va'>tstats</span><span class='op'>[</span><span class='va'>i</span><span class='op'>]</span> <span class='op'>&lt;-</span> <span class='va'>coefinfo</span><span class='op'>$</span><span class='va'>statistic</span><span class='op'>[</span><span class='fl'>2</span><span class='op'>]</span></span>
+<span>  <span class='va'>pvals</span><span class='op'>[</span><span class='va'>i</span><span class='op'>]</span> <span class='op'>&lt;-</span> <span class='va'>coefinfo</span><span class='op'>$</span><span class='va'>p.value</span><span class='op'>[</span><span class='fl'>2</span><span class='op'>]</span></span>
+<span><span class='op'>}</span></span></code></pre>
+</div>
+</div>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='co'># start with the map info for the chr 1 SNPs</span></span>
+<span><span class='va'>all.results</span> <span class='op'>&lt;-</span> <span class='va'>map.clean</span></span>
+<span></span>
+<span><span class='co'># then add betas, SEs, etc.</span></span>
+<span><span class='va'>all.results</span> <span class='op'>&lt;-</span> <span class='va'>all.results</span> <span class='op'>%&gt;%</span></span>
+<span>  <span class='fu'>mutate</span><span class='op'>(</span>Estimate <span class='op'>=</span> <span class='va'>betas</span>,</span>
+<span>         Std.Error <span class='op'>=</span> <span class='va'>ses</span>,</span>
+<span>         Test.Statistic <span class='op'>=</span> <span class='va'>tstats</span>,</span>
+<span>         P.Value <span class='op'>=</span> <span class='va'>pvals</span><span class='op'>)</span></span></code></pre>
+</div>
+</div>
+<p>When plotting the results, we make one small change to the code. Instead of plotting position along the x axis, we group with an interaction between position and chromosome. This is due to position restarting over again at each chromosome, so it prevents all the points from being plotted on top of one another.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>all.results</span> <span class='op'>%&gt;%</span></span>
+<span>  <span class='fu'>mutate</span><span class='op'>(</span>minuslogp <span class='op'>=</span> <span class='op'>-</span><span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log10</a></span><span class='op'>(</span><span class='va'>P.Value</span><span class='op'>)</span>,</span>
+<span>         chr <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>as.factor</a></span><span class='op'>(</span><span class='va'>chromosome</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span></span>
+<span>  <span class='fu'>ggplot</span><span class='op'>(</span><span class='fu'>aes</span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>chr</span>, y <span class='op'>=</span> <span class='va'>minuslogp</span>, group <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/interaction.html'>interaction</a></span><span class='op'>(</span><span class='va'>chr</span>, <span class='va'>position</span><span class='op'>)</span>, color <span class='op'>=</span> <span class='va'>chr</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span> <span class='co'>#interaction prevents chromosomes from overlapping</span></span>
+<span>  <span class='fu'>geom_point</span><span class='op'>(</span>position <span class='op'>=</span> <span class='fu'>position_dodge</span><span class='op'>(</span><span class='fl'>0.8</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span></span>
+<span>  <span class='fu'>scale_color_manual</span><span class='op'>(</span>values<span class='op'>=</span><span class='fu'>natparks.pals</span><span class='op'>(</span><span class='st'>"DeathValley"</span>,<span class='fl'>22</span><span class='op'>)</span><span class='op'>)</span><span class='op'>+</span></span>
+<span>  <span class='fu'>labs</span><span class='op'>(</span>x <span class='op'>=</span> <span class='st'>'chromosome'</span>, y <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/expression.html'>expression</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='st'>'-log'</span><span class='op'>[</span><span class='fl'>10</span><span class='op'>]</span>,<span class='st'>'(p-value)'</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span><span class='op'>+</span></span>
+<span>  <span class='fu'>theme_classic</span><span class='op'>(</span><span class='op'>)</span><span class='op'>+</span></span>
+<span>  <span class='fu'>theme</span><span class='op'>(</span>legend.position <span class='op'>=</span> <span class='st'>"none"</span><span class='op'>)</span></span></code></pre>
+</div>
+</div>
+<p><img src="images/manhattan.png" /></p>
+<p>In a real genetic study where we do not know the causal SNP, we would have some predetermined significance threshold in which we would take a closer look at all SNPs with a p-value below that threshold to see if there is a meaningful association between them and our trait of interest. I will take more about this in the <a href="https://statgensummary.netlify.app/multipletesting.html">Multiple Testing</a> section.</p>
+<h1 id="gwas-in-plink">GWAS in PLINK</h1>
+<p>While the process above was fairly simple, running the GWAS took over an hour on my computer and close to 30 minutes on some of Macalester’s faster computers. This is where the software PLINK can help. PLINK is a free, open-source whole genome association analysis toolset, designed to perform a range of basic, large-scale analyses in a computationally efficient manner. Once downloaded onto your computer, it runs from the terminal. We can run a GWAS in PLINK in a matter of a couple seconds instead of 30-60 minutes.</p>
+<p>For the purposes of demonstrating PLINK, I will simulate a trait not associated with any particular SNP, but that is associated with population structure. This will show us how a Manhattan plot with no associated SNPs compares to the one above, where we know a causal SNP exists. Creating a trait associated with the population structure will also be useful for analysis later in the PCA section.</p>
+<p>To get the data ready to run in PLINK, I started by merging all 9 files (the .bim, .bam, and .fam for each of the 3 sub-populations). I listed the name of each of these files in .txt file with the structure shown in the image below.</p>
+<p><img src="images/allfiles.png" /></p>
+<p>In the terminal and in the folder where my data was stored, I then ran the command <code>./plink --merge-list allfiles.txt --make-bed --out rbloggersComb</code>. This combines the data into three files that PLINK can use (<code>rbloggersComb.bed</code>, <code>rbloggersComb.bim</code>, <code>rbloggersComb.fam</code>).</p>
+<p>My next step was to create a trait in RStudio. To do this, I loaded in the data in the same way that I did in the <a href="https://statgensummary.netlify.app/data.html">Data</a> section, only this time adding a couple additional lines to extract information about each individual and SNP information.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>rbloggers_fam</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>rbind</a></span><span class='op'>(</span><span class='va'>SNP_M</span><span class='op'>$</span><span class='va'>fam</span>, <span class='va'>SNP_I</span><span class='op'>$</span><span class='va'>fam</span>, <span class='va'>SNP_C</span><span class='op'>$</span><span class='va'>fam</span><span class='op'>)</span></span>
+<span><span class='va'>rbloggers_map</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>rbind</a></span><span class='op'>(</span><span class='va'>SNP_M</span><span class='op'>$</span><span class='va'>map</span>, <span class='va'>SNP_I</span><span class='op'>$</span><span class='va'>map</span>, <span class='va'>SNP_C</span><span class='op'>$</span><span class='va'>map</span><span class='op'>)</span></span></code></pre>
+</div>
+</div>
+<p>I then selected the <code>pedigree</code> and <code>member</code> columns from the <code>rbloggers_fam</code> table and column-binded on a trait that varies by population. I write this new dataset to the folder where the data is stored.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>rbloggers_poptrait</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>cbind</a></span><span class='op'>(</span><span class='va'>rbloggers_fam</span> <span class='op'>%&gt;%</span> <span class='fu'>select</span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>2</span><span class='op'>)</span>, trait <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span>n <span class='op'>=</span> <span class='fl'>108</span>, mean <span class='op'>=</span> <span class='fl'>0</span>, sd <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='fl'>105</span>, <span class='op'>-</span><span class='fl'>1</span>, sd <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='fl'>110</span>, <span class='fl'>1</span>, <span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span></span>
+<span><span class='fu'>write_delim</span><span class='op'>(</span><span class='va'>rbloggers_poptrait</span>, <span class='st'>"rbloggersSep/rbloggers_poptrait"</span><span class='op'>)</span></span></code></pre>
+</div>
+</div>
+<p>In PLINK, I then run the command <code>./plink --bfile rbloggersComb --assoc --adjust --pheno rbloggers_poptrait --out as2</code>. The command and subsequent output are shown below.</p>
+<p><img src="images/plink1.png" /></p>
+<p>This command creates two files, one in which GWAS in ran without any adjustments (<code>as2.qassoc</code>) and one where it is ran with adjustments (<code>as2.qassoc.adjusted</code>). The file without adjustments returns a row for each of our original 2,527,458 SNPs. Monomorphic SNPs return a <code>NA</code> value for the information we care about (the t-statistic and p-value of the test). The file with adjustments removes all monomorphic SNPs from the data for us. It returns an unadjusted p-value for each SNP (<code>UNADJ</code>) and an adjusted p-value (<code>GC</code>). These p-values are quite different, as shown by the density plots below.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>rbloggersSep_adjusted</span> <span class='op'>&lt;-</span> <span class='fu'>read_table</span><span class='op'>(</span><span class='st'>"/Users/erinfranke/Desktop/MACStats/Statistical Genetics/StatGenWillErin/rbloggersSep/as2.qassoc.adjusted"</span><span class='op'>)</span></span>
+<span><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>rbloggersSep_adjusted</span><span class='op'>)</span></span></code></pre>
+</div>
+<pre><code># A tibble: 6 × 10
+    CHR SNP            UNADJ      GC     BONF     HOLM SIDAK…¹ SIDAK…²
+  &lt;dbl&gt; &lt;chr&gt;          &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;  
+1     2 kgp14454942 7.52e-31 9.84e-7 1.24e-24 1.24e-24 INF     INF    
+2     2 kgp14377296 9.16e-28 4.53e-6 1.51e-21 1.51e-21 INF     INF    
+3     2 kgp5564602  6.80e-27 6.91e-6 1.12e-20 1.12e-20 INF     INF    
+4     2 kgp14779806 6.95e-27 6.94e-6 1.15e-20 1.15e-20 INF     INF    
+5    13 rs10507688  1.30e-26 7.91e-6 2.14e-20 2.14e-20 INF     INF    
+6     2 rs4149433   2.32e-26 8.92e-6 3.82e-20 3.82e-20 INF     INF    
+# … with 2 more variables: FDR_BH &lt;dbl&gt;, FDR_BY &lt;dbl&gt;, and
+#   abbreviated variable names ¹​SIDAK_SS, ²​SIDAK_SD</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='fu'>ggplot</span><span class='op'>(</span><span class='va'>rbloggersSep_adjusted</span>, <span class='fu'>aes</span><span class='op'>(</span>x<span class='op'>=</span><span class='va'>UNADJ</span><span class='op'>)</span><span class='op'>)</span><span class='op'>+</span></span>
+<span>  <span class='fu'>geom_density</span><span class='op'>(</span>fill <span class='op'>=</span> <span class='st'>"cadetblue4"</span><span class='op'>)</span><span class='op'>+</span></span>
+<span>  <span class='fu'>theme_classic</span><span class='op'>(</span><span class='op'>)</span><span class='op'>+</span></span>
+<span>  <span class='fu'>labs</span><span class='op'>(</span>title <span class='op'>=</span> <span class='st'>"Distribution of p-values WITHOUT adjustment"</span>, x <span class='op'>=</span> <span class='st'>"Unadjusted p-value"</span>, y <span class='op'>=</span> <span class='st'>"Density"</span><span class='op'>)</span><span class='op'>+</span></span>
+<span>  <span class='fu'>theme</span><span class='op'>(</span>plot.title.position <span class='op'>=</span> <span class='st'>"plot"</span>, </span>
+<span>        plot.title <span class='op'>=</span> <span class='fu'>element_text</span><span class='op'>(</span>family <span class='op'>=</span> <span class='st'>"mono"</span><span class='op'>)</span>, </span>
+<span>        axis.title <span class='op'>=</span> <span class='fu'>element_text</span><span class='op'>(</span>family <span class='op'>=</span> <span class='st'>"mono"</span><span class='op'>)</span><span class='op'>)</span></span></code></pre>
+</div>
+<img src="gwas_files/figure-html5/unnamed-chunk-13-1.png" width="624" />
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='fu'>ggplot</span><span class='op'>(</span><span class='va'>rbloggersSep_adjusted</span>, <span class='fu'>aes</span><span class='op'>(</span>x<span class='op'>=</span><span class='va'>GC</span><span class='op'>)</span><span class='op'>)</span><span class='op'>+</span></span>
+<span>  <span class='fu'>geom_density</span><span class='op'>(</span>fill <span class='op'>=</span> <span class='st'>"cadetblue4"</span><span class='op'>)</span><span class='op'>+</span></span>
+<span>  <span class='fu'>theme_classic</span><span class='op'>(</span><span class='op'>)</span><span class='op'>+</span></span>
+<span>  <span class='fu'>labs</span><span class='op'>(</span>title <span class='op'>=</span> <span class='st'>"Distribution of p-values WITH adjustment"</span>, x <span class='op'>=</span> <span class='st'>"Adjusted p-value"</span>, y <span class='op'>=</span> <span class='st'>"Density"</span><span class='op'>)</span><span class='op'>+</span></span>
+<span>  <span class='fu'>theme</span><span class='op'>(</span>plot.title.position <span class='op'>=</span> <span class='st'>"plot"</span>, </span>
+<span>        plot.title <span class='op'>=</span> <span class='fu'>element_text</span><span class='op'>(</span>family <span class='op'>=</span> <span class='st'>"mono"</span><span class='op'>)</span>, </span>
+<span>        axis.title <span class='op'>=</span> <span class='fu'>element_text</span><span class='op'>(</span>family <span class='op'>=</span> <span class='st'>"mono"</span><span class='op'>)</span><span class='op'>)</span></span></code></pre>
+</div>
+<p><img src="gwas_files/figure-html5/unnamed-chunk-13-2.png" width="624" /></p>
+</div>
+<p>In the density plots WITHOUT adjustments, we see that in general SNPs tend to have much more significant p-values than in the density plot WITH adjustments. Why is this the case? As discussed in the Introduction of <a href="https://www.sciencedirect.com/science/article/pii/S0002929707635459"><em>The Power of Genomic Control</em></a>, the adjusted p-values listed under the <code>GC</code> column account for nonindependence in a case-control sample caused by population stratification and cryptic relatedness. <strong>Population stratification</strong> means systematic ancestry differences between cases and controls. While we do not know the cases and controls in this analysis given the provided trait was all missing values, it is highly likely population stratification exists. <strong>Cryptic relatedness</strong> means sample structure in our data due to distant relatedness among samples with no known family relationships. We may also have <strong>family structure</strong> in our data, meaning sample structure due to familial relatedness among samples (<em>note</em>: definitions for cryptic relatedness, population stratification, and cryptic relatedness were taken from the paper we read in class, <em>New approaches to population stratification in genome-wide association studies</em> by Alkes L. Price, Noah A. Zaitlen, David Reich and Nick Patterson). I believe there are ways to identify and remove related samples in the data, but I have not yet learned how to do this. Nonetheless, it is clear some combination of population structure, cryptic relatedness, and family structure has significantly inflated the p-values received from each test for significance between a SNP and our trait of interest. As a result, we will proceed with the adjusted p-values in the <code>GC</code> column.</p>
+<p>With these p-values, we can create a Manhattan plot in a similar manner that we did earlier, just first adding SNP position data to our GWAS results.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>rbloggersSep_adjusted</span> <span class='op'>&lt;-</span> <span class='va'>rbloggersSep_adjusted</span><span class='op'>%&gt;%</span></span>
+<span>  <span class='fu'>mutate</span><span class='op'>(</span>CHR <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/integer.html'>as.integer</a></span><span class='op'>(</span><span class='va'>CHR</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span></span>
+<span>  <span class='fu'>left_join</span><span class='op'>(</span><span class='va'>rbloggers_map</span> <span class='op'>%&gt;%</span></span>
+<span>              <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='va'>snp.name</span>, <span class='va'>position</span>, <span class='va'>chromosome</span><span class='op'>)</span>, by <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"SNP"</span> <span class='op'>=</span> <span class='st'>"snp.name"</span>, <span class='st'>"CHR"</span> <span class='op'>=</span> <span class='st'>"chromosome"</span><span class='op'>)</span><span class='op'>)</span></span></code></pre>
+</div>
+</div>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>rbloggersSep_adjusted</span> <span class='op'>%&gt;%</span></span>
+<span>  <span class='fu'>mutate</span><span class='op'>(</span>minuslogp <span class='op'>=</span> <span class='op'>-</span><span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log10</a></span><span class='op'>(</span><span class='va'>GC</span><span class='op'>)</span>,</span>
+<span>         CHR <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>as.factor</a></span><span class='op'>(</span><span class='va'>CHR</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span></span>
+<span>  <span class='fu'>ggplot</span><span class='op'>(</span><span class='fu'>aes</span><span class='op'>(</span>x <span class='op'>=</span> <span class='va'>CHR</span>, y <span class='op'>=</span> <span class='va'>minuslogp</span>, group <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/interaction.html'>interaction</a></span><span class='op'>(</span><span class='va'>CHR</span>, <span class='va'>position</span><span class='op'>)</span>, color <span class='op'>=</span> <span class='va'>CHR</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span> </span>
+<span>  <span class='fu'>geom_point</span><span class='op'>(</span>position <span class='op'>=</span> <span class='fu'>position_dodge</span><span class='op'>(</span><span class='fl'>0.8</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>+</span> </span>
+<span>  <span class='fu'>labs</span><span class='op'>(</span>x <span class='op'>=</span> <span class='st'>'chromosome'</span>, y <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/expression.html'>expression</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='st'>'-log'</span><span class='op'>[</span><span class='fl'>10</span><span class='op'>]</span>,<span class='st'>'(p-value)'</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span><span class='op'>+</span></span>
+<span>  <span class='fu'>theme_classic</span><span class='op'>(</span><span class='op'>)</span><span class='op'>+</span></span>
+<span>  <span class='fu'>scale_color_manual</span><span class='op'>(</span>values<span class='op'>=</span><span class='fu'>natparks.pals</span><span class='op'>(</span><span class='st'>"DeathValley"</span>,<span class='fl'>24</span><span class='op'>)</span><span class='op'>)</span><span class='op'>+</span></span>
+<span>  <span class='fu'>theme</span><span class='op'>(</span>legend.position <span class='op'>=</span> <span class='st'>"none"</span><span class='op'>)</span></span></code></pre>
+</div>
+</div>
+<p><img src="images/manhattanPop.png" /></p>
+<p>Overall, this manhattan plot looks fairly similar to the original one we created earlier. However, the most significant p-value in this plot has a <span class="math inline">\(-\text{log}_{10}(\text{p-value})\)</span> closer to 6 instead of 8. This is expected given we did not simulate the trait based on any one particular SNP and we know that none of the SNPs are causally located with our trait of interest. As previously mentioned, in a real genetic study we do not know whether or not any of our SNPs will be causally associated with our trait of interest. Therefore, we need some kind of threshold to determine if what SNPs we should look more closely at (if any). To learn more about how to do this, click on the <a href="https://statgensummary.netlify.app/multipletesting.html">Multiple Testing</a> tab!</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
 </div>
@@ -2137,6 +2390,15 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <div class="d-appendix">
 </div>
 
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
 
 <!--radix_placeholder_site_after_body-->
 <!--/radix_placeholder_site_after_body-->
