@@ -5,7 +5,7 @@ description: |
 output_dir: "_site"
 navbar:
   right:
-    - text: "Data and cleaning"
+    - text: "Data"
       href: data.html
     - text: "GWAS"
       href: gwas.html
@@ -13,7 +13,7 @@ navbar:
       href: multipletesting.html
     - text: "Genetic Ancestry & PCA"
       href: pca.html
-    - text: "Journal Articles & Ethics"
+    - text: "Ethics"
       href: readings.html
     
     

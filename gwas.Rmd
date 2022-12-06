@@ -210,7 +210,7 @@ In a real genetic study where we do not know the causal SNP, we would have some 
 
 # GWAS in PLINK
 
-While the process above was fairly simple, running the GWAS took over an hour on my computer and close to 30 minutes on some of Macalester's faster computers. This is where the software PLINK can help. PLINK is a free, open-source whole genome association analysis toolset, designed to perform a range of basic, large-scale analyses in a computationally efficient manner. Once downloaded onto your computer, it runs from the terminal. We can run a GWAS in PLINK in a matter of a couple seconds instead of 30-60 minutes. 
+While the process above was fairly simple, running the GWAS took over an hour on my computer and close to 30 minutes on some of Macalester's faster computers. This is where the software PLINK can help. PLINK is a free, open-source whole genome association analysis toolset, designed to perform a range of basic, large-scale analyses in a computationally efficient manner. To learn more about PLINK and how to download and use it, check out [this site](https://zzz.bwh.harvard.edu/plink/), which I relied heavily on. Once downloaded onto your computer, PLINK runs from the terminal. We can run a GWAS in PLINK in a matter of a couple seconds instead of 30-60 minutes. 
 
 For the purposes of demonstrating PLINK, I will simulate a trait not associated with any particular SNP, but that is associated with population structure. This will show us how a Manhattan plot with no associated SNPs compares to the one above, where we know a causal SNP exists. Creating a trait associated with the population structure will also be useful for analysis later in the PCA section.
 

@@ -2149,10 +2149,10 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <span><span class='fu'>tidy</span><span class='op'>(</span><span class='va'>snp1mod</span><span class='op'>)</span></span></code></pre>
 </div>
 <pre><code># A tibble: 2 × 5
-  term         estimate std.error statistic      p.value
-  &lt;chr&gt;           &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;        &lt;dbl&gt;
-1 (Intercept)   -0.0126     0.302   -0.0416 0.967       
-2 X.clean[, 1]   0.978      0.169    5.80   0.0000000158</code></pre>
+  term         estimate std.error statistic    p.value
+  &lt;chr&gt;           &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;      &lt;dbl&gt;
+1 (Intercept)   -0.0321     0.327   -0.0980 0.922     
+2 X.clean[, 1]   0.861      0.183    4.71   0.00000375</code></pre>
 </div>
 <p>Each of these models produces an estimate for the coefficient on the SNP. For example, the coefficient for <code>snp1mod</code> is 1.08. The way we might interpret this is that for every additional minor allele (G for example) that you carry at that position, the trait of interest changes by about 1.08 units. If the trait we were measuring was height, we would expect your height to increase about 1.08 inches for every additional minor allele (a value of either 0, 1, or 2) at SNP 1. This is obviously pretty extreme, but you understand the idea.</p>
 <h2 id="analyze-chromosome-1">Analyze chromosome 1</h2>
@@ -2298,7 +2298,7 @@ kgp5225889  1.041390e-06</code></pre>
 <p><img src="images/manhattan.png" /></p>
 <p>In a real genetic study where we do not know the causal SNP, we would have some predetermined significance threshold in which we would take a closer look at all SNPs with a p-value below that threshold to see if there is a meaningful association between them and our trait of interest. I will take more about this in the <a href="https://statgensummary.netlify.app/multipletesting.html">Multiple Testing</a> section.</p>
 <h1 id="gwas-in-plink">GWAS in PLINK</h1>
-<p>While the process above was fairly simple, running the GWAS took over an hour on my computer and close to 30 minutes on some of Macalester’s faster computers. This is where the software PLINK can help. PLINK is a free, open-source whole genome association analysis toolset, designed to perform a range of basic, large-scale analyses in a computationally efficient manner. Once downloaded onto your computer, it runs from the terminal. We can run a GWAS in PLINK in a matter of a couple seconds instead of 30-60 minutes.</p>
+<p>While the process above was fairly simple, running the GWAS took over an hour on my computer and close to 30 minutes on some of Macalester’s faster computers. This is where the software PLINK can help. PLINK is a free, open-source whole genome association analysis toolset, designed to perform a range of basic, large-scale analyses in a computationally efficient manner. To learn more about PLINK and how to download and use it, check out <a href="https://zzz.bwh.harvard.edu/plink/">this site</a>, which I relied heavily on. Once downloaded onto your computer, PLINK runs from the terminal. We can run a GWAS in PLINK in a matter of a couple seconds instead of 30-60 minutes.</p>
 <p>For the purposes of demonstrating PLINK, I will simulate a trait not associated with any particular SNP, but that is associated with population structure. This will show us how a Manhattan plot with no associated SNPs compares to the one above, where we know a causal SNP exists. Creating a trait associated with the population structure will also be useful for analysis later in the PCA section.</p>
 <p>To get the data ready to run in PLINK, I started by merging all 9 files (the .bim, .bam, and .fam for each of the 3 sub-populations). I listed the name of each of these files in .txt file with the structure shown in the image below.</p>
 <p><img src="images/allfiles.png" /></p>

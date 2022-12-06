@@ -90,27 +90,27 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   <!--radix_placeholder_meta_tags-->
   <title>Home: Genetic Ancestry &amp; PCA</title>
 
-  <meta property="description" itemprop="description" content="stuff about PCA"/>
+  <meta property="description" itemprop="description" content="What genetic ancestry is and how to use PCA to incorporate it into statistical analyses"/>
 
 
 
   <!--  https://developers.facebook.com/docs/sharing/webmasters#markup -->
   <meta property="og:title" content="Home: Genetic Ancestry &amp; PCA"/>
   <meta property="og:type" content="article"/>
-  <meta property="og:description" content="stuff about PCA"/>
+  <meta property="og:description" content="What genetic ancestry is and how to use PCA to incorporate it into statistical analyses"/>
   <meta property="og:locale" content="en_US"/>
   <meta property="og:site_name" content="Home"/>
 
   <!--  https://dev.twitter.com/cards/types/summary -->
   <meta property="twitter:card" content="summary"/>
   <meta property="twitter:title" content="Home: Genetic Ancestry &amp; PCA"/>
-  <meta property="twitter:description" content="stuff about PCA"/>
+  <meta property="twitter:description" content="What genetic ancestry is and how to use PCA to incorporate it into statistical analyses"/>
 
   <!--/radix_placeholder_meta_tags-->
   <!--radix_placeholder_rmarkdown_metadata-->
 
   <script type="text/json" id="radix-rmarkdown-metadata">
-  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","site"]}},"value":[{"type":"character","attributes":{},"value":["Genetic Ancestry & PCA"]},{"type":"character","attributes":{},"value":["stuff about PCA"]},{"type":"character","attributes":{},"value":["distill::distill_website"]}]}
+  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","site"]}},"value":[{"type":"character","attributes":{},"value":["Genetic Ancestry & PCA"]},{"type":"character","attributes":{},"value":["What genetic ancestry is and how to use PCA to incorporate it into statistical analyses"]},{"type":"character","attributes":{},"value":["distill::distill_website"]}]}
   </script>
   <!--/radix_placeholder_rmarkdown_metadata-->
   <!--radix_placeholder_navigation_in_header-->
@@ -2094,7 +2094,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <!--radix_placeholder_front_matter-->
 
 <script id="distill-front-matter" type="text/json">
-{"title":"Genetic Ancestry & PCA","description":"stuff about PCA","authors":[]}
+{"title":"Genetic Ancestry & PCA","description":"What genetic ancestry is and how to use PCA to incorporate it into statistical analyses","authors":[]}
 </script>
 
 <!--/radix_placeholder_front_matter-->
@@ -2105,11 +2105,11 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <a href="index.html" class="title">Home</a>
 </div>
 <div class="nav-right">
-<a href="geneticsBackground.html">Genetics background</a>
+<a href="data.html">Data</a>
 <a href="gwas.html">GWAS</a>
 <a href="multipletesting.html">Multiple Testing</a>
 <a href="pca.html">Genetic Ancestry &amp; PCA</a>
-<a href="readings.html">Journal Articles &amp; Ethics</a>
+<a href="readings.html">Ethics</a>
 <a href="javascript:void(0);" class="nav-toggle">&#9776;</a>
 </div>
 </nav>
@@ -2122,33 +2122,364 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <h1>Genetic Ancestry &amp; PCA</h1>
 <!--radix_placeholder_categories-->
 <!--/radix_placeholder_categories-->
-<p>stuff about PCA</p>
+<p>What genetic ancestry is and how to use PCA to incorporate it into statistical analyses</p>
 </div>
 
 
 <div class="d-article">
-<h2 id="r-markdown">R Markdown</h2>
-<p>This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <a href="http://rmarkdown.rstudio.com" class="uri">http://rmarkdown.rstudio.com</a>.</p>
-<p>When you click the <strong>Knit</strong> button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:</p>
+<h1 id="what-is-genetic-ancestry">What is Genetic Ancestry?</h1>
+<p>While so far I have mostly talked about using statistics to identify SNPs associated with a particular trait, this is not the only thing statistical geneticists do. Companies like <a href="https://www.23andme.com">23andMe</a> or <a href="https://www.ancestry.com">AncestryDNA</a> profit by selling DNA testing kits and returning the customer with a comprehensive ancestry breakdown. How do they do this?</p>
+<p>What genetic ancestry does is look at the ancestral origin of the genetic material we actually inherited. While we often think of being “1/4 Irish” or “1/8 North African”, we don’t actually inherit exactly 1/4 of our grandparents’ genetic material. As DNA is passed from one generation to the next, <strong>recombination</strong> events happen that shuffle up the genetic material. So while we have the same <em>genealogical ancestry</em> as our siblings, <em>genetic ancestry</em> isn’t the same. We can think of our genetic ancestry in two ways - locally and globally. <strong>Local ancestry</strong> refers to inheriting a specific part of your genome from an ancestor of a particular category. <strong>Global ancestry</strong> looks across the whole genome and refers to inheriting a <em>proportion</em> of your genome from an ancestor of a particular category.</p>
+<p>There are difficulties to determining someone’s local and global ancestry. It is hard to figure out which ancestor you got each portion of your genome from, and you need good information about which ancestry categories those ancestors belonged to. Due to these challenges, the focus is more on which segments of your genome are <em>similar</em> to individuals from a specific category. There are still challenges with this, which include how to define “similarity”, at what level to define categories (Swedish vs Scandinavian vs European), and finding people from each category to compare your genome to. The two large classes of statistical methods that are used to infer genetic similarity are machine learning tools (including PCA, regression forests, and support vector machines) and model-based, biologically informed approaches (including bayesian methods, maximum likelihood estimation, and others).</p>
+<h2 id="the-genetic-ancestry-of-african-americans-latinos-and-european-americans-across-the-u.s.">The Genetic Ancestry of African Americans, Latinos, and European Americans across the U.S.</h2>
+<p>To learn more about genetic ancestry, we read a paper in class titled “The Genetic Ancestry of African Americans, Latinos, and European Americans Across the United States” published in 2015 and written by Katarzyna Bryc, Eric Y. Durand, Michael J. Macpherson, David Reich, and Joanna Mountain. This study looks at the genetic ancestry of 5,269 African-Americans, 8,663 Latinos, and 148,789 European Americans who are 23andMe customers and shows that historical interactions between the groups are present in the genetic-ancestry of Americans today. This paper was very dense, but I had a few main takeaways from it.</p>
+<p>First, the authors used what they called “Ancestry Composition” which assigns ancestry labels to short local phased genomic regions and produces local ancestry proportions and confidence scores. This method provides ancestry proportions for several worldwide populations at each window the genome. If a window has a majority of a continental ancestry (&gt;51%), that window is counted in the number of windows inherited from the ancestry. So to estimate the proportion of a particular ancestry someone is, you divide the number of windows of that ancestry they have by the total number of windows studied.</p>
+<p>The authors also wanted to understand the time frame of admixture events, and to do so they used simple admixture models and grid search optimization. With this method and their ancestry composition method described above, they were able to come up with some interesting results. They were able to find differences in ancestry proportions between slave and free states and learned 1/5 of Africans have Native American ancestry. For the Latino group, they saw high levels of Iberian ancestry appear in areas of high Native American ancestry. Additionally, the noted that European ancestry not homogenous across US, which likely reflects immigration patterns of different ethnic groups.</p>
+<h2 id="genetic-ancestry-and-its-confounding-role-in-gwas">Genetic Ancestry and its confounding role in GWAS</h2>
+<p>Genetic ancestry is not only studied to determine whether or not we can see historical interactions present in the genetics of Americans today. Genetic ancestry is also important because it is a potential <strong>confounding variable</strong> in GWAS. When we are trying to determine if a particular SNP has a relationship with our trait of interest, we have to keep in mind the role of ancestry. Ancestry has a relationship with genotypes because the allele frequency of the SNP we’re testing differs across ancestral populations. Additionally, ancestry can have a relationship with our trait of interest - environmental factors or causal SNPs in other parts of the genome can differ across ancestry groups.</p>
+<p>Knowing that genetic ancestry is a confounding variable, we should adjust for it in our GWAS models with the following equation, where <span class="math inline">\(y\)</span> is the trait, <span class="math inline">\(x_j\)</span> is the number of minor alleles at position <span class="math inline">\(j\)</span>, and <span class="math inline">\(\pi\)</span> is the genetic ancestry.</p>
+<p><span class="math display">\[E[y|x_j, \pi] = \alpha + \beta_j x_j + \gamma\pi \\\]</span></p>
+<p>Before completing the GWAS, we will need to <em>infer</em> genetic ancestry using one of the methods mentioned earlier. Here we will use PCA.</p>
+<h1 id="pca-background">PCA background</h1>
+<p>Principal component analysis (PCA) is a widely used technique for <strong>dimension reduction</strong>. Dimension reduction aims to represent the information within our data with fewer variables, which is perfect for genetic data where we have millions of SNPs. With PCA, we are specifically looking for <strong>linear transformation</strong> of our data that explains the most variability. This linear representation is composed of <strong>principal components</strong>, or PCs. These PCs are new variables that are a linear combinations of our original SNPs:</p>
+<p><span class="math display">\[PC_1 = a_{11}x_1 + a_{12}x_2 + \cdots + a_{1p}x_p\]</span>
+<span class="math display">\[PC_2 = a_{21}x_1 + a_{22}x_2 + \cdots + a_{2p}x_p\]</span>
+<span class="math display">\[....\]</span>
+<span class="math display">\[PC_p = a_{p1}x_1 + a_{p2}x_2 + \cdots + a_{pp}x_p\]</span></p>
+<p>The number of the PC has some meaning to it - <span class="math inline">\(PC_1\)</span> is the component that explains the most variability in our data when all possible linear combinations are considered. In other words, it has the highest variance. <span class="math inline">\(PC_2\)</span> has the next highest variance, subject to the constraint of being orthogonal to, or uncorrelated with, <span class="math inline">\(PC_1\)</span>. Next is <span class="math inline">\(PC_3\)</span>, which is orthogonal to <span class="math inline">\(PC_2\)</span>, and so forth.</p>
+<p>Other important terminology related to PCs are scores and loadings. <strong>Loadings</strong> are the coefficients <span class="math inline">\(a_{11}, a_{22}\)</span>, etc, which represent the contribution of each of the original variables to the new PC. <strong>Scores</strong> are the values that PCs take when you multiply the loading <span class="math inline">\(a_{pp}\)</span> by the value at that SNP, <span class="math inline">\(x_p\)</span>.</p>
+<h2 id="running-pca-on-our-data">Running PCA on our data</h2>
+<p>To learn how to run PCA on our dataset, I largely followed <a href="https://www.bioconductor.org/packages/devel/bioc/vignettes/SNPRelate/inst/doc/SNPRelate.html">this tutorial</a> by Xiuwen Zheng from the Department of Biostatistics at the University of Washington – Seattle.</p>
+<p>Start by loading necessary libraries. If you have trouble installing the SNPRelate package, make sure you follow how to do it exactly <a href="https://www.bioconductor.org/packages/devel/bioc/vignettes/SNPRelate/inst/doc/SNPRelate.html#installation-of-the-package-snprelate">as shown</a> in the tutorial.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>cars</span><span class='op'>)</span></span></code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'>snpStats</span><span class='op'>)</span></span>
+<span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://tidyverse.tidyverse.org'>tidyverse</a></span><span class='op'>)</span></span>
+<span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='http://github.com/zhengxwen/gdsfmt'>gdsfmt</a></span><span class='op'>)</span></span>
+<span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='http://github.com/zhengxwen/SNPRelate'>SNPRelate</a></span><span class='op'>)</span></span></code></pre>
 </div>
-<pre><code>     speed           dist       
- Min.   : 4.0   Min.   :  2.00  
- 1st Qu.:12.0   1st Qu.: 26.00  
- Median :15.0   Median : 36.00  
- Mean   :15.4   Mean   : 42.98  
- 3rd Qu.:19.0   3rd Qu.: 56.00  
- Max.   :25.0   Max.   :120.00  </code></pre>
 </div>
-<h2 id="including-plots">Including Plots</h2>
-<p>You can also embed plots, for example:</p>
+<p>The next step is to load the data, convert it to GDS format, and combine files. Once you do this once, it will create files on your computer and you do not have to run this code again.</p>
 <div class="layout-chunk" data-layout="l-body">
-<p><img src="pca_files/figure-html5/pressure-1.png" width="624" /></p>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>bed.fn.m</span> <span class='op'>&lt;-</span> <span class='st'>"/Users/erinfranke/Desktop/GWAStutorial-master/public/Genomics/108Malay_2527458snps.bed"</span></span>
+<span><span class='va'>fam.fn.m</span> <span class='op'>&lt;-</span> <span class='st'>"/Users/erinfranke/Desktop/GWAStutorial-master/public/Genomics/108Malay_2527458snps.fam"</span></span>
+<span><span class='va'>bim.fn.m</span> <span class='op'>&lt;-</span> <span class='st'>"/Users/erinfranke/Desktop/GWAStutorial-master/public/Genomics/108Malay_2527458snps.bim"</span></span>
+<span></span>
+<span><span class='fu'><a href='https://rdrr.io/pkg/SNPRelate/man/snpgdsBED2GDS.html'>snpgdsBED2GDS</a></span><span class='op'>(</span><span class='va'>bed.fn.m</span>, <span class='va'>fam.fn.m</span>, <span class='va'>bim.fn.m</span>, <span class='st'>"test.gds"</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='va'>bed.fn.i</span> <span class='op'>&lt;-</span> <span class='st'>"/Users/erinfranke/Desktop/GWAStutorial-master/public/Genomics/105Indian_2527458snps.bed"</span></span>
+<span><span class='va'>fam.fn.i</span> <span class='op'>&lt;-</span> <span class='st'>"/Users/erinfranke/Desktop/GWAStutorial-master/public/Genomics/105Indian_2527458snps.fam"</span></span>
+<span><span class='va'>bim.fn.i</span> <span class='op'>&lt;-</span> <span class='st'>"/Users/erinfranke/Desktop/GWAStutorial-master/public/Genomics/105Indian_2527458snps.bim"</span></span>
+<span></span>
+<span><span class='fu'><a href='https://rdrr.io/pkg/SNPRelate/man/snpgdsBED2GDS.html'>snpgdsBED2GDS</a></span><span class='op'>(</span><span class='va'>bed.fn.i</span>, <span class='va'>fam.fn.i</span>, <span class='va'>bim.fn.i</span>, <span class='st'>"test2.gds"</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='va'>bed.fn.c</span> <span class='op'>&lt;-</span> <span class='st'>"/Users/erinfranke/Desktop/GWAStutorial-master/public/Genomics/110Chinese_2527458snps.bed"</span></span>
+<span><span class='va'>fam.fn.c</span> <span class='op'>&lt;-</span> <span class='st'>"/Users/erinfranke/Desktop/GWAStutorial-master/public/Genomics/110Chinese_2527458snps.fam"</span></span>
+<span><span class='va'>bim.fn.c</span> <span class='op'>&lt;-</span> <span class='st'>"/Users/erinfranke/Desktop/GWAStutorial-master/public/Genomics/110Chinese_2527458snps.bim"</span></span>
+<span></span>
+<span><span class='fu'><a href='https://rdrr.io/pkg/SNPRelate/man/snpgdsBED2GDS.html'>snpgdsBED2GDS</a></span><span class='op'>(</span><span class='va'>bed.fn.c</span>, <span class='va'>fam.fn.c</span>, <span class='va'>bim.fn.c</span>, <span class='st'>"test3.gds"</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='fu'><a href='https://rdrr.io/pkg/SNPRelate/man/snpgdsSummary.html'>snpgdsSummary</a></span><span class='op'>(</span><span class='st'>"test.gds"</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='va'>fn1</span> <span class='op'>&lt;-</span> <span class='st'>"test.gds"</span></span>
+<span><span class='va'>fn2</span> <span class='op'>&lt;-</span> <span class='st'>"test2.gds"</span></span>
+<span><span class='va'>fn3</span> <span class='op'>&lt;-</span> <span class='st'>"test3.gds"</span></span>
+<span><span class='fu'><a href='https://rdrr.io/pkg/SNPRelate/man/snpgdsCombineGeno.html'>snpgdsCombineGeno</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='va'>fn1</span>, <span class='va'>fn2</span>, <span class='va'>fn3</span><span class='op'>)</span>, <span class='st'>"test4.gds"</span><span class='op'>)</span></span></code></pre>
 </div>
-<p>Note that the <code>echo = FALSE</code> parameter was added to the code chunk to prevent printing of the R code that generated the plot.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
+</div>
+<p>Next, get a summary of the combined file and open it.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='fu'><a href='https://rdrr.io/pkg/SNPRelate/man/snpgdsSummary.html'>snpgdsSummary</a></span><span class='op'>(</span><span class='st'>"test4.gds"</span><span class='op'>)</span></span></code></pre>
+</div>
+<pre><code>The file name: /Users/erinfranke/Desktop/MACStats/Statistical Genetics/finalcontentsummary/test4.gds 
+The total number of samples: 323 
+The total number of SNPs: 2176501 
+SNP genotypes are stored in SNP-major mode (Sample X SNP).
+The number of valid samples: 323 
+The number of biallelic unique SNPs: 1300388 </code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>genofile</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/SNPRelate/man/snpgdsOpen.html'>snpgdsOpen</a></span><span class='op'>(</span><span class='st'>"test4.gds"</span><span class='op'>)</span></span></code></pre>
+</div>
+</div>
+<p>Earlier in the multiple testing section I talked a little bit about correlation between SNPs and linkage disequilibrium. When doing PCA, its suggested to use a pruned set of SNPs which are in approximate linkage equilibrium with each other to avoid the strong influence of SNP clusters. The following code tries different LD thresholds and selects a set of SNPs.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>1000</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='co'># Try different LD thresholds for sensitivity analysis</span></span>
+<span><span class='va'>snpset</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/SNPRelate/man/snpgdsLDpruning.html'>snpgdsLDpruning</a></span><span class='op'>(</span><span class='va'>genofile</span>, ld.threshold<span class='op'>=</span><span class='fl'>0.2</span><span class='op'>)</span></span></code></pre>
+</div>
+<pre><code>SNP pruning based on LD:
+Excluding 0 SNP on non-autosomes
+Excluding 876,113 SNPs (monomorphic: TRUE, MAF: NaN, missing rate: NaN)
+    # of samples: 323
+    # of SNPs: 1,300,388
+    using 1 thread
+    sliding window: 500,000 basepairs, Inf SNPs
+    |LD| threshold: 0.2
+    method: composite
+Chromosome 1: 4.54%, 8,114/178,671
+Chromosome 2: 4.27%, 7,658/179,463
+Chromosome 3: 4.58%, 6,933/151,523
+Chromosome 4: 4.55%, 6,304/138,560
+Chromosome 5: 4.54%, 6,051/133,424
+Chromosome 6: 4.13%, 5,916/143,125
+Chromosome 7: 4.59%, 5,473/119,147
+Chromosome 8: 4.33%, 4,954/114,456
+Chromosome 9: 4.76%, 4,637/97,371
+Chromosome 10: 4.68%, 5,109/109,218
+Chromosome 11: 4.20%, 4,718/112,258
+Chromosome 12: 4.70%, 5,024/106,902
+Chromosome 13: 5.03%, 3,724/74,013
+Chromosome 14: 4.85%, 3,499/72,089
+Chromosome 15: 4.97%, 3,445/69,297
+Chromosome 16: 4.97%, 3,717/74,739
+Chromosome 17: 5.13%, 3,515/68,572
+Chromosome 18: 5.54%, 3,443/62,121
+Chromosome 19: 4.99%, 2,713/54,393
+Chromosome 20: 5.30%, 2,841/53,560
+Chromosome 21: 5.32%, 1,613/30,341
+Chromosome 22: 5.25%, 1,747/33,258
+101,148 markers are selected in total.</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span><span class='op'>(</span><span class='va'>snpset</span><span class='op'>)</span></span></code></pre>
+</div>
+<pre><code>List of 22
+ $ chr1 : chr [1:8114] &quot;rs11240777&quot; &quot;kgp9059038&quot; &quot;rs7537756&quot; &quot;exm628&quot; ...
+ $ chr2 : chr [1:7658] &quot;kgp4971557&quot; &quot;kgp14800530&quot; &quot;rs17041717&quot; &quot;kgp2057000&quot; ...
+ $ chr3 : chr [1:6933] &quot;kgp7646170&quot; &quot;kgp3611083&quot; &quot;kgp4281785&quot; &quot;kgp5157934&quot; ...
+ $ chr4 : chr [1:6304] &quot;kgp7767085&quot; &quot;kgp7706308&quot; &quot;kgp10870542&quot; &quot;rs6847267&quot; ...
+ $ chr5 : chr [1:6051] &quot;kgp2306997&quot; &quot;kgp9525211&quot; &quot;kgp7091813&quot; &quot;kgp10311375&quot; ...
+ $ chr6 : chr [1:5916] &quot;kgp22745386&quot; &quot;kgp22734311&quot; &quot;kgp22752232&quot; &quot;kgp22744524&quot; ...
+ $ chr7 : chr [1:5473] &quot;kgp3293955&quot; &quot;kgp2819807&quot; &quot;kgp4314509&quot; &quot;kgp6561807&quot; ...
+ $ chr8 : chr [1:4954] &quot;kgp8876035&quot; &quot;kgp5401210&quot; &quot;kgp12018201&quot; &quot;kgp1622190&quot; ...
+ $ chr9 : chr [1:4637] &quot;rs680654&quot; &quot;kgp3928777&quot; &quot;kgp3538210&quot; &quot;kgp4962798&quot; ...
+ $ chr10: chr [1:5109] &quot;kgp10879287&quot; &quot;rs3125037&quot; &quot;kgp22052249&quot; &quot;kgp21937175&quot; ...
+ $ chr11: chr [1:4718] &quot;exm869284&quot; &quot;rs2272566&quot; &quot;kgp6770543&quot; &quot;kgp9403358&quot; ...
+ $ chr12: chr [1:5024] &quot;kgp8962939&quot; &quot;rs1106984&quot; &quot;rs7135126&quot; &quot;rs7974784&quot; ...
+ $ chr13: chr [1:3724] &quot;kgp6812842&quot; &quot;kgp1456930&quot; &quot;kgp200360&quot; &quot;rs9580112&quot; ...
+ $ chr14: chr [1:3499] &quot;kgp3297105&quot; &quot;exm1083420&quot; &quot;Exome_Asian_chr14-20296278-19&quot; &quot;kgp11118585&quot; ...
+ $ chr15: chr [1:3445] &quot;kgp1349873&quot; &quot;rs4932072&quot; &quot;kgp6048141&quot; &quot;Exome_Asian_chr15-20588685-19&quot; ...
+ $ chr16: chr [1:3717] &quot;kgp4996586&quot; &quot;kgp11473370&quot; &quot;kgp571139&quot; &quot;kgp9353104&quot; ...
+ $ chr17: chr [1:3515] &quot;kgp9690030&quot; &quot;kgp942802&quot; &quot;kgp7899711&quot; &quot;rs7223759&quot; ...
+ $ chr18: chr [1:3443] &quot;rs8096369&quot; &quot;kgp27746&quot; &quot;rs621636&quot; &quot;kgp5913270&quot; ...
+ $ chr19: chr [1:2713] &quot;kgp21362931&quot; &quot;kgp4747527&quot; &quot;kgp574339&quot; &quot;kgp12372026&quot; ...
+ $ chr20: chr [1:2841] &quot;rs6139074&quot; &quot;rs6039403&quot; &quot;kgp8039653&quot; &quot;kgp10171668&quot; ...
+ $ chr21: chr [1:1613] &quot;rs12627229&quot; &quot;exm1562172&quot; &quot;kgp13170864&quot; &quot;kgp11190641&quot; ...
+ $ chr22: chr [1:1747] &quot;kgp1568720&quot; &quot;rs5747010&quot; &quot;kgp8641560&quot; &quot;rs16980739&quot; ...</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='fu'><a href='https://rdrr.io/r/base/names.html'>names</a></span><span class='op'>(</span><span class='va'>snpset</span><span class='op'>)</span></span></code></pre>
+</div>
+<pre><code> [1] &quot;chr1&quot;  &quot;chr2&quot;  &quot;chr3&quot;  &quot;chr4&quot;  &quot;chr5&quot;  &quot;chr6&quot;  &quot;chr7&quot;  &quot;chr8&quot; 
+ [9] &quot;chr9&quot;  &quot;chr10&quot; &quot;chr11&quot; &quot;chr12&quot; &quot;chr13&quot; &quot;chr14&quot; &quot;chr15&quot; &quot;chr16&quot;
+[17] &quot;chr17&quot; &quot;chr18&quot; &quot;chr19&quot; &quot;chr20&quot; &quot;chr21&quot; &quot;chr22&quot;</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='co'># Get all selected snp id</span></span>
+<span><span class='va'>snpset.id</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/unlist.html'>unlist</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/unname.html'>unname</a></span><span class='op'>(</span><span class='va'>snpset</span><span class='op'>)</span><span class='op'>)</span></span>
+<span><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>snpset.id</span><span class='op'>)</span></span></code></pre>
+</div>
+<pre><code>[1] &quot;rs11240777&quot; &quot;kgp9059038&quot; &quot;rs7537756&quot;  &quot;exm628&quot;     &quot;rs1891910&quot; 
+[6] &quot;kgp7634233&quot;</code></pre>
+</div>
+<p>We can then run PCA and calculate the percent of variation is accounted for by the top principal components. It looks like the first principal component explains 3.13% of variation, the second explains 0.85%, the third and fourth explain 0.43%, the fifth 0.39%, etc. Therefore, the optimal number of principal components to use is probably 2.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='co'># Run PCA</span></span>
+<span><span class='va'>pca</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/SNPRelate/man/snpgdsPCA.html'>snpgdsPCA</a></span><span class='op'>(</span><span class='va'>genofile</span>, snp.id<span class='op'>=</span><span class='va'>snpset.id</span>, num.thread<span class='op'>=</span><span class='fl'>2</span><span class='op'>)</span></span></code></pre>
+</div>
+<pre><code>Principal Component Analysis (PCA) on genotypes:
+Excluding 2,075,353 SNPs (non-autosomes or non-selection)
+Excluding 0 SNP (monomorphic: TRUE, MAF: NaN, missing rate: NaN)
+    # of samples: 323
+    # of SNPs: 101,148
+    using 2 threads
+    # of principal components: 32
+PCA:    the sum of all selected genotypes (0,1,2) = 10950024
+CPU capabilities: Double-Precision SSE2
+Tue Dec  6 15:32:23 2022    (internal increment: 1508)
+
+[..................................................]  0%, ETC: ---        
+[==================================================] 100%, completed, 2s
+Tue Dec  6 15:32:25 2022    Begin (eigenvalues and eigenvectors)
+Tue Dec  6 15:32:25 2022    Done.</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='co'># variance proportion (%)</span></span>
+<span><span class='va'>pc.percent</span> <span class='op'>&lt;-</span> <span class='va'>pca</span><span class='op'>$</span><span class='va'>varprop</span><span class='op'>*</span><span class='fl'>100</span></span>
+<span><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/Round.html'>round</a></span><span class='op'>(</span><span class='va'>pc.percent</span>, <span class='fl'>2</span><span class='op'>)</span>,<span class='fl'>20</span><span class='op'>)</span></span></code></pre>
+</div>
+<pre><code> [1] 3.13 0.85 0.43 0.43 0.39 0.38 0.38 0.37 0.37 0.37 0.37 0.37 0.36
+[14] 0.36 0.36 0.36 0.36 0.36 0.36 0.36</code></pre>
+</div>
+<p>If we didn’t have any prior population information, we could plot the first two principal components and see if we see any patterns in the data. It kind of looks like we have three separate populations, which we know to be true!</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='co'># make a data.frame</span></span>
+<span><span class='va'>tab</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>sample.id <span class='op'>=</span> <span class='va'>pca</span><span class='op'>$</span><span class='va'>sample.id</span>,</span>
+<span>    EV1 <span class='op'>=</span> <span class='va'>pca</span><span class='op'>$</span><span class='va'>eigenvect</span><span class='op'>[</span>,<span class='fl'>1</span><span class='op'>]</span>,    <span class='co'># the first eigenvector</span></span>
+<span>    EV2 <span class='op'>=</span> <span class='va'>pca</span><span class='op'>$</span><span class='va'>eigenvect</span><span class='op'>[</span>,<span class='fl'>2</span><span class='op'>]</span>,    <span class='co'># the second eigenvector</span></span>
+<span>    stringsAsFactors <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='co'># Draw</span></span>
+<span><span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>tab</span><span class='op'>$</span><span class='va'>EV2</span>, <span class='va'>tab</span><span class='op'>$</span><span class='va'>EV1</span>, xlab<span class='op'>=</span><span class='st'>"eigenvector 2"</span>, ylab<span class='op'>=</span><span class='st'>"eigenvector 1"</span><span class='op'>)</span></span></code></pre>
+</div>
+<p><img src="pca_files/figure-html5/unnamed-chunk-6-1.png" width="624" /></p>
+</div>
+<p>To incorporate prior population, first load the data:</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='fu'><a href='https://rdrr.io/r/base/load.html'>load</a></span><span class='op'>(</span><span class='st'>"/Users/erinfranke/Desktop/GWAStutorial-master/conversionTable.RData"</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='va'>pathM</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='st'>"/Users/erinfranke/Desktop/GWAStutorial-master/public/Genomics/108Malay_2527458snps"</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>".bed"</span>, <span class='st'>".bim"</span>, <span class='st'>".fam"</span><span class='op'>)</span>, sep <span class='op'>=</span> <span class='st'>""</span><span class='op'>)</span></span>
+<span><span class='va'>SNP_M</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/snpStats/man/read.plink.html'>read.plink</a></span><span class='op'>(</span><span class='va'>pathM</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>]</span>, <span class='va'>pathM</span><span class='op'>[</span><span class='fl'>2</span><span class='op'>]</span>, <span class='va'>pathM</span><span class='op'>[</span><span class='fl'>3</span><span class='op'>]</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='va'>pathI</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='st'>"/Users/erinfranke/Desktop/GWAStutorial-master/public/Genomics/105Indian_2527458snps"</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>".bed"</span>, <span class='st'>".bim"</span>, <span class='st'>".fam"</span><span class='op'>)</span>, sep <span class='op'>=</span> <span class='st'>""</span><span class='op'>)</span></span>
+<span><span class='va'>SNP_I</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/snpStats/man/read.plink.html'>read.plink</a></span><span class='op'>(</span><span class='va'>pathI</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>]</span>, <span class='va'>pathI</span><span class='op'>[</span><span class='fl'>2</span><span class='op'>]</span>, <span class='va'>pathI</span><span class='op'>[</span><span class='fl'>3</span><span class='op'>]</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='va'>pathC</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='st'>"/Users/erinfranke/Desktop/GWAStutorial-master/public/Genomics/110Chinese_2527458snps"</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>".bed"</span>, <span class='st'>".bim"</span>, <span class='st'>".fam"</span><span class='op'>)</span>, sep <span class='op'>=</span> <span class='st'>""</span><span class='op'>)</span></span>
+<span><span class='va'>SNP_C</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/snpStats/man/read.plink.html'>read.plink</a></span><span class='op'>(</span><span class='va'>pathC</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>]</span>, <span class='va'>pathC</span><span class='op'>[</span><span class='fl'>2</span><span class='op'>]</span>, <span class='va'>pathC</span><span class='op'>[</span><span class='fl'>3</span><span class='op'>]</span><span class='op'>)</span></span></code></pre>
+</div>
+</div>
+<p>Then, run the following code. We can see the three clusters align with the three subpopulations as we expected.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>SNP_fam</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>rbind</a></span><span class='op'>(</span><span class='va'>SNP_M</span><span class='op'>$</span><span class='va'>fam</span>, <span class='va'>SNP_I</span><span class='op'>$</span><span class='va'>fam</span>, <span class='va'>SNP_C</span><span class='op'>$</span><span class='va'>fam</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
+<span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>pop <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='st'>"Malay"</span>, <span class='fl'>108</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='st'>"Indian"</span>, <span class='fl'>105</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/base/rep.html'>rep</a></span><span class='op'>(</span><span class='st'>"Chinese"</span>, <span class='fl'>110</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='va'>sample.id</span> <span class='op'>=</span>  <span class='va'>SNP_fam</span><span class='op'>$</span><span class='va'>pedigree</span></span>
+<span></span>
+<span></span>
+<span><span class='va'>tab</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span>sample.id <span class='op'>=</span> <span class='va'>SNP_fam</span><span class='op'>$</span><span class='va'>pedigree</span>,</span>
+<span>    pop <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='va'>SNP_fam</span><span class='op'>$</span><span class='va'>pop</span><span class='op'>)</span><span class='op'>[</span><span class='fu'><a href='https://rdrr.io/r/base/match.html'>match</a></span><span class='op'>(</span><span class='va'>pca</span><span class='op'>$</span><span class='va'>sample.id</span>, <span class='va'>sample.id</span><span class='op'>)</span><span class='op'>]</span>,</span>
+<span>    EV1 <span class='op'>=</span> <span class='va'>pca</span><span class='op'>$</span><span class='va'>eigenvect</span><span class='op'>[</span>,<span class='fl'>1</span><span class='op'>]</span>,    <span class='co'># the first eigenvector</span></span>
+<span>    EV2 <span class='op'>=</span> <span class='va'>pca</span><span class='op'>$</span><span class='va'>eigenvect</span><span class='op'>[</span>,<span class='fl'>2</span><span class='op'>]</span>,    <span class='co'># the second eigenvector</span></span>
+<span>    stringsAsFactors <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></span>
+<span><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>tab</span><span class='op'>)</span></span></code></pre>
+</div>
+<pre><code>  sample.id   pop         EV1        EV2
+1 M11062205 Malay -0.03507693 0.08154056
+2 M11050406 Malay -0.03538905 0.09150315
+3 M11050407 Malay -0.03566775 0.08688487
+4 M11070602 Malay -0.03317120 0.08035539
+5 M11060912 Malay -0.01784295 0.05161642
+6 M11060920 Malay -0.02643969 0.05688225</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='fu'><a href='https://rdrr.io/r/graphics/plot.default.html'>plot</a></span><span class='op'>(</span><span class='va'>tab</span><span class='op'>$</span><span class='va'>EV2</span>, <span class='va'>tab</span><span class='op'>$</span><span class='va'>EV1</span>, col<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/integer.html'>as.integer</a></span><span class='op'>(</span><span class='va'>tab</span><span class='op'>$</span><span class='va'>pop</span><span class='op'>)</span>, xlab<span class='op'>=</span><span class='st'>"eigenvector 2"</span>, ylab<span class='op'>=</span><span class='st'>"eigenvector 1"</span><span class='op'>)</span></span>
+<span><span class='fu'><a href='https://rdrr.io/r/graphics/legend.html'>legend</a></span><span class='op'>(</span><span class='st'>"bottomright"</span>, legend<span class='op'>=</span><span class='fu'><a href='https://rdrr.io/r/base/levels.html'>levels</a></span><span class='op'>(</span><span class='va'>tab</span><span class='op'>$</span><span class='va'>pop</span><span class='op'>)</span>, pch<span class='op'>=</span><span class='st'>"o"</span>, col<span class='op'>=</span><span class='fl'>1</span><span class='op'>:</span><span class='fu'><a href='https://rdrr.io/r/base/nlevels.html'>nlevels</a></span><span class='op'>(</span><span class='va'>tab</span><span class='op'>$</span><span class='va'>pop</span><span class='op'>)</span><span class='op'>)</span></span></code></pre>
+</div>
+<p><img src="pca_files/figure-html5/unnamed-chunk-8-1.png" width="624" /></p>
+</div>
+<p>If we wanted to, we could look at the top 4 PCs with the following code and decide whether or not it is worth including PCs 3 &amp; 4 when accounting for genetic ancestry in GWAS. To me, it looks like the clusters overlap a lot less (meaning more variation is explained) when looking at PCs 1 &amp; 2 and PCs 3 &amp; 4 don’t tell us that much (for example, all the dots are on top of each other for the plot of PC3 versus PC4).</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>lbls</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='st'>"PC"</span>, <span class='fl'>1</span><span class='op'>:</span><span class='fl'>4</span>, <span class='st'>"\n"</span>, <span class='fu'><a href='https://rdrr.io/r/base/format.html'>format</a></span><span class='op'>(</span><span class='va'>pc.percent</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>4</span><span class='op'>]</span>, digits<span class='op'>=</span><span class='fl'>2</span><span class='op'>)</span>, <span class='st'>"%"</span>, sep<span class='op'>=</span><span class='st'>""</span><span class='op'>)</span></span>
+<span><span class='fu'><a href='https://rdrr.io/r/graphics/pairs.html'>pairs</a></span><span class='op'>(</span><span class='va'>pca</span><span class='op'>$</span><span class='va'>eigenvect</span><span class='op'>[</span>,<span class='fl'>1</span><span class='op'>:</span><span class='fl'>4</span><span class='op'>]</span>, col<span class='op'>=</span><span class='va'>tab</span><span class='op'>$</span><span class='va'>pop</span>, labels<span class='op'>=</span><span class='va'>lbls</span><span class='op'>)</span></span></code></pre>
+</div>
+<p><img src="pca_files/figure-html5/unnamed-chunk-9-1.png" width="624" /></p>
+</div>
+<p>We can also see this in a parallel coordinates plot for the top 16 principal components - starting at PC3 the green sub population (Malay) is completely covered by the red and black lines (Chinese and Indian). This indicates any PCs beyond 1 &amp; 2 are really not helpful significantly to explain variation.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='http://www.stats.ox.ac.uk/pub/MASS4/'>MASS</a></span><span class='op'>)</span></span>
+<span></span>
+<span><span class='va'>datapop</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/factor.html'>factor</a></span><span class='op'>(</span><span class='va'>SNP_fam</span><span class='op'>$</span><span class='va'>pop</span><span class='op'>)</span><span class='op'>[</span><span class='fu'><a href='https://rdrr.io/r/base/match.html'>match</a></span><span class='op'>(</span><span class='va'>pca</span><span class='op'>$</span><span class='va'>sample.id</span>, <span class='va'>sample.id</span><span class='op'>)</span><span class='op'>]</span></span>
+<span><span class='fu'><a href='https://rdrr.io/pkg/MASS/man/parcoord.html'>parcoord</a></span><span class='op'>(</span><span class='va'>pca</span><span class='op'>$</span><span class='va'>eigenvect</span><span class='op'>[</span>,<span class='fl'>1</span><span class='op'>:</span><span class='fl'>16</span><span class='op'>]</span>, col <span class='op'>=</span> <span class='va'>datapop</span><span class='op'>)</span></span></code></pre>
+</div>
+<p><img src="pca_files/figure-html5/unnamed-chunk-10-1.png" width="624" /></p>
+</div>
+<h2 id="incorporating-pca-into-gwas">Incorporating PCA into GWAS</h2>
+<p>Having completed PCA, we can now incorporate PC1 and PC2 into our GWAS. This allows us to adjust for the confounding role that ancestry plays in identifying relationships between SNPs and the trait of interest.
+This is important because if I were to create a trait that is correlated with both population <em>and</em> a particular SNP, we would expect the p-value for that particular SNP to be significant and easily identifiable. However, when we don’t include the top PCs in our marginal regression models we may get additional SNPs that have significant p-values, specifically SNPs that differ the most in minor allele frequency between the three groups. Including PC1 and PC2 will better account for these ancestral differences and reduce the probability of <strong>spurious associations</strong> (2+ variables are associated but not causally related due to an unseen factor).</p>
+<p>The first step to including principal components in our GWAS is to again convert the SnpMatrix to numeric and generate a trait based on the causal SNP.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>rbloggers_fam</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>rbind</a></span><span class='op'>(</span><span class='va'>SNP_M</span><span class='op'>$</span><span class='va'>fam</span>, <span class='va'>SNP_I</span><span class='op'>$</span><span class='va'>fam</span>, <span class='va'>SNP_C</span><span class='op'>$</span><span class='va'>fam</span><span class='op'>)</span></span>
+<span><span class='va'>SNP</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>rbind</a></span><span class='op'>(</span><span class='va'>SNP_M</span><span class='op'>$</span><span class='va'>genotypes</span>, <span class='va'>SNP_I</span><span class='op'>$</span><span class='va'>genotypes</span>, <span class='va'>SNP_C</span><span class='op'>$</span><span class='va'>genotypes</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='va'>X</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/methods/as.html'>as</a></span><span class='op'>(</span><span class='va'>SNP</span>, <span class='st'>"numeric"</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>494</span><span class='op'>)</span></span>
+<span><span class='va'>y</span> <span class='op'>&lt;-</span> <span class='va'>X</span><span class='op'>[</span>,<span class='st'>'rs3131972'</span><span class='op'>]</span> <span class='op'>+</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='fl'>323</span>, <span class='fl'>0</span>, <span class='fl'>1.5</span><span class='op'>)</span></span></code></pre>
+</div>
+</div>
+<p>I then took the <code>member</code> and <code>pedigree</code> columns on the 323 individuals and created a trait varying based on sub population. After that, I added the trait based on the causal SNP <em>rs3131972</em> to the trait varying based on sub population to create a trait that varies based on sub population AND one SNP. I sent this file to where the data is stored.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>494</span><span class='op'>)</span></span>
+<span><span class='va'>rbloggers_popSNP</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>cbind</a></span><span class='op'>(</span><span class='va'>rbloggers_fam</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>2</span><span class='op'>)</span>, trait <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span>n <span class='op'>=</span> <span class='fl'>108</span>, mean <span class='op'>=</span> <span class='fl'>0</span>, sd <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='fl'>105</span>, <span class='op'>-</span><span class='fl'>1</span>, sd <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='fl'>110</span>, <span class='fl'>1</span>, <span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span>, <span class='va'>y</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
+<span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>trait <span class='op'>=</span> <span class='va'>trait</span> <span class='op'>+</span> <span class='va'>y</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='fu'><a href='https://readr.tidyverse.org/reference/write_delim.html'>write_delim</a></span><span class='op'>(</span><span class='va'>rbloggers_popSNP</span>, <span class='st'>"/Users/erinfranke/Desktop/MACStats/Statistical Genetics/StatGenWillErin/rbloggersSep/rbloggers_popSNP"</span><span class='op'>)</span></span></code></pre>
+</div>
+</div>
+<p>To learn how to incorporate principal components in PLINK, I found <a href="http://sites.tufts.edu/cbi/files/2013/02/GWAS_Exercise6_Stratification.pdf">this set of exercises</a> from Tufts University.</p>
+<p>I started by running a GWAS in PLINK without PCs using the code <code>./plink --bfile rbloggersComb --assoc --pheno rbloggers_popSNP --maf 0.05 --out gwasNoPCA</code>. Next, I read the results into RStudio and created a QQ plot and got a lambda value. This lambda represents the <strong>genomic control (GC)</strong>, which measures the extent of inflation of association based test statistics due to population stratification or other confounders. A value of <span class="math inline">\(\lambda_{GC} \approx 1\)</span> indicates no stratification, while typically <span class="math inline">\(\lambda_{GC} &gt; 1.05\)</span> indicates stratification or other confounders including family structure, cryptic relatedness, or differential bias (spurious differences in allele frequencies between cases and controls due to differences in sample collection, sample preparation, and/or genotyping assay procedures). With a <span class="math inline">\(\lambda_{GC}\)</span> of 1.73 and the QQ plot not fitting the expected distribution, its clear that there is stratification in this data and our p-values are inflated. Hopefully PCA can help account for this.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>results_noPCA</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://readr.tidyverse.org/reference/read_table.html'>read_table</a></span><span class='op'>(</span><span class='st'>"/Users/erinfranke/Desktop/MACStats/Statistical Genetics/StatGenWillErin/rbloggersSep/gwasNoPCA.qassoc"</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
+<span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/arrange.html'>arrange</a></span><span class='op'>(</span><span class='va'>P</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>results_noPCA</span><span class='op'>)</span></span></code></pre>
+</div>
+<pre><code># A tibble: 6 × 10
+    CHR SNP            BP NMISS  BETA    SE    R2     T        P X10  
+  &lt;dbl&gt; &lt;chr&gt;       &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt; &lt;lgl&gt;
+1     2 rs13403822 1.73e8   323  1.32 0.200 0.119  6.58 1.97e-10 NA   
+2     2 kgp779520  1.73e8   323  1.28 0.202 0.112  6.36 7.14e-10 NA   
+3     2 kgp5773487 1.10e8   322  1.56 0.247 0.111  6.32 8.95e-10 NA   
+4     2 rs12624292 1.73e8   323  1.26 0.202 0.108  6.23 1.49e- 9 NA   
+5     2 rs11892858 1.73e8   323  1.22 0.200 0.104  6.12 2.75e- 9 NA   
+6    13 kgp4920926 2.62e7   323 -1.34 0.223 0.101 -6.01 5.15e- 9 NA   </code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='fu'><a href='https://rdrr.io/pkg/snpStats/man/qq.chisq.html'>qq.chisq</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>2</span> <span class='op'>*</span> <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span><span class='op'>(</span><span class='va'>results_noPCA</span><span class='op'>$</span><span class='va'>P</span><span class='op'>)</span>, df <span class='op'>=</span> <span class='fl'>2</span>, pvals <span class='op'>=</span> <span class='cn'>TRUE</span>, overdisp <span class='op'>=</span> <span class='cn'>FALSE</span>, thin <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0.8</span>, <span class='fl'>1000</span><span class='op'>)</span><span class='op'>)</span></span></code></pre>
+</div>
+<p><img src="pca_files/figure-html5/unnamed-chunk-13-1.png" width="624" /></p>
+<pre><code>           N      omitted       lambda 
+1.200898e+06 0.000000e+00 1.731327e+00 </code></pre>
+</div>
+<p>To run a GWAS with PCs, I created a <code>pcs.txt</code> file that includes <code>member</code>, <code>pedigree</code>, <code>pc1</code>, and <code>pc2</code> with the following code and stored it with the rest of my data. To learn how to structure that file correctly, I looked at <a href="https://ibg.colorado.edu/cdrom2019/colodro_grasby/GWAS_QC_part2/GWAS_QC_part2_practical.pdf">these slides</a> from Colorado University.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>pcs</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>cbind</a></span><span class='op'>(</span><span class='va'>rbloggers_fam</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>2</span><span class='op'>)</span>, pc1 <span class='op'>=</span> <span class='va'>tab</span><span class='op'>$</span><span class='va'>EV1</span>, pc2 <span class='op'>=</span> <span class='va'>tab</span><span class='op'>$</span><span class='va'>EV2</span><span class='op'>)</span></span>
+<span><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>pcs</span><span class='op'>)</span></span></code></pre>
+</div>
+<pre><code>           pedigree    member         pc1        pc2
+M11062205 M11062205 M11062205 -0.03507693 0.08154056
+M11050406 M11050406 M11050406 -0.03538905 0.09150315
+M11050407 M11050407 M11050407 -0.03566775 0.08688487
+M11070602 M11070602 M11070602 -0.03317120 0.08035539
+M11060912 M11060912 M11060912 -0.01784295 0.05161642
+M11060920 M11060920 M11060920 -0.02643969 0.05688225</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='fu'><a href='https://readr.tidyverse.org/reference/write_delim.html'>write_delim</a></span><span class='op'>(</span><span class='va'>pcs</span>, <span class='st'>"/Users/erinfranke/Desktop/MACStats/Statistical Genetics/StatGenWillErin/rbloggersSep/pcs"</span><span class='op'>)</span></span></code></pre>
+</div>
+</div>
+<p>Then, I ran <code>./plink --bfile rbloggersComb --assoc --covar pcs.txt --covar-name pc1, pc2 --pheno rbloggers_popSNP --out gwasPCA</code> in PLINK and read the results into RStudio below. We can see that the <span class="math inline">\(\lambda_{GC}\)</span> value went down from 1.73 to 1.61. This means that genetic ancestry did have some kind of confounding effect on the relationship between the SNPs and our trait of interest, so it is good we included them.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>results_PCA</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://readr.tidyverse.org/reference/read_table.html'>read_table</a></span><span class='op'>(</span><span class='st'>"/Users/erinfranke/Desktop/MACStats/Statistical Genetics/StatGenWillErin/rbloggersSep/gwasPCA.qassoc"</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
+<span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/arrange.html'>arrange</a></span><span class='op'>(</span><span class='va'>P</span><span class='op'>)</span></span>
+<span><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>results_PCA</span><span class='op'>)</span></span></code></pre>
+</div>
+<pre><code># A tibble: 6 × 10
+    CHR SNP            BP NMISS  BETA    SE    R2     T        P X10  
+  &lt;dbl&gt; &lt;chr&gt;       &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt; &lt;lgl&gt;
+1     2 rs13403822 1.73e8   323  1.32 0.200 0.119  6.58 1.97e-10 NA   
+2     2 kgp779520  1.73e8   323  1.28 0.202 0.112  6.36 7.14e-10 NA   
+3     2 kgp5773487 1.10e8   322  1.56 0.247 0.111  6.32 8.95e-10 NA   
+4     2 rs12624292 1.73e8   323  1.26 0.202 0.108  6.23 1.49e- 9 NA   
+5     2 rs11892858 1.73e8   323  1.22 0.200 0.104  6.12 2.75e- 9 NA   
+6    13 kgp4920926 2.62e7   323 -1.34 0.223 0.101 -6.01 5.15e- 9 NA   </code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='fu'><a href='https://rdrr.io/pkg/snpStats/man/qq.chisq.html'>qq.chisq</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>2</span> <span class='op'>*</span> <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span><span class='op'>(</span><span class='va'>results_PCA</span><span class='op'>$</span><span class='va'>P</span><span class='op'>)</span>, df <span class='op'>=</span> <span class='fl'>2</span>, pvals <span class='op'>=</span> <span class='cn'>TRUE</span>, overdisp <span class='op'>=</span> <span class='cn'>FALSE</span>, thin <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0.8</span>, <span class='fl'>1000</span><span class='op'>)</span><span class='op'>)</span></span></code></pre>
+</div>
+<p><img src="pca_files/figure-html5/unnamed-chunk-15-1.png" width="624" /></p>
+<pre><code>           N      omitted       lambda 
+1.651345e+06 0.000000e+00 1.613123e+00 </code></pre>
+</div>
+<p>One method to correct for inflated <span class="math inline">\(\lambda_{GC}\)</span> values is to divide association statistics by <span class="math inline">\(\lambda_{GC}\)</span>. This usually provides a sufficient correction for stratification in the case of <strong>genetic drift</strong>, meaning random fluctuations in allele frequencies over time due to sampling effects, particularly in small populations. However, in the case of <strong>ancient population divergence</strong> (when populations accumulate independent genetic mutations overtime time and become more different), dividing by <span class="math inline">\(\lambda_{GC}\)</span> is unlikely to be adequate because SNPs with unusual allele frequency differences that lie outside the expected distribution could be this way because of natural selection. Therefore, there need to be additional approaches to accounting for population stratification than dividing association statistics by <span class="math inline">\(\lambda_{GC}\)</span>. These approaches include PCA, but also family based association tests and perhaps most effectively mixed models with PC covariates. I won’t talk about these now but it is something I’m interested in looking more into in the future!</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
 </div>
@@ -2156,6 +2487,15 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <div class="d-appendix">
 </div>
 
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
 
 <!--radix_placeholder_site_after_body-->
 <!--/radix_placeholder_site_after_body-->

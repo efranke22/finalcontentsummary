@@ -1,5 +1,5 @@
 ---
-title: "Data and Data Cleaning"
+title: "Data"
 description: "This section introduces my data and how I cleaned up it for later analysis."
 site: distill::distill_website
 ---
