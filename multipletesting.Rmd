@@ -8,6 +8,59 @@ site: distill::distill_website
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+```{r, message=FALSE, warning=FALSE, echo=FALSE}
+library(snpStats)
+library(tidyverse)
+library(broom)
+library(NatParksPalettes)
+library(parallel)
+library(GGally)  
+```
+
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+load("GWAStutorial-master/conversionTable.RData")
+
+pathM <- paste("GWAStutorial-master/public/Genomics/108Malay_2527458snps", c(".bed", ".bim", ".fam"), sep = "")
+SNP_M <- read.plink(pathM[1], pathM[2], pathM[3])
+
+pathI <- paste("GWAStutorial-master/public/Genomics/105Indian_2527458snps", c(".bed", ".bim", ".fam"), sep = "")
+SNP_I <- read.plink(pathI[1], pathI[2], pathI[3])
+
+pathC <- paste("GWAStutorial-master/public/Genomics/110Chinese_2527458snps", c(".bed", ".bim", ".fam"), sep = "")
+SNP_C <- read.plink(pathC[1], pathC[2], pathC[3])
+
+SNP <- rbind(SNP_M$genotypes, SNP_I$genotypes, SNP_C$genotypes)
+
+# Take one bim map (all 3 maps are based on the same ordered set of SNPs)
+map <- SNP_M$map
+colnames(map) <- c("chromosome", "snp.name", "cM", "position", "allele.1", "allele.2")
+
+# Rename SNPs present in the conversion table into rs IDs
+mappedSNPs <- intersect(map$SNP, names(conversionTable))
+newIDs <- conversionTable[match(map$SNP[map$SNP %in% mappedSNPs], names(conversionTable))]
+map$SNP[rownames(map) %in% mappedSNPs] <- newIDs
+
+maf <- col.summary(SNP)$MAF
+
+# add new MAF variable to map
+map <- map %>%
+  mutate(MAF = maf)
+
+map <- map %>%
+  filter(maf >0 )
+
+map.clean <- map %>%
+  filter(MAF > 0.03, 
+         !is.na(allele.1))
+
+X <- as(SNP, "numeric")
+X.clean <- X[,colnames(X) %in% map.clean$snp.name]
+
+n <- nrow(X)
+y <- X[,'rs3131972'] + rnorm(n, 0, 1.5)
+```
+
+
 # Introducing Multiple Testing
 
 In the plot Manhattan plot created using RStudio we were able to visually pick out the SNP that we know to be associated with the trait of interest. However, in a real GWAS we do know which SNPs are associated with the trait of interest so this is not the case. As a result, we need a way to decide if a p-value is small enough to be *statistically significant* and/or to warrant follow-up analysis.
@@ -18,7 +71,7 @@ Reading through some scientific articles, I have seen a wide variety of threshol
 
 Before getting into thresholds, it is important to understand the basics of hypothesis testing. The goal is to make a decision between two conflicting theories, which are labeled as the null and alternative hypothesis. In this situation, the null hypothesis $H_0$ is that the specific SNP *is not* associated with the trait of interest. The alternative hypothesis $H_A$ is that the specific SNP *is* associated with the trait of interest. Each SNP is tested independently for a relationship with the trait, and if the p-value resulting from the test falls below the chosen threshold then $H_0$ can be rejected. 
 
-The example below shows a test of SNP number 830,000 in this dataset. Its p-value is $0.34$, indicating that at the threshold of $5 \times 10^{-7}$ we would fail to reject the null hypothesis and conclude this SNP to not be associated with our trait of interest (which we rightfully know to be true in this simulation).
+The example below shows a test of SNP number 830,000 in this dataset. Its p-value is $0.577$, indicating that at the threshold of $5 \times 10^{-7}$ we would fail to reject the null hypothesis and conclude this SNP to not be associated with our trait of interest (which we rightfully know to be true in this simulation).
 
 ```{r}
 set.seed(453)
@@ -42,19 +95,15 @@ With a threshold of 0.05 and independent tests, the probability of having at lea
 
 $$ = 1 - [1-0.0000005]^{100,766} = 0.04913$$
 
-The threshold $5 \times 10^{-7}$ didn't just appear out of thin air. Statisticians came up with this threshold using what is called the **Bonferroni Correction**, which is a technique that gives a new significance threshold by dividing the desired family wise error rate by the number of tests conducted. Therefore, with our data if we wanted a 5% probability of a type I error on chromosome 1 we would use the threshold $4.962 \times 10^{-7}$.
+The threshold $5 \times 10^{-7}$ didn't just appear out of thin air. Statisticians came up with this threshold using what is called the **Bonferroni Correction**, which is a technique that gives a new significance threshold by dividing the desired family wise error rate by the number of tests conducted. Therefore, with our data if we wanted a 5% probability of a type I error across **all** chromosomes we would decrease the threshold to $3.867 \times 10^{-8}$ as there are 1,651,345 polymorphic SNPs in this dataset.
 
-$$ \text{Bonferroni threshold} = \frac{\text{FWER}}{\text{ # tests}} = \frac{0.05}{100,766} = 4.962 \times 10^{-7}$$
-
-If we wanted a 5% probability of a type I error across **all** chromosomes we would decrease the threshold to $3.867 \times 10^{-8}$ as there are 1,293,000 SNPs in this dataset.
-
-$$ \text{Bonferroni threshold} = \frac{\text{FWER}}{\text{ # tests}} = \frac{0.05}{1,293,100} = 3.867 \times 10^{-8}$$
+$$ \text{Bonferroni threshold} = \frac{\text{FWER}}{\text{ # tests}} = \frac{0.05}{1,651,345} = 3.03 \times 10^{-8}$$
 
 # Accounting for correlation
 
 ## Nearby SNPs are correlated
 
-We just came to the conclusion that for our dataset we would use a threshold of $3.867 \times 10^{-8}$ to determine whether or a not SNP may have a relationship with the trait of interest. However, in doing this we made one key assumption, which is that our tests are independent from one another. Unfortunately, this is certainly not the case due to **linkage disequalibrium**, which as stated in [Science Direct](https://www.sciencedirect.com/topics/neuroscience/linkage-disequilibrium) is the idea that two markers in close physical proximity are correlated in a population and are in association more than would be expected with random assortment. This concept of correlated SNPs is demonstrated by the plot below, which plots the linkage disequalibrium matrix for the first 200 SNPs on chromosome 1. 
+We just came to the conclusion that for our dataset we would use a threshold of $3.03 \times 10^{-8}$ to determine whether or a not SNP may have a relationship with the trait of interest. However, in doing this we made one key assumption, which is that our tests are independent from one another. Unfortunately, this is certainly not the case due to **linkage disequalibrium**, which as stated in [Science Direct](https://www.sciencedirect.com/topics/neuroscience/linkage-disequilibrium) is the idea that two markers in close physical proximity are correlated in a population and are in association more than would be expected with random assortment. Essentially, SNPs next to each other are much more similar than SNPs far away from each other. This concept of correlated SNPs is demonstrated by the plot below, which plots the linkage disequilibrium matrix for the first 200 SNPs on chromosome 1. 
 
 ```{r}
 chr1_200 <- SNP[1:323, 1:200]
@@ -98,31 +147,25 @@ To see how the correlation impacts our threshold for a given FWER, we can use si
 3. Repeat steps 1 and 2 many times, typically 1,000-10,000 times in professional genetic studies. \
 4. Look at the p-values saved from those simulation replicates. Sort them from smallest to largest and find the number at which 5% (desired FWER) of p-values are smaller than that number. This is the significance threshold. \
 
-This process is very computationally expensive, especially when 10,000 replications are completed. Each dataset has a different level of correlation between SNPs which is why there is no one widely accepted threshold for a given number of SNPs. Running 1,000 replications on Macalester's computer takes about 29 minutes per replication, or just over 20 days. Thus, 10,000 replications would take close to 7 months, which is clearly not computationally efficient. As a result, researchers will send code to remote computers or complete their multiple testing process in a more efficient software such as PLINK. For this example in RStudio, we will complete 1,000 replications but using only the polymorphics SNPs from only the first 500 SNPs of chromosome 1. This will be mostly just to show what the R code might look like - following this short example, I will show how to run 1,000 replications on the entire dataset in PLINK.
+This process is very computationally expensive, especially when 10,000 replications are completed. Each dataset has a different level of correlation between SNPs which is why there is no one widely accepted threshold for a given number of SNPs. Running 1,000 replications on Macalester's computer takes about 29 minutes per replication, or just over 20 days. Thus, 10,000 replications would take close to 7 months, which is clearly not computationally efficient. As a result, researchers will send code to remote computers or complete their multiple testing process in a more efficient software such as PLINK. The code below shows how we would run the the simulation in RStudio 1000 times for the entire dataset, but I will not actually run it. If I did run this code, one way I could minimize computational time slightly would be to use the `mclapply()` function from the parallel package. This allows computation to be split across the two cores of my computer. If your computer has more cores, this could potentially help speed up computation by a factor of the number of cores your computer has (e.g. 8x faster if you have 8 cores).
 
-To start, make a genotype matrix into form of 0, 1, and 2s for the first 500 SNPs on chromosome 1. After removing monomorphic SNPs, 211 polymorphic SNPs remain.
-
-```{r}
+```{r, eval=FALSE}
 # make genotype matrix into form of 0, 1, and 2s
-snp_500 <- as(SNP2, "numeric")
-dim(snp_500)
+snp <- as(SNP, "numeric")
+dim(snp)
 
 # calculate MAF
-maf <- col.summary(SNP2)$MAF
+maf <- col.summary(SNP)$MAF
 
 # find monomorphic SNPs
 monomorphic <- which(maf == 0) 
 
 # filter genotype matrix to remove monomorphic SNPs
-snp_500 <- snp_500[,-monomorphic]
+snp <- snp[,-monomorphic]
 
 # check the dimensions after filtering
-dim(snp_500)
-```
+dim(snp)
 
-The code for the simulation is shown below. To minimize computational time slightly, I used the `mclapply()` function from the parallel package. This allows me to split computation across all four cores of my computer. When I used `replicate()`, running 1,000 replications took 7 minutes and 30 seconds. With `mclapply()`, the process took just shy of 5 minutes for a reduction of about 33%. In other instances that I have used `mclapply()`, the reduction has been closer to 60% so I think it varies with what it you are doing and what else is running on your computer. Overall, if we wanted to complete 10,000 replications across all SNPs the benefits of `mclapply()` would still be nowhere near enough, but it a nice tip to have when running things that take less than a couple hours. 
-
-```{r, cache = TRUE}
 do_one_sim<- function(i){
   
   # simulate null trait
@@ -130,7 +173,7 @@ do_one_sim<- function(i){
   
   # implement GWAS
   pvals <- c()
-  for(i in 1:211){
+  for(i in 1:1,651,345){
     mod <- lm(y ~ snp_500[,i])
     pvals[i] <- tidy(mod)$p.value[2]
   }
@@ -140,22 +183,72 @@ do_one_sim<- function(i){
 
 # Run code with mclapply()
 set.seed(494)
-simresmclapply <- mclapply(1:1000, do_one_sim, mc.cores = 4) 
+simresmclapply <- mclapply(1:1000, do_one_sim, mc.cores = 2) 
+
+#will print quantile
 quantile(simresmclapply %>% as.data.frame(), 0.05)
-
-# Run code with replicate()
-set.seed(494)
-simres3 <- replicate(1000, do_one_sim())
 ```
-
-From this simulation we learn that the optimal threshold for this specific set of data is 0.00039. Using the Bonferroni correction on the same set of SNPs would have yielded a threshold of $\frac{0.05}{211} = 0.00024$. Due to tests being correlated, we are effectively conducting fewer tests which results in the simulated threshold being higher than the Bonferroni corrected threshold which treats the tests independently. In this case, the two thresholds really aren't too different but its possible that using a larger number of SNPs would better highlight their correlation and you'd see more of a difference. We will see if this is the case when we use PLINK to determine a threshold. Overall, the simulation process exemplifies that the Bonferroni correction is too conservative - it suggests a significance threshold that is smaller than we truly need it to be. As a result, we get more type II errors and lower power. As I mentioned earlier, the harm of type II errors is that they conclude a SNP is has no relationship to the trait of interest when in reality it does, causing researchers to potentially miss out on key information in helping solve a disease. Thus, if you have time to determine a threshold using simulation instead of Bonferroni, I recommend doing so. 
 
 # Using PLINK for Multiple Hypothesis Testing
 
-Running 1,000 replications on this entire dataset took only about 20 minutes in PLINK, which is obviously a huge reduction in computational time. 20 days is 20 x 24 x 60 minutes, or 28,800 minutes. So 20 minutes to get a threshold through PLINK is about 1/1440 the time!
+Since the multiple testing process is so computationally expensive in RStudio, I ran it in PLINK. Running 1,000 replications on this entire dataset took only about 20 minutes in PLINK versus 20 days in RStudio, which is obviously a huge reduction in computational time (1440x faster).
 
+To do multiple testing in PLINK, complete the following steps:
 
+1) Load the data into R. 
 
+```{r, eval=FALSE}
+load("rbloggersData/conversionTable.RData")
 
+pathM <- paste("rbloggersData/108Malay_2527458snps", c(".bed", ".bim", ".fam"), sep = "")
+SNP_M <- read.plink(pathM[1], pathM[2], pathM[3])
 
+pathI <- paste("rbloggersData/105Indian_2527458snps", c(".bed", ".bim", ".fam"), sep = "")
+SNP_I <- read.plink(pathI[1], pathI[2], pathI[3])
 
+pathC <- paste("rbloggersData/110Chinese_2527458snps", c(".bed", ".bim", ".fam"), sep = "")
+SNP_C <- read.plink(pathC[1], pathC[2], pathC[3])
+
+rbloggers_fam <- rbind(SNP_M$fam, SNP_I$fam, SNP_C$fam)
+rbloggers_map <- rbind(SNP_M$map, SNP_I$map, SNP_C$map)
+```
+
+2) If you didn't run the GWAS in PLINK earlier, you will need to merge the 9 files (the .bim, .bam, and .fam for each of the 3 sub-populations). I listed the name of each of these files in .txt file with the structure shown in the image below. 
+
+![](images/allfiles.png)
+
+In PLINK, then run the command `./plink --merge-list allfiles.txt --make-bed --out rbloggersComb`. This combines the data into three files that PLINK can use (`rbloggersComb.bed`, `rbloggersComb.bim`, `rbloggersComb.fam`).
+
+3) Create the function `create_quantitative_trait()` that creates a null trait. Then, bind the 1000 trait columns to the `pedigree` and `member` columns from the `rbloggers_fam` table. Write this file to the folder where the data and allfiles.txt file is stored.
+
+```{r, eval=FALSE}
+create_quantitative_trait <- function(i){
+  y <- rnorm(n = 323, mean = 0, sd = 1)
+}
+
+traits <- as.data.frame(replicate(1000, create_quantitative_trait()))
+
+rbloggers_Poptraits <- cbind(rbloggers_fam %>%
+        dplyr::select(1:2), traits)
+
+write_delim(rbloggers_Poptraits, "rbloggersSep/rbloggers_Poptraits")
+```
+
+4) In PLINK, run the command `./plink --bfile rbloggersComb --assoc --pheno rbloggers_Poptraits --all-pheno --pfilter 1e-3`
+
+This will essentially run a GWAS 1000 times and it will take all p-values from those tests that are less than `1e-3`. We will not end up needing all 1.65 million p-values that come with each association test and so this lowers the computational burden on the computer. 
+
+5) Once PLINK finishes this command (somewhere between 15-25 minutes), read all the files into R using the following code. This should take only a couple minutes.
+
+```{r, eval=FALSE}
+dataFiles <- lapply(Sys.glob("rbloggersSep/plink.P*.qassoc"), read_table)
+```
+
+6) Run the code below. This will take the smallest p-value from each of the 1000 genetic-wide association studies, and then take the 5% quantile those 1000 smallest p-values. This represents the threshold you should use when running a GWAS on your real data with an actual trait of interest.
+
+```{r, eval=FALSE}
+pvalues <- sapply(dataFiles, function(x) min(x$P, na.rm=TRUE))
+quantile(pvalues, 0.05)
+```
+
+Due to storage space on my computer, I deleted all the 1000 files before creating this website so the threshold doesn't print out above, but it was $5.424 \times 10^{-8}$! If you remember from above, the Bonferroni corrected threshold was $3.03 \times 10^{-8}$. Due to tests being correlated, we are effectively conducting fewer tests which results in the simulated threshold being higher than the Bonferroni corrected threshold which treats the tests independently. The Bonferroni correction is essentially slightly too conservative - it suggests a significance threshold that is smaller than we truly need it to be. As a result, we get more type II errors and lower power. As I mentioned earlier, the harm of type II errors is that they conclude a SNP is has no relationship to the trait of interest when in reality it does, causing researchers to potentially miss out on key information in helping solve a disease. Thus, if you have time to determine a threshold using simulation instead of Bonferroni, I recommend doing so. 

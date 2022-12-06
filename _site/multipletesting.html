@@ -90,27 +90,27 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   <!--radix_placeholder_meta_tags-->
   <title>Home: Multiple Testing</title>
 
-  <meta property="description" itemprop="description" content="stuff about multiple testing"/>
+  <meta property="description" itemprop="description" content="What it is, why we need it, and how to do it in RStudio and PLINK"/>
 
 
 
   <!--  https://developers.facebook.com/docs/sharing/webmasters#markup -->
   <meta property="og:title" content="Home: Multiple Testing"/>
   <meta property="og:type" content="article"/>
-  <meta property="og:description" content="stuff about multiple testing"/>
+  <meta property="og:description" content="What it is, why we need it, and how to do it in RStudio and PLINK"/>
   <meta property="og:locale" content="en_US"/>
   <meta property="og:site_name" content="Home"/>
 
   <!--  https://dev.twitter.com/cards/types/summary -->
   <meta property="twitter:card" content="summary"/>
   <meta property="twitter:title" content="Home: Multiple Testing"/>
-  <meta property="twitter:description" content="stuff about multiple testing"/>
+  <meta property="twitter:description" content="What it is, why we need it, and how to do it in RStudio and PLINK"/>
 
   <!--/radix_placeholder_meta_tags-->
   <!--radix_placeholder_rmarkdown_metadata-->
 
   <script type="text/json" id="radix-rmarkdown-metadata">
-  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","site"]}},"value":[{"type":"character","attributes":{},"value":["Multiple Testing"]},{"type":"character","attributes":{},"value":["stuff about multiple testing"]},{"type":"character","attributes":{},"value":["distill::distill_website"]}]}
+  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","site"]}},"value":[{"type":"character","attributes":{},"value":["Multiple Testing"]},{"type":"character","attributes":{},"value":["What it is, why we need it, and how to do it in RStudio and PLINK"]},{"type":"character","attributes":{},"value":["distill::distill_website"]}]}
   </script>
   <!--/radix_placeholder_rmarkdown_metadata-->
   <!--radix_placeholder_navigation_in_header-->
@@ -2094,7 +2094,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <!--radix_placeholder_front_matter-->
 
 <script id="distill-front-matter" type="text/json">
-{"title":"Multiple Testing","description":"stuff about multiple testing","authors":[]}
+{"title":"Multiple Testing","description":"What it is, why we need it, and how to do it in RStudio and PLINK","authors":[]}
 </script>
 
 <!--/radix_placeholder_front_matter-->
@@ -2105,7 +2105,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <a href="index.html" class="title">Home</a>
 </div>
 <div class="nav-right">
-<a href="geneticsBackground.html">Genetics background</a>
+<a href="data.html">Data and cleaning</a>
 <a href="gwas.html">GWAS</a>
 <a href="multipletesting.html">Multiple Testing</a>
 <a href="pca.html">Genetic Ancestry &amp; PCA</a>
@@ -2122,33 +2122,201 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <h1>Multiple Testing</h1>
 <!--radix_placeholder_categories-->
 <!--/radix_placeholder_categories-->
-<p>stuff about multiple testing</p>
+<p>What it is, why we need it, and how to do it in RStudio and PLINK</p>
 </div>
 
 
 <div class="d-article">
-<h2 id="r-markdown">R Markdown</h2>
-<p>This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <a href="http://rmarkdown.rstudio.com" class="uri">http://rmarkdown.rstudio.com</a>.</p>
-<p>When you click the <strong>Knit</strong> button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:</p>
+<div class="layout-chunk" data-layout="l-body">
+
+</div>
+<div class="layout-chunk" data-layout="l-body">
+
+</div>
+<h1 id="introducing-multiple-testing">Introducing Multiple Testing</h1>
+<p>In the plot Manhattan plot created using RStudio we were able to visually pick out the SNP that we know to be associated with the trait of interest. However, in a real GWAS we do know which SNPs are associated with the trait of interest so this is not the case. As a result, we need a way to decide if a p-value is small enough to be <em>statistically significant</em> and/or to warrant follow-up analysis.</p>
+<p>Reading through some scientific articles, I have seen a wide variety of thresholds be used. These thresholds largely fall between <span class="math inline">\(5 \times 10^{-7}\)</span> on the higher end and <span class="math inline">\(1 \times 10^{-9}\)</span> on the lower end, which are obviously much smaller than the conventionally accepted <span class="math inline">\(0.05\)</span> threshold. Why is this, and how can we determine which threshold to use?</p>
+<h2 id="hypothesis-testing-background">Hypothesis Testing Background</h2>
+<p>Before getting into thresholds, it is important to understand the basics of hypothesis testing. The goal is to make a decision between two conflicting theories, which are labeled as the null and alternative hypothesis. In this situation, the null hypothesis <span class="math inline">\(H_0\)</span> is that the specific SNP <em>is not</em> associated with the trait of interest. The alternative hypothesis <span class="math inline">\(H_A\)</span> is that the specific SNP <em>is</em> associated with the trait of interest. Each SNP is tested independently for a relationship with the trait, and if the p-value resulting from the test falls below the chosen threshold then <span class="math inline">\(H_0\)</span> can be rejected.</p>
+<p>The example below shows a test of SNP number 830,000 in this dataset. Its p-value is <span class="math inline">\(0.577\)</span>, indicating that at the threshold of <span class="math inline">\(5 \times 10^{-7}\)</span> we would fail to reject the null hypothesis and conclude this SNP to not be associated with our trait of interest (which we rightfully know to be true in this simulation).</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>cars</span><span class='op'>)</span></span></code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>453</span><span class='op'>)</span></span>
+<span><span class='va'>snp1mod</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>y</span> <span class='op'>~</span> <span class='va'>X.clean</span><span class='op'>[</span>,<span class='fl'>830000</span><span class='op'>]</span><span class='op'>)</span></span>
+<span><span class='fu'>tidy</span><span class='op'>(</span><span class='va'>snp1mod</span><span class='op'>)</span></span></code></pre>
 </div>
-<pre><code>     speed           dist       
- Min.   : 4.0   Min.   :  2.00  
- 1st Qu.:12.0   1st Qu.: 26.00  
- Median :15.0   Median : 36.00  
- Mean   :15.4   Mean   : 42.98  
- 3rd Qu.:19.0   3rd Qu.: 56.00  
- Max.   :25.0   Max.   :120.00  </code></pre>
+<pre><code># A tibble: 2 × 5
+  term              estimate std.error statistic  p.value
+  &lt;chr&gt;                &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+1 (Intercept)         1.58       0.228     6.90  2.86e-11
+2 X.clean[, 830000]   0.0773     0.150     0.515 6.07e- 1</code></pre>
 </div>
-<h2 id="including-plots">Including Plots</h2>
-<p>You can also embed plots, for example:</p>
+<p>Another key piece of information related to hypothesis testing is errors. Ideally, we want to reject <span class="math inline">\(H_0\)</span> when it is wrong and accept <span class="math inline">\(H_0\)</span> when it is right, but unfortunately this does not always happen. We call rejecting the null hypothesis <span class="math inline">\(H_0\)</span> when it is true a <strong>type I error</strong>, and failing to reject the alternative hypothesis when it is true a <strong>type II error</strong>. For a given test, the probability of making a type I error is <span class="math inline">\(\alpha\)</span>, our chosen threshold, meaning the probability of making a type I error is in our control. Type II errors are dependent on a larger number of factors. The probability of committing a type II error is 1 minus the power of the test, where power is the probability of correctly rejecting the null hypothesis. To increase the power of a test, you can increase <span class="math inline">\(\alpha\)</span> (though this increases type I error rate) and/or increase the sample size (here the number of people in our study).</p>
+<p>In the context of the data, would be it better to commit a type I or type II error? In this situation, committing a type I error would mean concluding a SNP is associated with the trait of interest when in reality it is not, and committing a type II error would mean concluding a SNP is has no relationship to the trait of interest when it actually does. A harm of the type I error is investing additional time and money into studying that particular SNP and/or incorrectly giving those impacted by the disease hope that you are discovering potential causes of it. For a type II error, you are denoting SNPs associated with the trait of interest as insignificant and passing up key information that could be useful in solving a disease. The harms of both are highly unfortunate, however I would lean more on the side of minimizing the occurrence of type II errors which in turn would mean using a threshold on the slightly higher end.</p>
+<h2 id="getting-back-into-the-threshold">Getting back into the threshold</h2>
+<p>As mentioned earlier, thresholds in genetic studies commonly fall between <span class="math inline">\(5 \times 10^{-7}\)</span> and <span class="math inline">\(1 \times 10^{-9}\)</span>. Why is this?</p>
+<p>Let’s say we are running tests for association with our trait of interest on just the 100,766 SNPs in chromosome 1 and for simplicity that the tests are <strong>independent</strong>. If we are conducting a test on just the first of those SNPs and use <span class="math inline">\(\alpha = 0.05\)</span>, the probability of making a type I error is 0.05. However, the probability of making a type I error in all <strong>100,766 tests</strong> needed for the SNPs of the first chromosome is
+<span class="math display">\[P(\text{at least 1 Type I error}) = 1 - P(\text{no error test 1}) \times... \times P(\text{no error test 100,766})\]</span>
+<span class="math display">\[ = 1 - [1-0.05]^{100,766} = \text{essentially } 1\]</span></p>
+<p>With a threshold of 0.05 and independent tests, the probability of having at least one type I error (or the <strong>family-wise error rate (FWER)</strong>) for SNPs on chromosome 1 is essentially 100% as shown above. This makes it obvious that a smaller threshold is needed. If we were to use <span class="math inline">\(5 \times 10^{-7}\)</span>, this probability would fall to right around 0.05!</p>
+<p><span class="math display">\[ = 1 - [1-0.0000005]^{100,766} = 0.04913\]</span></p>
+<p>The threshold <span class="math inline">\(5 \times 10^{-7}\)</span> didn’t just appear out of thin air. Statisticians came up with this threshold using what is called the <strong>Bonferroni Correction</strong>, which is a technique that gives a new significance threshold by dividing the desired family wise error rate by the number of tests conducted. Therefore, with our data if we wanted a 5% probability of a type I error across <strong>all</strong> chromosomes we would decrease the threshold to <span class="math inline">\(3.867 \times 10^{-8}\)</span> as there are 1,651,345 polymorphic SNPs in this dataset.</p>
+<p><span class="math display">\[ \text{Bonferroni threshold} = \frac{\text{FWER}}{\text{ # tests}} = \frac{0.05}{1,651,345} = 3.03 \times 10^{-8}\]</span></p>
+<h1 id="accounting-for-correlation">Accounting for correlation</h1>
+<h2 id="nearby-snps-are-correlated">Nearby SNPs are correlated</h2>
+<p>We just came to the conclusion that for our dataset we would use a threshold of <span class="math inline">\(3.03 \times 10^{-8}\)</span> to determine whether or a not SNP may have a relationship with the trait of interest. However, in doing this we made one key assumption, which is that our tests are independent from one another. Unfortunately, this is certainly not the case due to <strong>linkage disequalibrium</strong>, which as stated in <a href="https://www.sciencedirect.com/topics/neuroscience/linkage-disequilibrium">Science Direct</a> is the idea that two markers in close physical proximity are correlated in a population and are in association more than would be expected with random assortment. Essentially, SNPs next to each other are much more similar than SNPs far away from each other. This concept of correlated SNPs is demonstrated by the plot below, which plots the linkage disequilibrium matrix for the first 200 SNPs on chromosome 1.</p>
 <div class="layout-chunk" data-layout="l-body">
-<p><img src="multipletesting_files/figure-html5/pressure-1.png" width="624" /></p>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>chr1_200</span> <span class='op'>&lt;-</span> <span class='va'>SNP</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>323</span>, <span class='fl'>1</span><span class='op'>:</span><span class='fl'>200</span><span class='op'>]</span></span>
+<span><span class='va'>hapmap.ld</span> <span class='op'>&lt;-</span> <span class='fu'>ld</span><span class='op'>(</span><span class='va'>chr1_200</span>, depth <span class='op'>=</span> <span class='fl'>199</span>, stats <span class='op'>=</span> <span class='st'>"R.squared"</span>, symmetric <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></span>
+<span><span class='va'>color.pal</span> <span class='op'>&lt;-</span> <span class='fu'>natparks.pals</span><span class='op'>(</span><span class='st'>"Acadia"</span>, <span class='fl'>10</span><span class='op'>)</span></span>
+<span><span class='fu'><a href='https://rdrr.io/r/graphics/image.html'>image</a></span><span class='op'>(</span><span class='va'>hapmap.ld</span>, lwd <span class='op'>=</span> <span class='fl'>0</span>, cuts <span class='op'>=</span> <span class='fl'>9</span>, col.regions <span class='op'>=</span> <span class='va'>color.pal</span>, colorkey <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></span></code></pre>
 </div>
-<p>Note that the <code>echo = FALSE</code> parameter was added to the code chunk to prevent printing of the R code that generated the plot.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
+<p><img src="multipletesting_files/figure-html5/unnamed-chunk-4-1.png" width="624" /></p>
+</div>
+<p>If you look closely, you can see that along the diagonal there is a higher concentration of orange, meaning that neighboring SNPs are highly correlated with one another. However, this is a little hard to see because of all the white lines. The white lines are occurring at monomorphic SNPs. If we wanted to calculate the correlation between two SNPs (X and Y) we would use the following equation:</p>
+<p><span class="math display">\[r = \frac{\sum_{i=1}^n(x_i -
+\bar{x})(y_i - \bar{y})}{\sqrt{\sum_{i=1}^n(x_i - \bar{x})^2
+\sum_{i=1}^n(y_i - \bar{y})^2}}\]</span></p>
+<p>If we consider SNP X to be monomorphic, that means there are 0 copies of the minor allele for all people in our dataset. In the equation above, that means <span class="math inline">\(x_1 = ... = x_{323} = 0\)</span>. This means the sample average <span class="math inline">\(\bar{x}\)</span> is also 0 and thus <span class="math inline">\(x_i - \bar{x} = 0 - 0 = 0\)</span> for individuals <span class="math inline">\(i = 1, \dots, 323\)</span>. Plugging this information in, we get an undefined correlation, which is what all the white lines represent.</p>
+<p><span class="math display">\[r = \frac{\sum_{i=1}^{323} 0 \times (y_i -
+\bar{y})}{\sqrt{0 \times \sum_{i=1}^{323}(y_i - \bar{y})^2}} =
+\frac{0}{0}\]</span></p>
+<p>Removing the monomorphic SNPs from our LD matrix gets rid of over 120 monomorphic SNPs and better shows how highly correlated nearby SNPs are.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='co'>#get monomorphic SNPs only</span></span>
+<span><span class='va'>maf_chr1_200</span> <span class='op'>&lt;-</span> <span class='fu'>col.summary</span><span class='op'>(</span><span class='va'>chr1_200</span><span class='op'>)</span><span class='op'>$</span><span class='va'>MAF</span></span>
+<span><span class='va'>mono</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/which.html'>which</a></span><span class='op'>(</span><span class='va'>maf_chr1_200</span> <span class='op'>==</span> <span class='fl'>0</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='co'># calculate LD on polymorphic SNPs only</span></span>
+<span><span class='va'>hapmap.ld.nomono</span> <span class='op'>&lt;-</span> <span class='fu'>ld</span><span class='op'>(</span><span class='va'>chr1_200</span><span class='op'>[</span>,<span class='op'>-</span><span class='va'>mono</span><span class='op'>]</span>, depth <span class='op'>=</span> <span class='fl'>199</span><span class='op'>-</span><span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span><span class='op'>(</span><span class='va'>mono</span><span class='op'>)</span>, stats <span class='op'>=</span> <span class='st'>"R.squared"</span>, symmetric <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='co'># plot </span></span>
+<span><span class='fu'><a href='https://rdrr.io/r/graphics/image.html'>image</a></span><span class='op'>(</span><span class='va'>hapmap.ld.nomono</span>, lwd <span class='op'>=</span> <span class='fl'>0</span>, cuts <span class='op'>=</span> <span class='fl'>9</span>, col.regions <span class='op'>=</span> <span class='va'>color.pal</span>, colorkey <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></span></code></pre>
+</div>
+<p><img src="multipletesting_files/figure-html5/unnamed-chunk-5-1.png" width="624" /></p>
+</div>
+<h2 id="getting-a-threshold-with-simulation">Getting a threshold with simulation</h2>
+<p>To see how the correlation impacts our threshold for a given FWER, we can use simulation. The process for simulation goes as follows:</p>
+<ol type="1">
+<li>Simulate a null trait, meaning a trait not associated with any of the SNPs.<br />
+</li>
+<li>Run GWAS to test the association between the simulated null trait and each SNP in our dataset. After that record the smallest p-value from this GWAS.<br />
+</li>
+<li>Repeat steps 1 and 2 many times, typically 1,000-10,000 times in professional genetic studies.<br />
+</li>
+<li>Look at the p-values saved from those simulation replicates. Sort them from smallest to largest and find the number at which 5% (desired FWER) of p-values are smaller than that number. This is the significance threshold.<br />
+</li>
+</ol>
+<p>This process is very computationally expensive, especially when 10,000 replications are completed. Each dataset has a different level of correlation between SNPs which is why there is no one widely accepted threshold for a given number of SNPs. Running 1,000 replications on Macalester’s computer takes about 29 minutes per replication, or just over 20 days. Thus, 10,000 replications would take close to 7 months, which is clearly not computationally efficient. As a result, researchers will send code to remote computers or complete their multiple testing process in a more efficient software such as PLINK. The code below shows how we would run the the simulation in RStudio 1000 times for the entire dataset, but I will not actually run it. If I did run this code, one way I could minimize computational time slightly would be to use the <code>mclapply()</code> function from the parallel package. This allows computation to be split across the two cores of my computer. If your computer has more cores, this could potentially help speed up computation by a factor of the number of cores your computer has (e.g. 8x faster if you have 8 cores).</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># make genotype matrix into form of 0, 1, and 2s</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>snp <span class="ot">&lt;-</span> <span class="fu">as</span>(SNP, <span class="st">&quot;numeric&quot;</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(snp)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co"># calculate MAF</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>maf <span class="ot">&lt;-</span> <span class="fu">col.summary</span>(SNP)<span class="sc">$</span>MAF</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="co"># find monomorphic SNPs</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>monomorphic <span class="ot">&lt;-</span> <span class="fu">which</span>(maf <span class="sc">==</span> <span class="dv">0</span>) </span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="co"># filter genotype matrix to remove monomorphic SNPs</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>snp <span class="ot">&lt;-</span> snp[,<span class="sc">-</span>monomorphic]</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="co"># check the dimensions after filtering</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(snp)</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>do_one_sim<span class="ot">&lt;-</span> <span class="cf">function</span>(i){</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>  <span class="co"># simulate null trait</span></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>  y <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="at">n =</span> <span class="dv">323</span>, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> <span class="dv">1</span>)</span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>  <span class="co"># implement GWAS</span></span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>  pvals <span class="ot">&lt;-</span> <span class="fu">c</span>()</span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">1</span>,<span class="dv">651</span>,<span class="dv">345</span>){</span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>    mod <span class="ot">&lt;-</span> <span class="fu">lm</span>(y <span class="sc">~</span> snp_500[,i])</span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>    pvals[i] <span class="ot">&lt;-</span> <span class="fu">tidy</span>(mod)<span class="sc">$</span>p.value[<span class="dv">2</span>]</span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>  <span class="co"># record smallest p-value</span></span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">min</span>(pvals)</span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a><span class="co"># Run code with mclapply()</span></span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">494</span>)</span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a>simresmclapply <span class="ot">&lt;-</span> <span class="fu">mclapply</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">1000</span>, do_one_sim, <span class="at">mc.cores =</span> <span class="dv">2</span>) </span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a><span class="co">#will print quantile</span></span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a><span class="fu">quantile</span>(simresmclapply <span class="sc">%&gt;%</span> <span class="fu">as.data.frame</span>(), <span class="fl">0.05</span>)</span></code></pre></div>
+</div>
+<h1 id="using-plink-for-multiple-hypothesis-testing">Using PLINK for Multiple Hypothesis Testing</h1>
+<p>Since the multiple testing process is so computationally expensive in RStudio, I ran it in PLINK. Running 1,000 replications on this entire dataset took only about 20 minutes in PLINK versus 20 days in RStudio, which is obviously a huge reduction in computational time (1440x faster).</p>
+<p>To do multiple testing in PLINK, complete the following steps:</p>
+<ol type="1">
+<li>Load the data into R.</li>
+</ol>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='fu'><a href='https://rdrr.io/r/base/load.html'>load</a></span><span class='op'>(</span><span class='st'>"rbloggersData/conversionTable.RData"</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='va'>pathM</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='st'>"rbloggersData/108Malay_2527458snps"</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>".bed"</span>, <span class='st'>".bim"</span>, <span class='st'>".fam"</span><span class='op'>)</span>, sep <span class='op'>=</span> <span class='st'>""</span><span class='op'>)</span></span>
+<span><span class='va'>SNP_M</span> <span class='op'>&lt;-</span> <span class='fu'>read.plink</span><span class='op'>(</span><span class='va'>pathM</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>]</span>, <span class='va'>pathM</span><span class='op'>[</span><span class='fl'>2</span><span class='op'>]</span>, <span class='va'>pathM</span><span class='op'>[</span><span class='fl'>3</span><span class='op'>]</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='va'>pathI</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='st'>"rbloggersData/105Indian_2527458snps"</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>".bed"</span>, <span class='st'>".bim"</span>, <span class='st'>".fam"</span><span class='op'>)</span>, sep <span class='op'>=</span> <span class='st'>""</span><span class='op'>)</span></span>
+<span><span class='va'>SNP_I</span> <span class='op'>&lt;-</span> <span class='fu'>read.plink</span><span class='op'>(</span><span class='va'>pathI</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>]</span>, <span class='va'>pathI</span><span class='op'>[</span><span class='fl'>2</span><span class='op'>]</span>, <span class='va'>pathI</span><span class='op'>[</span><span class='fl'>3</span><span class='op'>]</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='va'>pathC</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='st'>"rbloggersData/110Chinese_2527458snps"</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>".bed"</span>, <span class='st'>".bim"</span>, <span class='st'>".fam"</span><span class='op'>)</span>, sep <span class='op'>=</span> <span class='st'>""</span><span class='op'>)</span></span>
+<span><span class='va'>SNP_C</span> <span class='op'>&lt;-</span> <span class='fu'>read.plink</span><span class='op'>(</span><span class='va'>pathC</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>]</span>, <span class='va'>pathC</span><span class='op'>[</span><span class='fl'>2</span><span class='op'>]</span>, <span class='va'>pathC</span><span class='op'>[</span><span class='fl'>3</span><span class='op'>]</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='va'>rbloggers_fam</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>rbind</a></span><span class='op'>(</span><span class='va'>SNP_M</span><span class='op'>$</span><span class='va'>fam</span>, <span class='va'>SNP_I</span><span class='op'>$</span><span class='va'>fam</span>, <span class='va'>SNP_C</span><span class='op'>$</span><span class='va'>fam</span><span class='op'>)</span></span>
+<span><span class='va'>rbloggers_map</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>rbind</a></span><span class='op'>(</span><span class='va'>SNP_M</span><span class='op'>$</span><span class='va'>map</span>, <span class='va'>SNP_I</span><span class='op'>$</span><span class='va'>map</span>, <span class='va'>SNP_C</span><span class='op'>$</span><span class='va'>map</span><span class='op'>)</span></span></code></pre>
+</div>
+</div>
+<ol start="2" type="1">
+<li>If you didn’t run the GWAS in PLINK earlier, you will need to merge the 9 files (the .bim, .bam, and .fam for each of the 3 sub-populations). I listed the name of each of these files in .txt file with the structure shown in the image below.</li>
+</ol>
+<p><img src="images/allfiles.png" /></p>
+<p>In PLINK, then run the command <code>./plink --merge-list allfiles.txt --make-bed --out rbloggersComb</code>. This combines the data into three files that PLINK can use (<code>rbloggersComb.bed</code>, <code>rbloggersComb.bim</code>, <code>rbloggersComb.fam</code>).</p>
+<ol start="3" type="1">
+<li>Create the function <code>create_quantitative_trait()</code> that creates a null trait. Then, bind the 1000 trait columns to the <code>pedigree</code> and <code>member</code> columns from the <code>rbloggers_fam</code> table. Write this file to the folder where the data and allfiles.txt file is stored.</li>
+</ol>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>create_quantitative_trait</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>i</span><span class='op'>)</span><span class='op'>{</span></span>
+<span>  <span class='va'>y</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span>n <span class='op'>=</span> <span class='fl'>323</span>, mean <span class='op'>=</span> <span class='fl'>0</span>, sd <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span></span>
+<span><span class='op'>}</span></span>
+<span></span>
+<span><span class='va'>traits</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/as.data.frame.html'>as.data.frame</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>replicate</a></span><span class='op'>(</span><span class='fl'>1000</span>, <span class='fu'>create_quantitative_trait</span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='va'>rbloggers_Poptraits</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>cbind</a></span><span class='op'>(</span><span class='va'>rbloggers_fam</span> <span class='op'>%&gt;%</span></span>
+<span>        <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>2</span><span class='op'>)</span>, <span class='va'>traits</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='fu'>write_delim</span><span class='op'>(</span><span class='va'>rbloggers_Poptraits</span>, <span class='st'>"rbloggersSep/rbloggers_Poptraits"</span><span class='op'>)</span></span></code></pre>
+</div>
+</div>
+<ol start="4" type="1">
+<li>In PLINK, run the command <code>./plink --bfile rbloggersComb --assoc --pheno rbloggers_Poptraits --all-pheno --pfilter 1e-3</code></li>
+</ol>
+<p>This will essentially run a GWAS 1000 times and it will take all p-values from those tests that are less than <code>1e-3</code>. We will not end up needing all 1.65 million p-values that come with each association test and so this lowers the computational burden on the computer.</p>
+<ol start="5" type="1">
+<li>Once PLINK finishes this command (somewhere between 15-25 minutes), read all the files into R using the following code. This should take only a couple minutes.</li>
+</ol>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>dataFiles</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>lapply</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/Sys.glob.html'>Sys.glob</a></span><span class='op'>(</span><span class='st'>"rbloggersSep/plink.P*.qassoc"</span><span class='op'>)</span>, <span class='va'>read_table</span><span class='op'>)</span></span></code></pre>
+</div>
+</div>
+<ol start="6" type="1">
+<li>Run the code below. This will take the smallest p-value from each of the 1000 genetic-wide association studies, and then take the 5% quantile those 1000 smallest p-values. This represents the threshold you should use when running a GWAS on your real data with an actual trait of interest.</li>
+</ol>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>pvalues</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>sapply</a></span><span class='op'>(</span><span class='va'>dataFiles</span>, <span class='kw'>function</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span> <span class='fu'><a href='https://rdrr.io/r/base/Extremes.html'>min</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>$</span><span class='va'>P</span>, na.rm<span class='op'>=</span><span class='cn'>TRUE</span><span class='op'>)</span><span class='op'>)</span></span>
+<span><span class='fu'><a href='https://rdrr.io/r/stats/quantile.html'>quantile</a></span><span class='op'>(</span><span class='va'>pvalues</span>, <span class='fl'>0.05</span><span class='op'>)</span></span></code></pre>
+</div>
+</div>
+<p>Due to storage space on my computer, I deleted all the 1000 files before creating this website so the threshold doesn’t print out above, but it was <span class="math inline">\(5.424 \times 10^{-8}\)</span>! If you remember from above, the Bonferroni corrected threshold was <span class="math inline">\(3.03 \times 10^{-8}\)</span>. Due to tests being correlated, we are effectively conducting fewer tests which results in the simulated threshold being higher than the Bonferroni corrected threshold which treats the tests independently. The Bonferroni correction is essentially slightly too conservative - it suggests a significance threshold that is smaller than we truly need it to be. As a result, we get more type II errors and lower power. As I mentioned earlier, the harm of type II errors is that they conclude a SNP is has no relationship to the trait of interest when in reality it does, causing researchers to potentially miss out on key information in helping solve a disease. Thus, if you have time to determine a threshold using simulation instead of Bonferroni, I recommend doing so.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
 </div>
@@ -2156,6 +2324,15 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <div class="d-appendix">
 </div>
 
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
 
 <!--radix_placeholder_site_after_body-->
 <!--/radix_placeholder_site_after_body-->
