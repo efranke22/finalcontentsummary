@@ -1,7 +1,10 @@
 ---
 title: "Multiple Testing"
-description: "What it is, why we need it, and how to do it in RStudio and PLINK"
-site: distill::distill_website
+description: "What it is, why we need it, and how to do it in RStudio and PLINK."
+output: 
+  distill::distill_article:
+    toc: true
+bibliography: Library.bib
 ---
 
 ```{r setup, include=FALSE}
@@ -57,7 +60,8 @@ X <- as(SNP, "numeric")
 X.clean <- X[,colnames(X) %in% map.clean$snp.name]
 
 n <- nrow(X)
-y <- X[,'rs3131972'] + rnorm(n, 0, 1.5)
+set.seed(494)
+y <- X[,'rs3131972'] + rnorm(n, 0, 1)
 ```
 
 
@@ -71,7 +75,7 @@ Reading through some scientific articles, I have seen a wide variety of threshol
 
 Before getting into thresholds, it is important to understand the basics of hypothesis testing. The goal is to make a decision between two conflicting theories, which are labeled as the null and alternative hypothesis. In this situation, the null hypothesis $H_0$ is that the specific SNP *is not* associated with the trait of interest. The alternative hypothesis $H_A$ is that the specific SNP *is* associated with the trait of interest. Each SNP is tested independently for a relationship with the trait, and if the p-value resulting from the test falls below the chosen threshold then $H_0$ can be rejected. 
 
-The example below shows a test of SNP number 830,000 in this dataset. Its p-value is $0.577$, indicating that at the threshold of $5 \times 10^{-7}$ we would fail to reject the null hypothesis and conclude this SNP to not be associated with our trait of interest (which we rightfully know to be true in this simulation).
+The example below shows a test of SNP number 830,000 in this dataset. Its p-value is $0.41$, indicating that at the threshold of $5 \times 10^{-7}$ we would fail to reject the null hypothesis and conclude this SNP to not be associated with our trait of interest (which we rightfully know to be true in this simulation).
 
 ```{r}
 set.seed(453)
@@ -83,7 +87,7 @@ Another key piece of information related to hypothesis testing is errors. Ideall
 
 In the context of the data, would be it better to commit a type I or type II error? In this situation, committing a type I error would mean concluding a SNP is associated with the trait of interest when in reality it is not, and committing a type II error would mean concluding a SNP is has no relationship to the trait of interest when it actually does. A harm of the type I error is investing additional time and money into studying that particular SNP and/or incorrectly giving those impacted by the disease hope that you are discovering potential causes of it. For a type II error, you are denoting SNPs associated with the trait of interest as insignificant and passing up key information that could be useful in solving a disease. The harms of both are highly unfortunate, however I would lean more on the side of minimizing the occurrence of type II errors which in turn would mean using a threshold on the slightly higher end. 
 
-## Getting back into the threshold
+## Back to the threshold
 
 As mentioned earlier, thresholds in genetic studies commonly fall between $5 \times 10^{-7}$ and $1 \times 10^{-9}$. Why is this?
 
@@ -103,7 +107,7 @@ $$ \text{Bonferroni threshold} = \frac{\text{FWER}}{\text{ # tests}} = \frac{0.0
 
 ## Nearby SNPs are correlated
 
-We just came to the conclusion that for our dataset we would use a threshold of $3.03 \times 10^{-8}$ to determine whether or a not SNP may have a relationship with the trait of interest. However, in doing this we made one key assumption, which is that our tests are independent from one another. Unfortunately, this is certainly not the case due to **linkage disequalibrium**, which as stated in [Science Direct](https://www.sciencedirect.com/topics/neuroscience/linkage-disequilibrium) is the idea that two markers in close physical proximity are correlated in a population and are in association more than would be expected with random assortment. Essentially, SNPs next to each other are much more similar than SNPs far away from each other. This concept of correlated SNPs is demonstrated by the plot below, which plots the linkage disequilibrium matrix for the first 200 SNPs on chromosome 1. 
+We just came to the conclusion that for our dataset we would use a threshold of $3.03 \times 10^{-8}$ to determine whether or a not SNP may have a relationship with the trait of interest. However, in doing this we made one key assumption, which is that our tests are independent from one another. Unfortunately, this is certainly not the case due to **linkage disequalibrium**, which as stated in [Science Direct](https://www.sciencedirect.com/topics/neuroscience/linkage-disequilibrium) is the idea that two markers in close physical proximity are correlated in a population and are in association more than would be expected with random assortment [@linkage]. Essentially, SNPs next to each other are much more similar than SNPs far away from each other. This concept of correlated SNPs is demonstrated by the plot below, which plots the linkage disequilibrium matrix for the first 200 SNPs on chromosome 1. 
 
 ```{r}
 chr1_200 <- SNP[1:323, 1:200]
@@ -147,7 +151,7 @@ To see how the correlation impacts our threshold for a given FWER, we can use si
 3. Repeat steps 1 and 2 many times, typically 1,000-10,000 times in professional genetic studies. \
 4. Look at the p-values saved from those simulation replicates. Sort them from smallest to largest and find the number at which 5% (desired FWER) of p-values are smaller than that number. This is the significance threshold. \
 
-This process is very computationally expensive, especially when 10,000 replications are completed. Each dataset has a different level of correlation between SNPs which is why there is no one widely accepted threshold for a given number of SNPs. Running 1,000 replications on Macalester's computer takes about 29 minutes per replication, or just over 20 days. Thus, 10,000 replications would take close to 7 months, which is clearly not computationally efficient. As a result, researchers will send code to remote computers or complete their multiple testing process in a more efficient software such as PLINK. The code below shows how we would run the the simulation in RStudio 1000 times for the entire dataset, but I will not actually run it. If I did run this code, one way I could minimize computational time slightly would be to use the `mclapply()` function from the parallel package. This allows computation to be split across the two cores of my computer. If your computer has more cores, this could potentially help speed up computation by a factor of the number of cores your computer has (e.g. 8x faster if you have 8 cores).
+This process is very computationally expensive, especially when 10,000 replications are completed. Each dataset has a different level of correlation between SNPs which is why there is no one widely accepted threshold for a given number of SNPs. Running 1,000 replications on Macalester's computer takes about 29 minutes per replication, or just over 20 days total. Thus, 10,000 replications would take close to 7 months, which is clearly not computationally efficient. As a result, researchers will send code to remote computers or complete their multiple testing process in a more efficient software such as PLINK. The code below shows how we would run the the simulation in RStudio 1000 times for the entire dataset, but I will not actually run it. If I did run this code, one way I could minimize computational time slightly would be to use the `mclapply()` function from the parallel package. This allows computation to be split across the two cores of my computer. If your computer has more cores, this could potentially help speed up computation by a factor of the number of cores your computer has (e.g. 8x faster if you have 8 cores).
 
 ```{r, eval=FALSE}
 # make genotype matrix into form of 0, 1, and 2s
@@ -219,7 +223,7 @@ rbloggers_map <- rbind(SNP_M$map, SNP_I$map, SNP_C$map)
 
 In PLINK, then run the command `./plink --merge-list allfiles.txt --make-bed --out rbloggersComb`. This combines the data into three files that PLINK can use (`rbloggersComb.bed`, `rbloggersComb.bim`, `rbloggersComb.fam`).
 
-3) Create the function `create_quantitative_trait()` that creates a null trait. Then, bind the 1000 trait columns to the `pedigree` and `member` columns from the `rbloggers_fam` table. Write this file to the folder where the data and allfiles.txt file is stored.
+3) Create the function `create_quantitative_trait()` that creates a null trait. Then, bind the 1000 trait columns to the `pedigree` and `member` columns from the `rbloggers_fam` table. Write this file to the folder where the data and `allfiles.txt` file is stored.
 
 ```{r, eval=FALSE}
 create_quantitative_trait <- function(i){
@@ -236,7 +240,7 @@ write_delim(rbloggers_Poptraits, "rbloggersSep/rbloggers_Poptraits")
 
 4) In PLINK, run the command `./plink --bfile rbloggersComb --assoc --pheno rbloggers_Poptraits --all-pheno --pfilter 1e-3`
 
-This will essentially run a GWAS 1000 times and it will take all p-values from those tests that are less than `1e-3`. We will not end up needing all 1.65 million p-values that come with each association test and so this lowers the computational burden on the computer. 
+This will essentially run a GWAS 1000 times and it will take all p-values from those tests that are less than `1e-3`. We will not end up needing all 1.65 million p-values that come with each association test (we just need the smallest one) so this lowers the computational burden on the computer. 
 
 5) Once PLINK finishes this command (somewhere between 15-25 minutes), read all the files into R using the following code. This should take only a couple minutes.
 
