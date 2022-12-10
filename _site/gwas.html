@@ -86,31 +86,56 @@ code span.vs { color: #20794d; } /* VerbatimString */
 code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 </style>
 
+<style>
+  div.csl-bib-body { }
+  div.csl-entry {
+    clear: both;
+    }
+  .hanging div.csl-entry {
+    margin-left:2em;
+    text-indent:-2em;
+  }
+  div.csl-left-margin {
+    min-width:2em;
+    float:left;
+  }
+  div.csl-right-inline {
+    margin-left:2em;
+    padding-left:1em;
+  }
+  div.csl-indent {
+    margin-left: 2em;
+  }
+</style>
 
   <!--radix_placeholder_meta_tags-->
-  <title>Home: Genetic Wide Association Studies (GWAS)</title>
+  <title>Home: Genome Wide Association Studies (GWAS)</title>
 
-  <meta property="description" itemprop="description" content="What it is and how to do it in RStudio and PLINK"/>
+  <meta property="description" itemprop="description" content="What a GWAS is and how to do it in RStudio and PLINK."/>
 
 
 
   <!--  https://developers.facebook.com/docs/sharing/webmasters#markup -->
-  <meta property="og:title" content="Home: Genetic Wide Association Studies (GWAS)"/>
+  <meta property="og:title" content="Home: Genome Wide Association Studies (GWAS)"/>
   <meta property="og:type" content="article"/>
-  <meta property="og:description" content="What it is and how to do it in RStudio and PLINK"/>
+  <meta property="og:description" content="What a GWAS is and how to do it in RStudio and PLINK."/>
   <meta property="og:locale" content="en_US"/>
   <meta property="og:site_name" content="Home"/>
 
   <!--  https://dev.twitter.com/cards/types/summary -->
   <meta property="twitter:card" content="summary"/>
-  <meta property="twitter:title" content="Home: Genetic Wide Association Studies (GWAS)"/>
-  <meta property="twitter:description" content="What it is and how to do it in RStudio and PLINK"/>
+  <meta property="twitter:title" content="Home: Genome Wide Association Studies (GWAS)"/>
+  <meta property="twitter:description" content="What a GWAS is and how to do it in RStudio and PLINK."/>
 
   <!--/radix_placeholder_meta_tags-->
+  
+  <meta name="citation_reference" content="citation_title=The power of genomic control;citation_publisher=Cell Press;citation_author=Silviu-Alin Bacanu;citation_author=B. Devlin;citation_author=Kathryn Roeder"/>
+  <meta name="citation_reference" content="citation_title=Whole genome association analysis toolset"/>
+  <meta name="citation_reference" content="citation_title=New approaches to population stratification in genome-wide association studies;citation_volume=11;citation_doi=10.1038/nrg2813;citation_author=Alkes L. Price;citation_author=Noah A. Zaitlen;citation_author=David Reich;citation_author=Nick Patterson"/>
   <!--radix_placeholder_rmarkdown_metadata-->
 
   <script type="text/json" id="radix-rmarkdown-metadata">
-  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","site"]}},"value":[{"type":"character","attributes":{},"value":["Genetic Wide Association Studies (GWAS)"]},{"type":"character","attributes":{},"value":["What it is and how to do it in RStudio and PLINK"]},{"type":"character","attributes":{},"value":["distill::distill_website"]}]}
+  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","output","bibliography"]}},"value":[{"type":"character","attributes":{},"value":["Genome Wide Association Studies (GWAS)"]},{"type":"character","attributes":{},"value":["What a GWAS is and how to do it in RStudio and PLINK."]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["distill::distill_article"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["toc"]}},"value":[{"type":"logical","attributes":{},"value":[true]}]}]},{"type":"character","attributes":{},"value":["Library.bib"]}]}
   </script>
   <!--/radix_placeholder_rmarkdown_metadata-->
   <!--radix_placeholder_navigation_in_header-->
@@ -2073,6 +2098,316 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 
   </script>
 
+  <style type="text/css">
+  /* base variables */
+
+  /* Edit the CSS properties in this file to create a custom
+     Distill theme. Only edit values in the right column
+     for each row; values shown are the CSS defaults.
+     To return any property to the default,
+     you may set its value to: unset
+     All rows must end with a semi-colon.                      */
+
+  /* Optional: embed custom fonts here with `@import`          */
+  /* This must remain at the top of this file.                 */
+
+
+
+  html {
+    /*-- Main font sizes --*/
+    --title-size:      50px;
+    --body-size:       1.06rem;
+    --code-size:       14px;
+    --aside-size:      12px;
+    --fig-cap-size:    13px;
+    /*-- Main font colors --*/
+    --title-color:     #000000;
+    --header-color:    rgba(0, 0, 0, 0.8);
+    --body-color:      rgba(0, 0, 0, 0.8);
+    --aside-color:     rgba(0, 0, 0, 0.6);
+    --fig-cap-color:   rgba(0, 0, 0, 0.6);
+    /*-- Specify custom fonts ~~~ must be imported above   --*/
+    --heading-font:    sans-serif;
+    --mono-font:       monospace;
+    --body-font:       sans-serif;
+    --navbar-font:     sans-serif;  /* websites + blogs only */
+  }
+
+  /*-- ARTICLE METADATA --*/
+  d-byline {
+    --heading-size:    0.6rem;
+    --heading-color:   rgba(0, 0, 0, 0.5);
+    --body-size:       0.8rem;
+    --body-color:      rgba(0, 0, 0, 0.8);
+  }
+
+  /*-- ARTICLE TABLE OF CONTENTS --*/
+  .d-contents {
+    --heading-size:    18px;
+    --contents-size:   13px;
+  }
+
+  /*-- ARTICLE APPENDIX --*/
+  d-appendix {
+    --heading-size:    15px;
+    --heading-color:   rgba(0, 0, 0, 0.65);
+    --text-size:       0.8em;
+    --text-color:      rgba(0, 0, 0, 0.5);
+  }
+
+  /*-- WEBSITE HEADER + FOOTER --*/
+  /* These properties only apply to Distill sites and blogs  */
+
+  .distill-site-header {
+    --title-size:       18px;
+    --text-color:       rgba(255, 255, 255, 0.8);
+    --text-size:        15px;
+    --hover-color:      white;
+    --bkgd-color:       #0F2E3D;
+  }
+
+  .distill-site-footer {
+    --text-color:       rgba(255, 255, 255, 0.8);
+    --text-size:        15px;
+    --hover-color:      white;
+    --bkgd-color:       #0F2E3D;
+  }
+
+  /*-- Additional custom styles --*/
+  /* Add any additional CSS rules below                      */
+  </style>
+  <style type="text/css">@import url('https://fonts.googleapis.com/css2?family=Alata');
+  @import url('https://fonts.googleapis.com/css2?family=Cardo');
+  /* base variables */
+
+  /* Edit the CSS properties in this file to create a custom
+     Distill theme. Only edit values in the right column
+     for each row; values shown are the CSS defaults.
+     To return any property to the default,
+     you may set its value to: unset
+     All rows must end with a semi-colon.                      */
+
+  /* Optional: embed custom fonts here with `@import`          */
+  /* This must remain at the top of this file.                 */
+
+
+
+  html {
+    /*-- Main font sizes --*/
+    --title-size:      50px;
+    --body-size:       1rem;
+    --code-size:       14px;
+    --aside-size:      12px;
+    --fig-cap-size:    13px;
+    /*-- Main font colors --*/
+    --title-color:     #000000;
+    --header-color:    rgba(0, 0, 0, 0.8);
+    --body-color:      rgba(0, 0, 0, 0.8);
+    --aside-color:     rgba(0, 0, 0, 0.6);
+    --fig-cap-color:   rgba(0, 0, 0, 0.6);
+    /*-- Specify custom fonts ~~~ must be imported above   --*/
+    --heading-font:    'Alata', sans-serif;
+    --mono-font:       monospace;
+    --body-font:       'Cardo', serif;
+    --navbar-font:     'Alata', sans-serif; /* websites + blogs only */
+  }
+
+  /*-- ARTICLE METADATA --*/
+  d-byline {
+    --heading-size:    0.6rem;
+    --heading-color:   rgba(0, 0, 0, 0.5);
+    --body-size:       0.8rem;
+    --body-color:      rgba(0, 0, 0, 0.8);
+  }
+
+  /*-- ARTICLE TABLE OF CONTENTS --*/
+  .d-contents {
+    --heading-size:    18px;
+    --contents-size:   13px;
+  }
+
+  /*-- ARTICLE APPENDIX --*/
+  d-appendix {
+    --heading-size:    15px;
+    --heading-color:   rgba(0, 0, 0, 0.65);
+    --text-size:       0.8em;
+    --text-color:      rgba(0, 0, 0, 0.5);
+  }
+
+  /*-- WEBSITE HEADER + FOOTER --*/
+  /* These properties only apply to Distill sites and blogs  */
+
+  .distill-site-header {
+    --title-size:       18px;
+    --text-color:       rgba(255, 255, 255, 0.8);
+    --text-size:        15px;
+    --hover-color:      white;
+    --bkgd-color:       #335022;
+  }
+
+  .distill-site-footer {
+    --text-color:       rgba(255, 255, 255, 0.8);
+    --text-size:        15px;
+    --hover-color:      white;
+    --bkgd-color:       #C56A2E;
+  }
+
+  /*-- Additional custom styles --*/
+  /* Add any additional CSS rules below                      */</style>
+  <style type="text/css">
+  /* base style */
+
+  /* FONT FAMILIES */
+
+  :root {
+    --heading-default: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", Arial, sans-serif;
+    --mono-default: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+    --body-default: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", Arial, sans-serif;
+  }
+
+  body,
+  .posts-list .post-preview p,
+  .posts-list .description p {
+    font-family: var(--body-font), var(--body-default);
+  }
+
+  h1, h2, h3, h4, h5, h6,
+  .posts-list .post-preview h2,
+  .posts-list .description h2 {
+    font-family: var(--heading-font), var(--heading-default);
+  }
+
+  d-article div.sourceCode code,
+  d-article pre code {
+    font-family: var(--mono-font), var(--mono-default);
+  }
+
+
+  /*-- TITLE --*/
+  d-title h1,
+  .posts-list > h1 {
+    color: var(--title-color, black);
+  }
+
+  d-title h1 {
+    font-size: var(--title-size, 50px);
+  }
+
+  /*-- HEADERS --*/
+  d-article h1,
+  d-article h2,
+  d-article h3,
+  d-article h4,
+  d-article h5,
+  d-article h6 {
+    color: var(--header-color, rgba(0, 0, 0, 0.8));
+  }
+
+  /*-- BODY --*/
+  d-article > p,  /* only text inside of <p> tags */
+  d-article > ul, /* lists */
+  d-article > ol {
+    color: var(--body-color, rgba(0, 0, 0, 0.8));
+    font-size: var(--body-size, 1.06rem);
+  }
+
+
+  /*-- CODE --*/
+  d-article div.sourceCode code,
+  d-article pre code {
+    font-size: var(--code-size, 14px);
+  }
+
+  /*-- ASIDE --*/
+  d-article aside {
+    font-size: var(--aside-size, 12px);
+    color: var(--aside-color, rgba(0, 0, 0, 0.6));
+  }
+
+  /*-- FIGURE CAPTIONS --*/
+  figure .caption,
+  figure figcaption,
+  .figure .caption {
+    font-size: var(--fig-cap-size, 13px);
+    color: var(--fig-cap-color, rgba(0, 0, 0, 0.6));
+  }
+
+  /*-- METADATA --*/
+  d-byline h3 {
+    font-size: var(--heading-size, 0.6rem);
+    color: var(--heading-color, rgba(0, 0, 0, 0.5));
+  }
+
+  d-byline {
+    font-size: var(--body-size, 0.8rem);
+    color: var(--body-color, rgba(0, 0, 0, 0.8));
+  }
+
+  d-byline a,
+  d-article d-byline a {
+    color: var(--body-color, rgba(0, 0, 0, 0.8));
+  }
+
+  /*-- TABLE OF CONTENTS --*/
+  .d-contents nav h3 {
+    font-size: var(--heading-size, 18px);
+  }
+
+  .d-contents nav a {
+    font-size: var(--contents-size, 13px);
+  }
+
+  /*-- APPENDIX --*/
+  d-appendix h3 {
+    font-size: var(--heading-size, 15px);
+    color: var(--heading-color, rgba(0, 0, 0, 0.65));
+  }
+
+  d-appendix {
+    font-size: var(--text-size, 0.8em);
+    color: var(--text-color, rgba(0, 0, 0, 0.5));
+  }
+
+  d-appendix d-footnote-list a.footnote-backlink {
+    color: var(--text-color, rgba(0, 0, 0, 0.5));
+  }
+
+  /*-- WEBSITE HEADER + FOOTER --*/
+  .distill-site-header .title {
+    font-size: var(--title-size, 18px);
+    font-family: var(--navbar-font), var(--heading-default);
+  }
+
+  .distill-site-header a,
+  .nav-dropdown .nav-dropbtn {
+    font-family: var(--navbar-font), var(--heading-default);
+  }
+
+  .nav-dropdown .nav-dropbtn {
+    color: var(--text-color, rgba(255, 255, 255, 0.8));
+    font-size: var(--text-size, 15px);
+  }
+
+  .distill-site-header a:hover,
+  .nav-dropdown:hover .nav-dropbtn {
+    color: var(--hover-color, white);
+  }
+
+  .distill-site-header {
+    font-size: var(--text-size, 15px);
+    color: var(--text-color, rgba(255, 255, 255, 0.8));
+    background-color: var(--bkgd-color, #0F2E3D);
+  }
+
+  .distill-site-footer {
+    font-size: var(--text-size, 15px);
+    color: var(--text-color, rgba(255, 255, 255, 0.8));
+    background-color: var(--bkgd-color, #0F2E3D);
+  }
+
+  .distill-site-footer a:hover {
+    color: var(--hover-color, white);
+  }</style>
   <!--/radix_placeholder_distill-->
   <script src="site_libs/header-attrs-2.17/header-attrs.js"></script>
   <script src="site_libs/popper-2.6.0/popper.min.js"></script>
@@ -2094,7 +2429,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <!--radix_placeholder_front_matter-->
 
 <script id="distill-front-matter" type="text/json">
-{"title":"Genetic Wide Association Studies (GWAS)","description":"What it is and how to do it in RStudio and PLINK","authors":[]}
+{"title":"Genome Wide Association Studies (GWAS)","description":"What a GWAS is and how to do it in RStudio and PLINK.","authors":[]}
 </script>
 
 <!--/radix_placeholder_front_matter-->
@@ -2105,11 +2440,11 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <a href="index.html" class="title">Home</a>
 </div>
 <div class="nav-right">
-<a href="data.html">Data and cleaning</a>
+<a href="data.html">Data</a>
 <a href="gwas.html">GWAS</a>
 <a href="multipletesting.html">Multiple Testing</a>
 <a href="pca.html">Genetic Ancestry &amp; PCA</a>
-<a href="readings.html">Journal Articles &amp; Ethics</a>
+<a href="readings.html">Ethics</a>
 <a href="javascript:void(0);" class="nav-toggle">&#9776;</a>
 </div>
 </nav>
@@ -2119,42 +2454,54 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <!--/radix_placeholder_site_before_body-->
 
 <div class="d-title">
-<h1>Genetic Wide Association Studies (GWAS)</h1>
+<h1>Genome Wide Association Studies (GWAS)</h1>
 <!--radix_placeholder_categories-->
 <!--/radix_placeholder_categories-->
-<p>What it is and how to do it in RStudio and PLINK</p>
+<p>What a GWAS is and how to do it in RStudio and PLINK.</p>
 </div>
 
 
 <div class="d-article">
-<div class="layout-chunk" data-layout="l-body">
-
+<div class="d-contents d-contents-float">
+<nav class="l-text toc figcaption" id="TOC">
+<h3>Contents</h3>
+<ul>
+<li><a href="#gwas-in-rstudio" id="toc-gwas-in-rstudio">GWAS in RStudio</a>
+<ul>
+<li><a href="#analyze-chromosome-1" id="toc-analyze-chromosome-1">Analyze chromosome 1</a></li>
+<li><a href="#analyze-all-chromosomes" id="toc-analyze-all-chromosomes">Analyze all chromosomes</a></li>
+</ul></li>
+<li><a href="#gwas-in-plink" id="toc-gwas-in-plink">GWAS in PLINK</a></li>
+</ul>
+</nav>
 </div>
 <div class="layout-chunk" data-layout="l-body">
 
 </div>
-<p>On the <a href="https://statgensummary.netlify.app">home page</a>, I introduced <strong>genetic variants</strong>. We can study these genetic variants with something known as a <strong>Genetic - Wide Association Study (GWAS)</strong>. The overarching goal of a GWAS is to help us understand which SNPs might be causally associated with our trait of interest, which can be particularly important and helpful when trying to find a cure for a disease or understand why certain people get that disease.</p>
+<div class="layout-chunk" data-layout="l-body">
+
+</div>
+<p>On the <a href="https://statgensummary.netlify.app">home page</a>, I introduced <strong>genetic variants</strong>. We can study these genetic variants with something known as a <strong>Genome-Wide Association Study (GWAS)</strong>. The overarching goal of a GWAS is to help us understand which SNPs might be causally associated with our trait of interest, which can be particularly important and helpful when trying to find a cure for a disease or understand why certain people get that disease.</p>
 <p><img src="images/gwas.png" /></p>
-<p>Using the trait we developed in the <a href="https://statgensummary.netlify.app/data.html">Data</a> tab, we can implement <strong>marginal regression</strong> to run GWAS on our data. If you haven’t yet looked through the Data section, it would be useful to do now in order to understand the context of this GWAS.</p>
+<p>Using the trait we developed in the <a href="https://statgensummary.netlify.app/data.html">Data</a> tab, we can implement <strong>marginal regression</strong> to run GWAS on our data. If you haven’t yet looked through the Data section, it would be useful to do so now in order to understand the context of this GWAS.</p>
 <h1 id="gwas-in-rstudio">GWAS in RStudio</h1>
-<p>We developed our trait of interest around causal SNP, <em>rs3131972</em>, which we know to be located on chromosome 1. However, in a real genetic study we would not know where the casual SNP(s) we are looking for are located. Therefore, we’d need to run a GWAS to see if there are variants are associated with the trait and if so, where. To do this we will use <em>marginal regression</em>.</p>
+<p>We developed our trait of interest around causal SNP, <em>rs3131972</em>, which we know to be located on chromosome 1. However, in a real genetic study we would not know where the casual SNP(s) we are looking for are located. Therefore, we’d need to run a GWAS to see if there are variants are associated with the trait of interest and if so, where. To do this we will use <em>marginal regression</em>.</p>
 <p>For each SNP, we will fit a model with the SNP as the single independent variable and the trait of interest as the dependent variable. Looking at our first three SNPs, the models can be created like this:</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span><span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>494</span><span class='op'>)</span></span>
-<span><span class='va'>snp1mod</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>y</span> <span class='op'>~</span> <span class='va'>X.clean</span><span class='op'>[</span>,<span class='fl'>1</span><span class='op'>]</span><span class='op'>)</span></span>
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>snp1mod</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>y</span> <span class='op'>~</span> <span class='va'>X.clean</span><span class='op'>[</span>,<span class='fl'>1</span><span class='op'>]</span><span class='op'>)</span></span>
 <span><span class='va'>snp2mod</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>y</span> <span class='op'>~</span> <span class='va'>X.clean</span><span class='op'>[</span>,<span class='fl'>2</span><span class='op'>]</span><span class='op'>)</span></span>
 <span><span class='va'>snp3mod</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>y</span> <span class='op'>~</span> <span class='va'>X.clean</span><span class='op'>[</span>,<span class='fl'>3</span><span class='op'>]</span><span class='op'>)</span></span>
 <span></span>
 <span><span class='fu'>tidy</span><span class='op'>(</span><span class='va'>snp1mod</span><span class='op'>)</span></span></code></pre>
 </div>
 <pre><code># A tibble: 2 × 5
-  term         estimate std.error statistic    p.value
-  &lt;chr&gt;           &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;      &lt;dbl&gt;
-1 (Intercept)   -0.0321     0.327   -0.0980 0.922     
-2 X.clean[, 1]   0.861      0.183    4.71   0.00000375</code></pre>
+  term         estimate std.error statistic      p.value
+  &lt;chr&gt;           &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;        &lt;dbl&gt;
+1 (Intercept)   -0.0869     0.308    -0.282 0.778       
+2 X.clean[, 1]   1.00       0.172     5.82  0.0000000144</code></pre>
 </div>
-<p>Each of these models produces an estimate for the coefficient on the SNP. For example, the coefficient for <code>snp1mod</code> is 1.08. The way we might interpret this is that for every additional minor allele (G for example) that you carry at that position, the trait of interest changes by about 1.08 units. If the trait we were measuring was height, we would expect your height to increase about 1.08 inches for every additional minor allele (a value of either 0, 1, or 2) at SNP 1. This is obviously pretty extreme, but you understand the idea.</p>
+<p>Each of these models produces an estimate for the coefficient on the SNP. For example, the coefficient for <code>snp1mod</code> is 1.00. The way we might interpret this is that for every additional minor allele (G for example) that you carry at that position, the trait of interest changes by about 1.00 units. If the trait we were measuring was height, we would expect your height to increase about 1.00 inches for every additional minor allele (a value of either 0, 1, or 2) at SNP 1. This is obviously pretty extreme, but you understand the idea.</p>
 <h2 id="analyze-chromosome-1">Analyze chromosome 1</h2>
 <p>Obviously, we cannot do the process above by hand for over one million SNPs. However, we can do this with a loop! We will start first with all SNPs located on chromosome 1.</p>
 <p>First, pick out these SNPs using <code>which()</code>.</p>
@@ -2226,6 +2573,14 @@ exm2268640  1.309910e-02
 kgp3709449  2.389118e-06
 kgp15275285 1.372146e-01
 kgp5225889  1.041390e-06</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>chr1.results</span> <span class='op'>%&gt;%</span></span>
+<span>  <span class='fu'><a href='https://rdrr.io/r/stats/filter.html'>filter</a></span><span class='op'>(</span><span class='va'>snp.name</span> <span class='op'>==</span> <span class='st'>'rs3131972'</span><span class='op'>)</span></span></code></pre>
+</div>
+<pre><code>          chromosome  snp.name cM position allele.1 allele.2
+rs3131972          1 rs3131972 NA   752721        A        G
+                MAF Estimate Std.Error Test.Statistic      P.Value
+rs3131972 0.2337461 0.998355 0.1448057       6.894448 2.877123e-11</code></pre>
 </div>
 <p>Lastly, we can plot the results. We take the log of the p-value in order to better identify SNPs with small p-values, and then take the negative of this to flip the plot and make it look like the typical Manhattan plot. We see a gap in the middle of the plot where the <strong>centromere</strong> of chromosome 1 is located. Centromeres are difficult to genotype so we don’t get any data in this area. The causal SNP is easy to spot colored in navy blue with a <span class="math inline">\(-\text{log}_{10}\)</span>(p-value) close to 12.</p>
 <div class="layout-chunk" data-layout="l-body">
@@ -2245,7 +2600,7 @@ kgp5225889  1.041390e-06</code></pre>
 </div>
 <p><img src="images/chr1plot.png" /></p>
 <h2 id="analyze-all-chromosomes">Analyze all chromosomes</h2>
-<p>Finally, we can analyze all chromosomes. To do this, we simply loop over the SNPs in all chromosomes instead of just those in chromosome 1.</p>
+<p>Finally, we can analyze all chromosomes. To do this, we simply loop over the SNPs in all chromosomes instead of just those in chromosome 1. The problem with this code is that on my personal computer it takes over an hour to run and even on faster Macalester computers it takes close to 30 minutes. As a result, I will not actually run it here and instead talk about a solution to this problem later on.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span><span class='co'># set up empty vectors for storing results</span></span>
@@ -2270,7 +2625,7 @@ kgp5225889  1.041390e-06</code></pre>
 </div>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span><span class='co'># start with the map info for the chr 1 SNPs</span></span>
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='co'># start with the map info</span></span>
 <span><span class='va'>all.results</span> <span class='op'>&lt;-</span> <span class='va'>map.clean</span></span>
 <span></span>
 <span><span class='co'># then add betas, SEs, etc.</span></span>
@@ -2281,7 +2636,7 @@ kgp5225889  1.041390e-06</code></pre>
 <span>         P.Value <span class='op'>=</span> <span class='va'>pvals</span><span class='op'>)</span></span></code></pre>
 </div>
 </div>
-<p>When plotting the results, we make one small change to the code. Instead of plotting position along the x axis, we group with an interaction between position and chromosome. This is due to position restarting over again at each chromosome, so it prevents all the points from being plotted on top of one another.</p>
+<p>Had we ran the code above, we could plot the results in a similar matter as we did for chromosome one, just making one small change to the code. Instead of plotting position along the x axis, we group with an interaction between position and chromosome. This is due to position restarting over again at each chromosome, so it prevents all the points from being plotted on top of one another. The final manhattan plot would then look something like the image below.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>all.results</span> <span class='op'>%&gt;%</span></span>
@@ -2296,10 +2651,9 @@ kgp5225889  1.041390e-06</code></pre>
 </div>
 </div>
 <p><img src="images/manhattan.png" /></p>
-<p>In a real genetic study where we do not know the causal SNP, we would have some predetermined significance threshold in which we would take a closer look at all SNPs with a p-value below that threshold to see if there is a meaningful association between them and our trait of interest. I will take more about this in the <a href="https://statgensummary.netlify.app/multipletesting.html">Multiple Testing</a> section.</p>
 <h1 id="gwas-in-plink">GWAS in PLINK</h1>
-<p>While the process above was fairly simple, running the GWAS took over an hour on my computer and close to 30 minutes on some of Macalester’s faster computers. This is where the software PLINK can help. PLINK is a free, open-source whole genome association analysis toolset, designed to perform a range of basic, large-scale analyses in a computationally efficient manner. To learn more about PLINK and how to download and use it, check out <a href="https://zzz.bwh.harvard.edu/plink/">this site</a>, which I relied heavily on. Once downloaded onto your computer, PLINK runs from the terminal. We can run a GWAS in PLINK in a matter of a couple seconds instead of 30-60 minutes.</p>
-<p>For the purposes of demonstrating PLINK, I will simulate a trait not associated with any particular SNP, but that is associated with population structure. This will show us how a Manhattan plot with no associated SNPs compares to the one above, where we know a causal SNP exists. Creating a trait associated with the population structure will also be useful for analysis later in the PCA section.</p>
+<p>While the code above is fairly simple, it is not efficient. This is where the software PLINK can help. PLINK is a free, open-source whole genome association analysis toolset, designed to perform a range of basic, large-scale analyses in a computationally efficient manner. To learn more about PLINK and how to download and use it, check out <a href="https://zzz.bwh.harvard.edu/plink/">this site</a> <span class="citation" data-cites="plink">(<a href="#ref-plink" role="doc-biblioref"><span>“Whole Genome Association Analysis Toolset,”</span> n.d.</a>)</span>, which I relied heavily on. Once downloaded onto your computer, PLINK runs from the terminal. We can run a GWAS in PLINK in a matter of a couple seconds instead of 30-60 minutes.</p>
+<p>For the purposes of demonstrating PLINK, I simulated a trait not associated with any particular SNP, but that is associated with population structure. This will show us how a Manhattan plot with no associated SNPs compares to the one above, where we know a causal SNP exists. Creating a trait associated with the population structure will also be useful for analysis later in the PCA section.</p>
 <p>To get the data ready to run in PLINK, I started by merging all 9 files (the .bim, .bam, and .fam for each of the 3 sub-populations). I listed the name of each of these files in .txt file with the structure shown in the image below.</p>
 <p><img src="images/allfiles.png" /></p>
 <p>In the terminal and in the folder where my data was stored, I then ran the command <code>./plink --merge-list allfiles.txt --make-bed --out rbloggersComb</code>. This combines the data into three files that PLINK can use (<code>rbloggersComb.bed</code>, <code>rbloggersComb.bim</code>, <code>rbloggersComb.fam</code>).</p>
@@ -2310,14 +2664,28 @@ kgp5225889  1.041390e-06</code></pre>
 <span><span class='va'>rbloggers_map</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>rbind</a></span><span class='op'>(</span><span class='va'>SNP_M</span><span class='op'>$</span><span class='va'>map</span>, <span class='va'>SNP_I</span><span class='op'>$</span><span class='va'>map</span>, <span class='va'>SNP_C</span><span class='op'>$</span><span class='va'>map</span><span class='op'>)</span></span></code></pre>
 </div>
 </div>
-<p>I then selected the <code>pedigree</code> and <code>member</code> columns from the <code>rbloggers_fam</code> table and column-binded on a trait that varies by population. I write this new dataset to the folder where the data is stored.</p>
+<p>I then selected the <code>pedigree</code> and <code>member</code> columns from the <code>rbloggers_fam</code> table and column-binded on a trait that varies by population. I wrote this new dataset (which has one row for each of the 323 study participants) to the folder where the data is stored.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>rbloggers_poptrait</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>cbind</a></span><span class='op'>(</span><span class='va'>rbloggers_fam</span> <span class='op'>%&gt;%</span> <span class='fu'>select</span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>2</span><span class='op'>)</span>, trait <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span>n <span class='op'>=</span> <span class='fl'>108</span>, mean <span class='op'>=</span> <span class='fl'>0</span>, sd <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='fl'>105</span>, <span class='op'>-</span><span class='fl'>1</span>, sd <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='fl'>110</span>, <span class='fl'>1</span>, <span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span></span>
-<span><span class='fu'>write_delim</span><span class='op'>(</span><span class='va'>rbloggers_poptrait</span>, <span class='st'>"rbloggersSep/rbloggers_poptrait"</span><span class='op'>)</span></span></code></pre>
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>494</span><span class='op'>)</span></span>
+<span><span class='va'>rbloggers_poptrait</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>cbind</a></span><span class='op'>(</span><span class='va'>rbloggers_fam</span> <span class='op'>%&gt;%</span> <span class='fu'>select</span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>2</span><span class='op'>)</span>, trait <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span>n <span class='op'>=</span> <span class='fl'>108</span>, mean <span class='op'>=</span> <span class='fl'>0</span>, sd <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='fl'>105</span>, <span class='op'>-</span><span class='fl'>1</span>, sd <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='fl'>110</span>, <span class='fl'>1</span>, <span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span></span>
+<span></span>
+<span><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>rbloggers_poptrait</span><span class='op'>)</span></span></code></pre>
+</div>
+<pre><code>           pedigree    member      trait
+M11062205 M11062205 M11062205 -1.7917316
+M11050406 M11050406 M11050406 -0.3732191
+M11050407 M11050407 M11050407 -0.6577352
+M11070602 M11070602 M11070602 -0.8303604
+M11060912 M11060912 M11060912  1.9450827
+M11060920 M11060920 M11060920  0.8350451</code></pre>
+</div>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='fu'>write_delim</span><span class='op'>(</span><span class='va'>rbloggers_poptrait</span>, <span class='st'>"rbloggersSep/rbloggers_poptrait"</span><span class='op'>)</span></span></code></pre>
 </div>
 </div>
-<p>In PLINK, I then run the command <code>./plink --bfile rbloggersComb --assoc --adjust --pheno rbloggers_poptrait --out as2</code>. The command and subsequent output are shown below.</p>
+<p>In PLINK, I then ran the command <code>./plink --bfile rbloggersComb --assoc --adjust --pheno rbloggers_poptrait --out as2</code>. The command and subsequent output are shown below.</p>
 <p><img src="images/plink1.png" /></p>
 <p>This command creates two files, one in which GWAS in ran without any adjustments (<code>as2.qassoc</code>) and one where it is ran with adjustments (<code>as2.qassoc.adjusted</code>). The file without adjustments returns a row for each of our original 2,527,458 SNPs. Monomorphic SNPs return a <code>NA</code> value for the information we care about (the t-statistic and p-value of the test). The file with adjustments removes all monomorphic SNPs from the data for us. It returns an unadjusted p-value for each SNP (<code>UNADJ</code>) and an adjusted p-value (<code>GC</code>). These p-values are quite different, as shown by the density plots below.</p>
 <div class="layout-chunk" data-layout="l-body">
@@ -2345,7 +2713,7 @@ kgp5225889  1.041390e-06</code></pre>
 <span>        plot.title <span class='op'>=</span> <span class='fu'>element_text</span><span class='op'>(</span>family <span class='op'>=</span> <span class='st'>"mono"</span><span class='op'>)</span>, </span>
 <span>        axis.title <span class='op'>=</span> <span class='fu'>element_text</span><span class='op'>(</span>family <span class='op'>=</span> <span class='st'>"mono"</span><span class='op'>)</span><span class='op'>)</span></span></code></pre>
 </div>
-<img src="gwas_files/figure-html5/unnamed-chunk-13-1.png" width="624" />
+<img src="gwas_files/figure-html5/unnamed-chunk-14-1.png" width="624" />
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span><span class='fu'>ggplot</span><span class='op'>(</span><span class='va'>rbloggersSep_adjusted</span>, <span class='fu'>aes</span><span class='op'>(</span>x<span class='op'>=</span><span class='va'>GC</span><span class='op'>)</span><span class='op'>)</span><span class='op'>+</span></span>
 <span>  <span class='fu'>geom_density</span><span class='op'>(</span>fill <span class='op'>=</span> <span class='st'>"cadetblue4"</span><span class='op'>)</span><span class='op'>+</span></span>
@@ -2355,9 +2723,9 @@ kgp5225889  1.041390e-06</code></pre>
 <span>        plot.title <span class='op'>=</span> <span class='fu'>element_text</span><span class='op'>(</span>family <span class='op'>=</span> <span class='st'>"mono"</span><span class='op'>)</span>, </span>
 <span>        axis.title <span class='op'>=</span> <span class='fu'>element_text</span><span class='op'>(</span>family <span class='op'>=</span> <span class='st'>"mono"</span><span class='op'>)</span><span class='op'>)</span></span></code></pre>
 </div>
-<p><img src="gwas_files/figure-html5/unnamed-chunk-13-2.png" width="624" /></p>
+<p><img src="gwas_files/figure-html5/unnamed-chunk-14-2.png" width="624" /></p>
 </div>
-<p>In the density plots WITHOUT adjustments, we see that in general SNPs tend to have much more significant p-values than in the density plot WITH adjustments. Why is this the case? As discussed in the Introduction of <a href="https://www.sciencedirect.com/science/article/pii/S0002929707635459"><em>The Power of Genomic Control</em></a>, the adjusted p-values listed under the <code>GC</code> column account for nonindependence in a case-control sample caused by population stratification and cryptic relatedness. <strong>Population stratification</strong> means systematic ancestry differences between cases and controls. While we do not know the cases and controls in this analysis given the provided trait was all missing values, it is highly likely population stratification exists. <strong>Cryptic relatedness</strong> means sample structure in our data due to distant relatedness among samples with no known family relationships. We may also have <strong>family structure</strong> in our data, meaning sample structure due to familial relatedness among samples (<em>note</em>: definitions for cryptic relatedness, population stratification, and cryptic relatedness were taken from the paper we read in class, <em>New approaches to population stratification in genome-wide association studies</em> by Alkes L. Price, Noah A. Zaitlen, David Reich and Nick Patterson). I believe there are ways to identify and remove related samples in the data, but I have not yet learned how to do this. Nonetheless, it is clear some combination of population structure, cryptic relatedness, and family structure has significantly inflated the p-values received from each test for significance between a SNP and our trait of interest. As a result, we will proceed with the adjusted p-values in the <code>GC</code> column.</p>
+<p>We see that in general SNPs tend to have much more significant p-values in the density plots WITHOUT adjustments than in the density plot WITH adjustments. Why is this the case? As discussed in the Introduction of <a href="https://www.sciencedirect.com/science/article/pii/S0002929707635459"><em>The Power of Genomic Control</em></a>, the adjusted p-values listed under the <code>GC</code> column account for nonindependence in a case-control sample caused by population stratification and cryptic relatedness <span class="citation" data-cites="bacanu_devlin_roeder_2008">(<a href="#ref-bacanu_devlin_roeder_2008" role="doc-biblioref">Bacanu, Devlin, and Roeder 2008</a>)</span>. <strong>Population stratification</strong> means systematic ancestry differences between cases and controls. While we do not know the cases and controls in this analysis given the provided trait was all missing values, it is highly likely population stratification exists. <strong>Cryptic relatedness</strong> means sample structure in our data due to distant relatedness among samples with no known family relationships. We may also have <strong>family structure</strong> in our data, meaning sample structure due to familial relatedness among samples <span class="citation" data-cites="price_zaitlen_reich_patterson_2010">(<a href="#ref-price_zaitlen_reich_patterson_2010" role="doc-biblioref">Price et al. 2010</a>)</span>. I believe there are ways to identify and remove related samples in the data, but I have not yet learned how to do this. Nonetheless, it is clear some combination of population structure, cryptic relatedness, and family structure has significantly inflated the p-values received from each test for significance between a SNP and our trait of interest. As a result, we will proceed with the adjusted p-values in the <code>GC</code> column.</p>
 <p>With these p-values, we can create a Manhattan plot in a similar manner that we did earlier, just first adding SNP position data to our GWAS results.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
@@ -2381,8 +2749,19 @@ kgp5225889  1.041390e-06</code></pre>
 </div>
 </div>
 <p><img src="images/manhattanPop.png" /></p>
-<p>Overall, this manhattan plot looks fairly similar to the original one we created earlier. However, the most significant p-value in this plot has a <span class="math inline">\(-\text{log}_{10}(\text{p-value})\)</span> closer to 6 instead of 8. This is expected given we did not simulate the trait based on any one particular SNP and we know that none of the SNPs are causally located with our trait of interest. As previously mentioned, in a real genetic study we do not know whether or not any of our SNPs will be causally associated with our trait of interest. Therefore, we need some kind of threshold to determine if what SNPs we should look more closely at (if any). To learn more about how to do this, click on the <a href="https://statgensummary.netlify.app/multipletesting.html">Multiple Testing</a> tab!</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
+<p>Overall, this manhattan plot looks fairly similar to the original one we created earlier. However, the most significant p-value in this plot has a <span class="math inline">\(-\text{log}_{10}(\text{p-value})\)</span> of only about 6. This is expected given we did not simulate the trait based on any one particular SNP and we know that none of the SNPs are causally located with our trait of interest. As previously mentioned, in a real genetic study we do not know whether or not any of our SNPs will be causally associated with our trait of interest. Therefore, we need some kind of threshold to determine what SNPs we should look more closely at (if any). To learn more about how to do this, click on the <a href="https://statgensummary.netlify.app/multipletesting.html">Multiple Testing</a> tab!</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
+<div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography">
+<div id="ref-bacanu_devlin_roeder_2008" class="csl-entry" role="doc-biblioentry">
+Bacanu, Silviu-Alin, B. Devlin, and Kathryn Roeder. 2008. <span>“The Power of Genomic Control.”</span> <em>The American Journal of Human Genetics</em>. Cell Press. <a href="https://www.sciencedirect.com/science/article/pii/S0002929707635459">https://www.sciencedirect.com/science/article/pii/S0002929707635459</a>.
+</div>
+<div id="ref-price_zaitlen_reich_patterson_2010" class="csl-entry" role="doc-biblioentry">
+Price, Alkes L., Noah A. Zaitlen, David Reich, and Nick Patterson. 2010. <span>“New Approaches to Population Stratification in Genome-Wide Association Studies.”</span> <em>Nature Reviews Genetics</em> 11 (7): 459–63. <a href="https://doi.org/10.1038/nrg2813">https://doi.org/10.1038/nrg2813</a>.
+</div>
+<div id="ref-plink" class="csl-entry" role="doc-biblioentry">
+<span>“Whole Genome Association Analysis Toolset.”</span> n.d. <em>PLINK: Whole Genome Data Analysis Toolset</em>. <a href="https://zzz.bwh.harvard.edu/plink/">https://zzz.bwh.harvard.edu/plink/</a>.
+</div>
+</div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
 </div>
@@ -2403,7 +2782,10 @@ kgp5225889  1.041390e-06</code></pre>
 <!--radix_placeholder_site_after_body-->
 <!--/radix_placeholder_site_after_body-->
 <!--radix_placeholder_appendices-->
-<div class="appendix-bottom"></div>
+<div class="appendix-bottom">
+<h3 id="references">References</h3>
+<div id="references-listing"></div>
+</div>
 <!--/radix_placeholder_appendices-->
 <!--radix_placeholder_navigation_after_body-->
 <!--/radix_placeholder_navigation_after_body-->

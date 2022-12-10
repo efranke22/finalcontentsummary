@@ -1,5 +1,7 @@
 name: "website"
 title: "Home"
+theme: theme.css
+search: true
 description: |
   A summary of what I've learned in Statistical Genetics
 output_dir: "_site"

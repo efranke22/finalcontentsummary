@@ -174,7 +174,7 @@ do_one_sim<- function(i){
   # implement GWAS
   pvals <- c()
   for(i in 1:1,651,345){
-    mod <- lm(y ~ snp_500[,i])
+    mod <- lm(y ~ snp[,i])
     pvals[i] <- tidy(mod)$p.value[2]
   }
   # record smallest p-value

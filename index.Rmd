@@ -1,7 +1,7 @@
 ---
 title: "Welcome"
 description: |
-  This website represents a summary of what I have learned in Statistical Genetics!
+  This website represents a summary of what I have learned in Stat 494 Statistical Genetics!
 site: distill::distill_website
 ---
 
@@ -15,8 +15,8 @@ To get started, you'll have to have a little background on genetics. Check out t
 
 ![](images/geneticvariants.png)
 
-To learn more, switch over to the [Data and Cleaning](https://statgensummary.netlify.app/data.html) tab!
+To learn more, switch over to the [Data](https://statgensummary.netlify.app/data.html) tab!
 
 ### Acknowledgements
 
-I would like to give a big thank you to my professor Kelsey Grinde for teaching most of the material on this site and helping me learn the PLINK software!
+I would like to give a big thank you to my professor Kelsey Grinde for making this website possible and getting me interested in the field of statistical genetics :)

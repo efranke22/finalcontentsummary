@@ -1,14 +1,17 @@
 ---
 title: "Data"
 description: "This section introduces my data and how I cleaned up it for later analysis."
-site: distill::distill_website
+output: 
+  distill::distill_article:
+    toc: true
+bibliography: Library.bib
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-Throughout this site, I will go through examples of how to perform statistical techniques to better understand genetic data. To do this, I will rely on a publicly available dataset I downloaded from [R-bloggers](https://www.r-bloggers.com/2017/10/genome-wide-association-studies-in-r/), which includes 323 individuals (110 Chinese, 105 Indian and 108 Malay) and 2,527,458 SNPs.
+Throughout this site, I will go through examples of how to perform statistical techniques to better understand genetic data. To do this, I will rely on a publicly available dataset I downloaded from [R-bloggers](https://www.r-bloggers.com/2017/10/genome-wide-association-studies-in-r/) [@lima_2017], which includes 323 individuals (110 Chinese, 105 Indian and 108 Malay) and 2,527,458 SNPs.
 
 ## Data Loading and Organization
 
@@ -88,7 +91,7 @@ head(map)
 
 ## Data Cleaning
 
-One useful piece of information not contained in the data is the **minor allele frequency (MAF)**. This represents the frequency of the minor allele in the dataset. We can add this to our SNP information using the `snpstats` package and add MAF to `map`, our dataframe that gives us SNP information.
+One useful piece of information not contained in the data is the **minor allele frequency (MAF)**. This represents the frequency of the minor allele in the dataset. We can add this to our SNP information using the `snpstats` package and add MAF to `map`, our data frame that gives us SNP information.
 
 ```{r}
 #calculate MAF
@@ -195,11 +198,12 @@ map %>%
   filter(snp.name == "rs3131972")
 ```
 
-To create a quantitative trait `y` we will use information dependent on the genotype at this SNP plus random noise that is normally distributed with a mean of 0 and standard deviation of 0.6. Choosing a standard deviation is somewhat arbitrary, but I decided to go on the smaller side here to better ensure our causal SNP stands out in the final results.
+To create a quantitative trait `y` we will use information dependent on the genotype at this SNP plus random noise that is normally distributed with a mean of 0 and standard deviation of 1. 
 
 ```{r}
 n <- nrow(X)
-y <- X[,'rs3131972'] + rnorm(n, 0, 1.5)
+set.seed(494)
+y <- X[,'rs3131972'] + rnorm(n, 0, 1)
 head(y)
 ```
 

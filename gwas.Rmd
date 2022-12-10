@@ -1,7 +1,10 @@
 ---
-title: "Genetic Wide Association Studies (GWAS)"
-description: "What it is and how to do it in RStudio and PLINK"
-site: distill::distill_website
+title: "Genome Wide Association Studies (GWAS)"
+description: "What a GWAS is and how to do it in RStudio and PLINK."
+output: 
+  distill::distill_article:
+    toc: true
+bibliography: Library.bib
 ---
 
 ```{r setup, include=FALSE}
@@ -30,6 +33,7 @@ pathC <- paste("GWAStutorial-master/public/Genomics/110Chinese_2527458snps", c("
 SNP_C <- read.plink(pathC[1], pathC[2], pathC[3])
 
 SNP <- rbind(SNP_M$genotypes, SNP_I$genotypes, SNP_C$genotypes)
+fam <- rbind(SNP_M$fam, SNP_I$fam, SNP_C$fam)
 
 # Take one bim map (all 3 maps are based on the same ordered set of SNPs)
 map <- SNP_M$map
@@ -57,23 +61,23 @@ X <- as(SNP, "numeric")
 X.clean <- X[,colnames(X) %in% map.clean$snp.name]
 
 n <- nrow(X)
+set.seed(494)
 y <- X[,'rs3131972'] + rnorm(n, 0, 1.5)
 ```
 
-On the [home page](https://statgensummary.netlify.app), I introduced **genetic variants**. We can study these genetic variants with something known as a **Genetic - Wide Association Study (GWAS)**. The overarching goal of a GWAS is to help us understand which SNPs might be causally associated with our trait of interest, which can be particularly important and helpful when trying to find a cure for a disease or understand why certain people get that disease.
+On the [home page](https://statgensummary.netlify.app), I introduced **genetic variants**. We can study these genetic variants with something known as a **Genome-Wide Association Study (GWAS)**. The overarching goal of a GWAS is to help us understand which SNPs might be causally associated with our trait of interest, which can be particularly important and helpful when trying to find a cure for a disease or understand why certain people get that disease.
 
 ![](images/gwas.png)
 
-Using the trait we developed in the [Data](https://statgensummary.netlify.app/data.html) tab, we can implement **marginal regression** to run GWAS on our data. If you haven't yet looked through the Data section, it would be useful to do now in order to understand the context of this GWAS. 
+Using the trait we developed in the [Data](https://statgensummary.netlify.app/data.html) tab, we can implement **marginal regression** to run GWAS on our data. If you haven't yet looked through the Data section, it would be useful to do so now in order to understand the context of this GWAS. 
 
 # GWAS in RStudio
 
-We developed our trait of interest around causal SNP, *rs3131972*, which we know to be located on chromosome 1. However, in a real genetic study we would not know where the casual SNP(s) we are looking for are located. Therefore, we’d need to run a GWAS to see if there are variants are associated with the trait and if so, where. To do this we will use *marginal regression*.
+We developed our trait of interest around causal SNP, *rs3131972*, which we know to be located on chromosome 1. However, in a real genetic study we would not know where the casual SNP(s) we are looking for are located. Therefore, we’d need to run a GWAS to see if there are variants are associated with the trait of interest and if so, where. To do this we will use *marginal regression*.
 
 For each SNP, we will fit a model with the SNP as the single independent variable and the trait of interest as the dependent variable. Looking at our first three SNPs, the models can be created like this: 
 
 ```{r}
-set.seed(494)
 snp1mod <- lm(y ~ X.clean[,1])
 snp2mod <- lm(y ~ X.clean[,2])
 snp3mod <- lm(y ~ X.clean[,3])
@@ -81,7 +85,7 @@ snp3mod <- lm(y ~ X.clean[,3])
 tidy(snp1mod)
 ```
 
-Each of these models produces an estimate for the coefficient on the SNP. For example, the coefficient for `snp1mod` is 1.08. The way we might interpret this is that for every additional minor allele (G for example) that you carry at that position, the trait of interest changes by about 1.08 units. If the trait we were measuring was height, we would expect your height to increase about 1.08 inches for every additional minor allele (a value of either 0, 1, or 2) at SNP 1. This is obviously pretty extreme, but you understand the idea.
+Each of these models produces an estimate for the coefficient on the SNP. For example, the coefficient for `snp1mod` is 1.00. The way we might interpret this is that for every additional minor allele (G for example) that you carry at that position, the trait of interest changes by about 1.00 units. If the trait we were measuring was height, we would expect your height to increase about 1.00 inches for every additional minor allele (a value of either 0, 1, or 2) at SNP 1. This is obviously pretty extreme, but you understand the idea.
 
 ## Analyze chromosome 1
 
@@ -133,6 +137,9 @@ chr1.results <- chr1.results %>%
 
 # look at results
 head(chr1.results)
+
+chr1.results %>%
+  filter(snp.name == 'rs3131972')
 ```
 
 Lastly, we can plot the results. We take the log of the p-value in order to better identify SNPs with small p-values, and then take the negative of this to flip the plot and make it look like the typical Manhattan plot. We see a gap in the middle of the plot where the **centromere** of chromosome 1 is located. Centromeres are difficult to genotype so we don't get any data in this area. The causal SNP is easy to spot colored in navy blue with a $-\text{log}_{10}$(p-value) close to 12.
@@ -155,7 +162,7 @@ chr1.results %>%
 
 ## Analyze all chromosomes
 
-Finally, we can analyze all chromosomes. To do this, we simply loop over the SNPs in all chromosomes instead of just those in chromosome 1.
+Finally, we can analyze all chromosomes. To do this, we simply loop over the SNPs in all chromosomes instead of just those in chromosome 1. The problem with this code is that on my personal computer it takes over an hour to run and even on faster Macalester computers it takes close to 30 minutes. As a result, I will not actually run it here and instead talk about a solution to this problem later on.
 
 ```{r, eval=FALSE}
 # set up empty vectors for storing results
@@ -179,7 +186,7 @@ for(i in 1:ncol(X.clean)){
 ```
 
 ```{r, eval=FALSE}
-# start with the map info for the chr 1 SNPs
+# start with the map info
 all.results <- map.clean
 
 # then add betas, SEs, etc.
@@ -190,7 +197,7 @@ all.results <- all.results %>%
          P.Value = pvals)
 ```
 
-When plotting the results, we make one small change to the code. Instead of plotting position along the x axis, we group with an interaction between position and chromosome. This is due to position restarting over again at each chromosome, so it prevents all the points from being plotted on top of one another.   
+Had we ran the code above, we could plot the results in a similar matter as we did for chromosome one, just making one small change to the code. Instead of plotting position along the x axis, we group with an interaction between position and chromosome. This is due to position restarting over again at each chromosome, so it prevents all the points from being plotted on top of one another. The final manhattan plot would then look something like the image below. 
 
 ```{r, eval=FALSE}
 all.results %>%
@@ -206,13 +213,11 @@ all.results %>%
 
 ![](images/manhattan.png)
 
-In a real genetic study where we do not know the causal SNP, we would have some predetermined significance threshold in which we would take a closer look at all SNPs with a p-value below that threshold to see if there is a meaningful association between them and our trait of interest. I will take more about this in the [Multiple Testing](https://statgensummary.netlify.app/multipletesting.html) section.
-
 # GWAS in PLINK
 
-While the process above was fairly simple, running the GWAS took over an hour on my computer and close to 30 minutes on some of Macalester's faster computers. This is where the software PLINK can help. PLINK is a free, open-source whole genome association analysis toolset, designed to perform a range of basic, large-scale analyses in a computationally efficient manner. To learn more about PLINK and how to download and use it, check out [this site](https://zzz.bwh.harvard.edu/plink/), which I relied heavily on. Once downloaded onto your computer, PLINK runs from the terminal. We can run a GWAS in PLINK in a matter of a couple seconds instead of 30-60 minutes. 
+While the code above is fairly simple, it is not efficient. This is where the software PLINK can help. PLINK is a free, open-source whole genome association analysis toolset, designed to perform a range of basic, large-scale analyses in a computationally efficient manner. To learn more about PLINK and how to download and use it, check out [this site](https://zzz.bwh.harvard.edu/plink/) [@plink], which I relied heavily on. Once downloaded onto your computer, PLINK runs from the terminal. We can run a GWAS in PLINK in a matter of a couple seconds instead of 30-60 minutes. 
 
-For the purposes of demonstrating PLINK, I will simulate a trait not associated with any particular SNP, but that is associated with population structure. This will show us how a Manhattan plot with no associated SNPs compares to the one above, where we know a causal SNP exists. Creating a trait associated with the population structure will also be useful for analysis later in the PCA section.
+For the purposes of demonstrating PLINK, I simulated a trait not associated with any particular SNP, but that is associated with population structure. This will show us how a Manhattan plot with no associated SNPs compares to the one above, where we know a causal SNP exists. Creating a trait associated with the population structure will also be useful for analysis later in the PCA section.
 
 To get the data ready to run in PLINK, I started by merging all 9 files (the .bim, .bam, and .fam for each of the 3 sub-populations). I listed the name of each of these files in .txt file with the structure shown in the image below. 
 
@@ -227,14 +232,20 @@ rbloggers_fam <- rbind(SNP_M$fam, SNP_I$fam, SNP_C$fam)
 rbloggers_map <- rbind(SNP_M$map, SNP_I$map, SNP_C$map)
 ```
 
-I then selected the `pedigree` and `member` columns from the `rbloggers_fam` table and column-binded on a trait that varies by population. I write this new dataset to the folder where the data is stored.
+I then selected the `pedigree` and `member` columns from the `rbloggers_fam` table and column-binded on a trait that varies by population. I wrote this new dataset (which has one row for each of the 323 study participants) to the folder where the data is stored.
+
+```{r}
+set.seed(494)
+rbloggers_poptrait <- cbind(rbloggers_fam %>% select(1:2), trait = c(rnorm(n = 108, mean = 0, sd = 1), rnorm(105, -1, sd = 1), rnorm(110, 1, 1)))
+
+head(rbloggers_poptrait)
+```
 
 ```{r, eval=FALSE}
-rbloggers_poptrait <- cbind(rbloggers_fam %>% select(1:2), trait = c(rnorm(n = 108, mean = 0, sd = 1), rnorm(105, -1, sd = 1), rnorm(110, 1, 1)))
 write_delim(rbloggers_poptrait, "rbloggersSep/rbloggers_poptrait")
 ```
 
-In PLINK, I then run the command `./plink --bfile rbloggersComb --assoc --adjust --pheno rbloggers_poptrait --out as2`. The command and subsequent output are shown below.
+In PLINK, I then ran the command `./plink --bfile rbloggersComb --assoc --adjust --pheno rbloggers_poptrait --out as2`. The command and subsequent output are shown below.
 
 ![](images/plink1.png)
 
@@ -261,11 +272,11 @@ ggplot(rbloggersSep_adjusted, aes(x=GC))+
         axis.title = element_text(family = "mono"))
 ```
 
-In the density plots WITHOUT adjustments, we see that in general SNPs tend to have much more significant p-values than in the density plot WITH adjustments. Why is this the case? As discussed in the Introduction of [*The Power of Genomic Control*](https://www.sciencedirect.com/science/article/pii/S0002929707635459), the adjusted p-values listed under the `GC` column account for nonindependence in a case-control sample caused by population stratification and cryptic relatedness. **Population stratification** means systematic ancestry differences between cases and controls. While we do not know the cases and controls in this analysis given the provided trait was all missing values, it is highly likely population stratification exists. **Cryptic relatedness** means sample structure in our data due to distant relatedness among samples with no known family relationships. We may also have **family structure** in our data, meaning sample structure due to familial relatedness among samples (*note*: definitions for cryptic relatedness, population stratification, and cryptic relatedness were taken from the paper we read in class, *New approaches to population stratification in genome-wide association studies* by Alkes L. Price, Noah A. Zaitlen, David Reich and Nick Patterson). I believe there are ways to identify and remove related samples in the data, but I have not yet learned how to do this. Nonetheless, it is clear some combination of population structure, cryptic relatedness, and family structure has significantly inflated the p-values received from each test for significance between a SNP and our trait of interest. As a result, we will proceed with the adjusted p-values in the `GC` column.
+We see that in general SNPs tend to have much more significant p-values in the density plots WITHOUT adjustments than in the density plot WITH adjustments. Why is this the case? As discussed in the Introduction of [*The Power of Genomic Control*](https://www.sciencedirect.com/science/article/pii/S0002929707635459), the adjusted p-values listed under the `GC` column account for nonindependence in a case-control sample caused by population stratification and cryptic relatedness [@bacanu_devlin_roeder_2008]. **Population stratification** means systematic ancestry differences between cases and controls. While we do not know the cases and controls in this analysis given the provided trait was all missing values, it is highly likely population stratification exists. **Cryptic relatedness** means sample structure in our data due to distant relatedness among samples with no known family relationships. We may also have **family structure** in our data, meaning sample structure due to familial relatedness among samples [@price_zaitlen_reich_patterson_2010]. I believe there are ways to identify and remove related samples in the data, but I have not yet learned how to do this. Nonetheless, it is clear some combination of population structure, cryptic relatedness, and family structure has significantly inflated the p-values received from each test for significance between a SNP and our trait of interest. As a result, we will proceed with the adjusted p-values in the `GC` column.
 
 With these p-values, we can create a Manhattan plot in a similar manner that we did earlier, just first adding SNP position data to our GWAS results. 
 
-```{r}
+```{r, eval=FALSE}
 rbloggersSep_adjusted <- rbloggersSep_adjusted%>%
   mutate(CHR = as.integer(CHR)) %>%
   left_join(rbloggers_map %>%
@@ -286,5 +297,5 @@ rbloggersSep_adjusted %>%
 
 ![](images/manhattanPop.png)
 
-Overall, this manhattan plot looks fairly similar to the original one we created earlier. However, the most significant p-value in this plot has a $-\text{log}_{10}(\text{p-value})$ closer to 6 instead of 8. This is expected given we did not simulate the trait based on any one particular SNP and we know that none of the SNPs are causally located with our trait of interest. As previously mentioned, in a real genetic study we do not know whether or not any of our SNPs will be causally associated with our trait of interest. Therefore, we need some kind of threshold to determine if what SNPs we should look more closely at (if any). To learn more about how to do this, click on the [Multiple Testing](https://statgensummary.netlify.app/multipletesting.html) tab! 
+Overall, this manhattan plot looks fairly similar to the original one we created earlier. However, the most significant p-value in this plot has a $-\text{log}_{10}(\text{p-value})$ of only about 6. This is expected given we did not simulate the trait based on any one particular SNP and we know that none of the SNPs are causally located with our trait of interest. As previously mentioned, in a real genetic study we do not know whether or not any of our SNPs will be causally associated with our trait of interest. Therefore, we need some kind of threshold to determine what SNPs we should look more closely at (if any). To learn more about how to do this, click on the [Multiple Testing](https://statgensummary.netlify.app/multipletesting.html) tab! 
 
