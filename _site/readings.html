@@ -86,31 +86,57 @@ code span.vs { color: #20794d; } /* VerbatimString */
 code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 </style>
 
+<style>
+  div.csl-bib-body { }
+  div.csl-entry {
+    clear: both;
+    }
+  .hanging div.csl-entry {
+    margin-left:2em;
+    text-indent:-2em;
+  }
+  div.csl-left-margin {
+    min-width:2em;
+    float:left;
+  }
+  div.csl-right-inline {
+    margin-left:2em;
+    padding-left:1em;
+  }
+  div.csl-indent {
+    margin-left: 2em;
+  }
+</style>
 
   <!--radix_placeholder_meta_tags-->
-  <title>Home: Journal Articles &amp; Ethics</title>
+  <title>Home: Race, Ethnicity, and Ancestry in Genetic Studies</title>
 
-  <meta property="description" itemprop="description" content="stuff about readings"/>
+  <meta property="description" itemprop="description" content="A discussion about some of the ethical issues within the field of statistical genetics."/>
 
 
 
   <!--  https://developers.facebook.com/docs/sharing/webmasters#markup -->
-  <meta property="og:title" content="Home: Journal Articles &amp; Ethics"/>
+  <meta property="og:title" content="Home: Race, Ethnicity, and Ancestry in Genetic Studies"/>
   <meta property="og:type" content="article"/>
-  <meta property="og:description" content="stuff about readings"/>
+  <meta property="og:description" content="A discussion about some of the ethical issues within the field of statistical genetics."/>
   <meta property="og:locale" content="en_US"/>
   <meta property="og:site_name" content="Home"/>
 
   <!--  https://dev.twitter.com/cards/types/summary -->
   <meta property="twitter:card" content="summary"/>
-  <meta property="twitter:title" content="Home: Journal Articles &amp; Ethics"/>
-  <meta property="twitter:description" content="stuff about readings"/>
+  <meta property="twitter:title" content="Home: Race, Ethnicity, and Ancestry in Genetic Studies"/>
+  <meta property="twitter:description" content="A discussion about some of the ethical issues within the field of statistical genetics."/>
 
   <!--/radix_placeholder_meta_tags-->
+  
+  <meta name="citation_reference" content="citation_title=Taking an antiracist posture in scientific publications in human genetics and genomics;citation_volume=23;citation_doi=10.1038/s41436-021-01109-w;citation_author=Kyle B. Brothers;citation_author=Robin L. Bennett;citation_author=Mildred K. Cho"/>
+  <meta name="citation_reference" content="citation_title=American society of human genetics statement regarding concepts of &quot;good genes&quot; and human genetics"/>
+  <meta name="citation_reference" content="citation_title=Recommendations on the use and reporting of race, ethnicity, and ancestry in genetic research: Experiences from the NHLBI topmed program;citation_publisher=Elsevier;citation_author=Alyna T Khan;citation_author=Stephanie M Gogarten;citation_author=Caitlin P McHugh;citation_author=Stilp M Adrienne;citation_author=Michael L Bowers;citation_author=Quenna Wong;citation_author=Adrienne L Cupples;citation_author=Bertha Hidalgo;citation_author=Andrew D Johnson;citation_author=Merry-Lynn N McDonald;citation_author= al."/>
+  <meta name="citation_reference" content="citation_title=Science and society. Taking race out of human genetics;citation_publisher=U.S. National Library of Medicine;citation_author=Michael Yodel;citation_author=Dorothy Roberts;citation_author=Rob DeSalle;citation_author=Sarah Tishkoff"/>
   <!--radix_placeholder_rmarkdown_metadata-->
 
   <script type="text/json" id="radix-rmarkdown-metadata">
-  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","site"]}},"value":[{"type":"character","attributes":{},"value":["Journal Articles & Ethics"]},{"type":"character","attributes":{},"value":["stuff about readings"]},{"type":"character","attributes":{},"value":["distill::distill_website"]}]}
+  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","output","bibliography"]}},"value":[{"type":"character","attributes":{},"value":["Race, Ethnicity, and Ancestry in Genetic Studies"]},{"type":"character","attributes":{},"value":["A discussion about some of the ethical issues within the field of statistical genetics."]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["distill::distill_article"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["toc"]}},"value":[{"type":"logical","attributes":{},"value":[true]}]}]},{"type":"character","attributes":{},"value":["Library.bib"]}]}
   </script>
   <!--/radix_placeholder_rmarkdown_metadata-->
   <!--radix_placeholder_navigation_in_header-->
@@ -2073,6 +2099,316 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 
   </script>
 
+  <style type="text/css">
+  /* base variables */
+
+  /* Edit the CSS properties in this file to create a custom
+     Distill theme. Only edit values in the right column
+     for each row; values shown are the CSS defaults.
+     To return any property to the default,
+     you may set its value to: unset
+     All rows must end with a semi-colon.                      */
+
+  /* Optional: embed custom fonts here with `@import`          */
+  /* This must remain at the top of this file.                 */
+
+
+
+  html {
+    /*-- Main font sizes --*/
+    --title-size:      50px;
+    --body-size:       1.06rem;
+    --code-size:       14px;
+    --aside-size:      12px;
+    --fig-cap-size:    13px;
+    /*-- Main font colors --*/
+    --title-color:     #000000;
+    --header-color:    rgba(0, 0, 0, 0.8);
+    --body-color:      rgba(0, 0, 0, 0.8);
+    --aside-color:     rgba(0, 0, 0, 0.6);
+    --fig-cap-color:   rgba(0, 0, 0, 0.6);
+    /*-- Specify custom fonts ~~~ must be imported above   --*/
+    --heading-font:    sans-serif;
+    --mono-font:       monospace;
+    --body-font:       sans-serif;
+    --navbar-font:     sans-serif;  /* websites + blogs only */
+  }
+
+  /*-- ARTICLE METADATA --*/
+  d-byline {
+    --heading-size:    0.6rem;
+    --heading-color:   rgba(0, 0, 0, 0.5);
+    --body-size:       0.8rem;
+    --body-color:      rgba(0, 0, 0, 0.8);
+  }
+
+  /*-- ARTICLE TABLE OF CONTENTS --*/
+  .d-contents {
+    --heading-size:    18px;
+    --contents-size:   13px;
+  }
+
+  /*-- ARTICLE APPENDIX --*/
+  d-appendix {
+    --heading-size:    15px;
+    --heading-color:   rgba(0, 0, 0, 0.65);
+    --text-size:       0.8em;
+    --text-color:      rgba(0, 0, 0, 0.5);
+  }
+
+  /*-- WEBSITE HEADER + FOOTER --*/
+  /* These properties only apply to Distill sites and blogs  */
+
+  .distill-site-header {
+    --title-size:       18px;
+    --text-color:       rgba(255, 255, 255, 0.8);
+    --text-size:        15px;
+    --hover-color:      white;
+    --bkgd-color:       #0F2E3D;
+  }
+
+  .distill-site-footer {
+    --text-color:       rgba(255, 255, 255, 0.8);
+    --text-size:        15px;
+    --hover-color:      white;
+    --bkgd-color:       #0F2E3D;
+  }
+
+  /*-- Additional custom styles --*/
+  /* Add any additional CSS rules below                      */
+  </style>
+  <style type="text/css">@import url('https://fonts.googleapis.com/css2?family=Alata');
+  @import url('https://fonts.googleapis.com/css2?family=Cardo');
+  /* base variables */
+
+  /* Edit the CSS properties in this file to create a custom
+     Distill theme. Only edit values in the right column
+     for each row; values shown are the CSS defaults.
+     To return any property to the default,
+     you may set its value to: unset
+     All rows must end with a semi-colon.                      */
+
+  /* Optional: embed custom fonts here with `@import`          */
+  /* This must remain at the top of this file.                 */
+
+
+
+  html {
+    /*-- Main font sizes --*/
+    --title-size:      50px;
+    --body-size:       1rem;
+    --code-size:       14px;
+    --aside-size:      12px;
+    --fig-cap-size:    13px;
+    /*-- Main font colors --*/
+    --title-color:     #000000;
+    --header-color:    rgba(0, 0, 0, 0.8);
+    --body-color:      rgba(0, 0, 0, 0.8);
+    --aside-color:     rgba(0, 0, 0, 0.6);
+    --fig-cap-color:   rgba(0, 0, 0, 0.6);
+    /*-- Specify custom fonts ~~~ must be imported above   --*/
+    --heading-font:    'Alata', sans-serif;
+    --mono-font:       monospace;
+    --body-font:       'Cardo', serif;
+    --navbar-font:     'Alata', sans-serif; /* websites + blogs only */
+  }
+
+  /*-- ARTICLE METADATA --*/
+  d-byline {
+    --heading-size:    0.6rem;
+    --heading-color:   rgba(0, 0, 0, 0.5);
+    --body-size:       0.8rem;
+    --body-color:      rgba(0, 0, 0, 0.8);
+  }
+
+  /*-- ARTICLE TABLE OF CONTENTS --*/
+  .d-contents {
+    --heading-size:    18px;
+    --contents-size:   13px;
+  }
+
+  /*-- ARTICLE APPENDIX --*/
+  d-appendix {
+    --heading-size:    15px;
+    --heading-color:   rgba(0, 0, 0, 0.65);
+    --text-size:       0.8em;
+    --text-color:      rgba(0, 0, 0, 0.5);
+  }
+
+  /*-- WEBSITE HEADER + FOOTER --*/
+  /* These properties only apply to Distill sites and blogs  */
+
+  .distill-site-header {
+    --title-size:       18px;
+    --text-color:       rgba(255, 255, 255, 0.8);
+    --text-size:        15px;
+    --hover-color:      white;
+    --bkgd-color:       #335022;
+  }
+
+  .distill-site-footer {
+    --text-color:       rgba(255, 255, 255, 0.8);
+    --text-size:        15px;
+    --hover-color:      white;
+    --bkgd-color:       #C56A2E;
+  }
+
+  /*-- Additional custom styles --*/
+  /* Add any additional CSS rules below                      */</style>
+  <style type="text/css">
+  /* base style */
+
+  /* FONT FAMILIES */
+
+  :root {
+    --heading-default: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", Arial, sans-serif;
+    --mono-default: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+    --body-default: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", Arial, sans-serif;
+  }
+
+  body,
+  .posts-list .post-preview p,
+  .posts-list .description p {
+    font-family: var(--body-font), var(--body-default);
+  }
+
+  h1, h2, h3, h4, h5, h6,
+  .posts-list .post-preview h2,
+  .posts-list .description h2 {
+    font-family: var(--heading-font), var(--heading-default);
+  }
+
+  d-article div.sourceCode code,
+  d-article pre code {
+    font-family: var(--mono-font), var(--mono-default);
+  }
+
+
+  /*-- TITLE --*/
+  d-title h1,
+  .posts-list > h1 {
+    color: var(--title-color, black);
+  }
+
+  d-title h1 {
+    font-size: var(--title-size, 50px);
+  }
+
+  /*-- HEADERS --*/
+  d-article h1,
+  d-article h2,
+  d-article h3,
+  d-article h4,
+  d-article h5,
+  d-article h6 {
+    color: var(--header-color, rgba(0, 0, 0, 0.8));
+  }
+
+  /*-- BODY --*/
+  d-article > p,  /* only text inside of <p> tags */
+  d-article > ul, /* lists */
+  d-article > ol {
+    color: var(--body-color, rgba(0, 0, 0, 0.8));
+    font-size: var(--body-size, 1.06rem);
+  }
+
+
+  /*-- CODE --*/
+  d-article div.sourceCode code,
+  d-article pre code {
+    font-size: var(--code-size, 14px);
+  }
+
+  /*-- ASIDE --*/
+  d-article aside {
+    font-size: var(--aside-size, 12px);
+    color: var(--aside-color, rgba(0, 0, 0, 0.6));
+  }
+
+  /*-- FIGURE CAPTIONS --*/
+  figure .caption,
+  figure figcaption,
+  .figure .caption {
+    font-size: var(--fig-cap-size, 13px);
+    color: var(--fig-cap-color, rgba(0, 0, 0, 0.6));
+  }
+
+  /*-- METADATA --*/
+  d-byline h3 {
+    font-size: var(--heading-size, 0.6rem);
+    color: var(--heading-color, rgba(0, 0, 0, 0.5));
+  }
+
+  d-byline {
+    font-size: var(--body-size, 0.8rem);
+    color: var(--body-color, rgba(0, 0, 0, 0.8));
+  }
+
+  d-byline a,
+  d-article d-byline a {
+    color: var(--body-color, rgba(0, 0, 0, 0.8));
+  }
+
+  /*-- TABLE OF CONTENTS --*/
+  .d-contents nav h3 {
+    font-size: var(--heading-size, 18px);
+  }
+
+  .d-contents nav a {
+    font-size: var(--contents-size, 13px);
+  }
+
+  /*-- APPENDIX --*/
+  d-appendix h3 {
+    font-size: var(--heading-size, 15px);
+    color: var(--heading-color, rgba(0, 0, 0, 0.65));
+  }
+
+  d-appendix {
+    font-size: var(--text-size, 0.8em);
+    color: var(--text-color, rgba(0, 0, 0, 0.5));
+  }
+
+  d-appendix d-footnote-list a.footnote-backlink {
+    color: var(--text-color, rgba(0, 0, 0, 0.5));
+  }
+
+  /*-- WEBSITE HEADER + FOOTER --*/
+  .distill-site-header .title {
+    font-size: var(--title-size, 18px);
+    font-family: var(--navbar-font), var(--heading-default);
+  }
+
+  .distill-site-header a,
+  .nav-dropdown .nav-dropbtn {
+    font-family: var(--navbar-font), var(--heading-default);
+  }
+
+  .nav-dropdown .nav-dropbtn {
+    color: var(--text-color, rgba(255, 255, 255, 0.8));
+    font-size: var(--text-size, 15px);
+  }
+
+  .distill-site-header a:hover,
+  .nav-dropdown:hover .nav-dropbtn {
+    color: var(--hover-color, white);
+  }
+
+  .distill-site-header {
+    font-size: var(--text-size, 15px);
+    color: var(--text-color, rgba(255, 255, 255, 0.8));
+    background-color: var(--bkgd-color, #0F2E3D);
+  }
+
+  .distill-site-footer {
+    font-size: var(--text-size, 15px);
+    color: var(--text-color, rgba(255, 255, 255, 0.8));
+    background-color: var(--bkgd-color, #0F2E3D);
+  }
+
+  .distill-site-footer a:hover {
+    color: var(--hover-color, white);
+  }</style>
   <!--/radix_placeholder_distill-->
   <script src="site_libs/header-attrs-2.17/header-attrs.js"></script>
   <script src="site_libs/popper-2.6.0/popper.min.js"></script>
@@ -2094,7 +2430,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <!--radix_placeholder_front_matter-->
 
 <script id="distill-front-matter" type="text/json">
-{"title":"Journal Articles & Ethics","description":"stuff about readings","authors":[]}
+{"title":"Race, Ethnicity, and Ancestry in Genetic Studies","description":"A discussion about some of the ethical issues within the field of statistical genetics.","authors":[]}
 </script>
 
 <!--/radix_placeholder_front_matter-->
@@ -2105,11 +2441,11 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <a href="index.html" class="title">Home</a>
 </div>
 <div class="nav-right">
-<a href="geneticsBackground.html">Genetics background</a>
+<a href="data.html">Data</a>
 <a href="gwas.html">GWAS</a>
 <a href="multipletesting.html">Multiple Testing</a>
 <a href="pca.html">Genetic Ancestry &amp; PCA</a>
-<a href="readings.html">Journal Articles &amp; Ethics</a>
+<a href="readings.html">Ethics</a>
 <a href="javascript:void(0);" class="nav-toggle">&#9776;</a>
 </div>
 </nav>
@@ -2119,36 +2455,49 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <!--/radix_placeholder_site_before_body-->
 
 <div class="d-title">
-<h1>Journal Articles &amp; Ethics</h1>
+<h1>Race, Ethnicity, and Ancestry in Genetic Studies</h1>
 <!--radix_placeholder_categories-->
 <!--/radix_placeholder_categories-->
-<p>stuff about readings</p>
+<p>A discussion about some of the ethical issues within the field of statistical genetics.</p>
 </div>
 
 
 <div class="d-article">
-<h2 id="r-markdown">R Markdown</h2>
-<p>This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <a href="http://rmarkdown.rstudio.com" class="uri">http://rmarkdown.rstudio.com</a>.</p>
-<p>When you click the <strong>Knit</strong> button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:</p>
-<div class="layout-chunk" data-layout="l-body">
-<div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>cars</span><span class='op'>)</span></span></code></pre>
+<div class="d-contents d-contents-float">
+<nav class="l-text toc figcaption" id="TOC">
+<h3>Contents</h3>
+<ul>
+<li><a href="#introduction" id="toc-introduction">Introduction</a></li>
+<li><a href="#difference-between-race-ancestry-and-ethnicity" id="toc-difference-between-race-ancestry-and-ethnicity">Difference between race, ancestry, and ethnicity</a></li>
+<li><a href="#problems" id="toc-problems">Problems</a></li>
+<li><a href="#solutions" id="toc-solutions">Solutions</a></li>
+</ul>
+</nav>
 </div>
-<pre><code>     speed           dist       
- Min.   : 4.0   Min.   :  2.00  
- 1st Qu.:12.0   1st Qu.: 26.00  
- Median :15.0   Median : 36.00  
- Mean   :15.4   Mean   : 42.98  
- 3rd Qu.:19.0   3rd Qu.: 56.00  
- Max.   :25.0   Max.   :120.00  </code></pre>
+<h3 id="introduction">Introduction</h3>
+<p>Statistical genetics is an important scientific field. It can teach us about our DNA and help us identify differences in the genome that might be contributing to a particular disease or trait. It can also help people learn more about their familial history. However, the field of human genetics has a complex and troubling connection with what has been called an “ideology of race,” the belief that (1) the human species is comprised of scientifically distinguishable racial groups; (2) these groups are morphologically, behaviorally, and intellectually distinct; and (3) these features allow for racial groups to be ordered in a hierarchy of superiority <span class="citation" data-cites="brothers_bennett_cho_2021">(<a href="#ref-brothers_bennett_cho_2021" role="doc-biblioref">Brothers, Bennett, and Cho 2021</a>)</span>. These corrupt beliefs came before human genetics emerged as a distinct scientific field and as a result influenced its early development. This mean that the “ideology of race” was treated as a background assumption for genetic science and work reinforced these assumptions <span class="citation" data-cites="brothers_bennett_cho_2021">(<a href="#ref-brothers_bennett_cho_2021" role="doc-biblioref">Brothers, Bennett, and Cho 2021</a>)</span>.</p>
+<h3 id="difference-between-race-ancestry-and-ethnicity">Difference between race, ancestry, and ethnicity</h3>
+<p>We often hear the words race, ancestry, and ethnicity used interchangeably in today’s society while in reality, this is not the case. <em>Ancestry</em> is the relationship with the individual and others who share the same genealogical history. <em>Race</em> is a categorization of individuals based on their physical characteristics. Genetics demonstrates that humans cannot be divided into biologically distinct subcategories or races, and any efforts to claim the superiority of humans based on any genetic ancestry have no scientific evidence <span class="citation" data-cites="ashg_2020">(<a href="#ref-ashg_2020" role="doc-biblioref"><span>“American Society of Human Genetics Statement Regarding Concepts of "Good Genes" and Human Genetics”</span> 2020</a>)</span>. Race is a sociological rather than biological concept. <em>Ethnicity</em> is a group of people who share the same culture, language, heritage, and customs.</p>
+<h3 id="problems">Problems</h3>
+<p>There are many subtle forms of racism in the field of statistical genetics. Certain diseases are misdiagnosed/underdiagnosed because of misconceptions of them as diseases that only pertain to a racial group. For example, there is the so-called “slavery hypothesis,” which posits that US Black populations face an elevated risk of developing hypertension as a result of the selective pressure experienced by their ancestors during the brutal Middle Passage from West Africa to the Americas and their subsequent enslavement <span class="citation" data-cites="brothers_bennett_cho_2021">(<a href="#ref-brothers_bennett_cho_2021" role="doc-biblioref">Brothers, Bennett, and Cho 2021</a>)</span>. This hypothesis is unsupported by either genetic or historical evidence so its tenacity among scientists and clinicians reflects beliefs about the association of genetic “defects” within racial groups and racist assumptions rooted in genetic determinism <span class="citation" data-cites="brothers_bennett_cho_2021">(<a href="#ref-brothers_bennett_cho_2021" role="doc-biblioref">Brothers, Bennett, and Cho 2021</a>)</span>. Health disparities between populations have stemmed from social, not biological, inequalities.</p>
+<p>There are also problems on the statistician side. Scientists are trained to evaluate new data to see if they match expectations, but this training can work against us when it intersects with our social biases because we view results that reflect those biases as more likely to be ‘true’ than other results <span class="citation" data-cites="long">(<a href="#ref-long" role="doc-biblioref">Khan et al. 2022</a>)</span>. Additionally, there is the disparity in the inclusion of non-European populations in genomics research. This is likely part due to researchers’ biases but also as a result of the Tuskegee effect, which is a feeling of distrust/unwillingness from Black populations in researchers from historic mistreatment <span class="citation" data-cites="brothers_bennett_cho_2021">(<a href="#ref-brothers_bennett_cho_2021" role="doc-biblioref">Brothers, Bennett, and Cho 2021</a>)</span>.</p>
+<h3 id="solutions">Solutions</h3>
+<p>First, we should explicitly distinguish between variables that derive from non-genetic &amp; reported information versus genetically inferred information. We should also avoid using terms that are historically linked to hierarchical, racial typologies. For example, we should use “White” instead of “Caucasian” when referring to race and “European ancestry” when referring to genetic ancestry <span class="citation" data-cites="long">(<a href="#ref-long" role="doc-biblioref">Khan et al. 2022</a>)</span>. We should create a panel of experts from biological sciences, social sciences, and humanities to recommend ways for moving past use of race as a tool for laboratory and clinical research <span class="citation" data-cites="yodel_roberts_desalle_tishkoff_2016">(<a href="#ref-yodel_roberts_desalle_tishkoff_2016" role="doc-biblioref">Yodel et al. 2016</a>)</span>. We should also use the terms ancestry, population, language, and other variables instead of race. Additionally, given the under representation of Black, Latinx, Asian, and other non-White populations in genetics and genomics research, editors and reviewers should prioritize manuscripts with strong representation of these groups, even when findings replicate earlier findings in White populations <span class="citation" data-cites="brothers_bennett_cho_2021">(<a href="#ref-brothers_bennett_cho_2021" role="doc-biblioref">Brothers, Bennett, and Cho 2021</a>)</span>. To go along with this, authors should carefully avoid structuring data tables and other representations of data in such a way as to treat White populations or European ancestry groups as the “normal” in group comparisons <span class="citation" data-cites="brothers_bennett_cho_2021">(<a href="#ref-brothers_bennett_cho_2021" role="doc-biblioref">Brothers, Bennett, and Cho 2021</a>)</span>. There is still a long way to go to wipe away the “ideology of race” in the field of statistical genetics, but putting these steps into action can help progress be made.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
+<div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography">
+<div id="ref-ashg_2020" class="csl-entry" role="doc-biblioentry">
+<span>“American Society of Human Genetics Statement Regarding Concepts of "Good Genes" and Human Genetics.”</span> 2020. <em>ASHG</em>. <a href="https://www.ashg.org/publications-news/ashg-news/statement-regarding-good-genes-human-genetics/#:~:text=There%20is%20no%20factual%20basis,discredited%20views%20and%20racist%20ideologies.">https://www.ashg.org/publications-news/ashg-news/statement-regarding-good-genes-human-genetics/#:~:text=There%20is%20no%20factual%20basis,discredited%20views%20and%20racist%20ideologies.</a>
 </div>
-<h2 id="including-plots">Including Plots</h2>
-<p>You can also embed plots, for example:</p>
-<div class="layout-chunk" data-layout="l-body">
-<p><img src="readings_files/figure-html5/pressure-1.png" width="624" /></p>
+<div id="ref-brothers_bennett_cho_2021" class="csl-entry" role="doc-biblioentry">
+Brothers, Kyle B., Robin L. Bennett, and Mildred K. Cho. 2021. <span>“Taking an Antiracist Posture in Scientific Publications in Human Genetics and Genomics.”</span> <em>Genetics in Medicine</em> 23 (6): 1004–7. <a href="https://doi.org/10.1038/s41436-021-01109-w">https://doi.org/10.1038/s41436-021-01109-w</a>.
 </div>
-<p>Note that the <code>echo = FALSE</code> parameter was added to the code chunk to prevent printing of the R code that generated the plot.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
+<div id="ref-long" class="csl-entry" role="doc-biblioentry">
+Khan, Alyna T, Stephanie M Gogarten, Caitlin P McHugh, Stilp M Adrienne, Michael L Bowers, Quenna Wong, Adrienne L Cupples, et al. 2022. <span>“Recommendations on the Use and Reporting of Race, Ethnicity, and Ancestry in Genetic Research: Experiences from the NHLBI Topmed Program.”</span> Edited by TamarTranslator Sofer. <em>Cell Genomics</em>. Elsevier. <a href="https://www.sciencedirect.com/science/article/pii/S2666979X22000921">https://www.sciencedirect.com/science/article/pii/S2666979X22000921</a>.
+</div>
+<div id="ref-yodel_roberts_desalle_tishkoff_2016" class="csl-entry" role="doc-biblioentry">
+Yodel, Michael, Dorothy Roberts, Rob DeSalle, and Sarah Tishkoff. 2016. <span>“Science and Society. Taking Race Out of Human Genetics.”</span> <em>Science (New York, N.Y.)</em>. U.S. National Library of Medicine. <a href="https://pubmed.ncbi.nlm.nih.gov/26912690/">https://pubmed.ncbi.nlm.nih.gov/26912690/</a>.
+</div>
+</div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
 </div>
@@ -2160,7 +2509,10 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <!--radix_placeholder_site_after_body-->
 <!--/radix_placeholder_site_after_body-->
 <!--radix_placeholder_appendices-->
-<div class="appendix-bottom"></div>
+<div class="appendix-bottom">
+<h3 id="references">References</h3>
+<div id="references-listing"></div>
+</div>
 <!--/radix_placeholder_appendices-->
 <!--radix_placeholder_navigation_after_body-->
 <!--/radix_placeholder_navigation_after_body-->

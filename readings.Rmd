@@ -1,29 +1,32 @@
 ---
-title: "Journal Articles & Ethics"
-description: "stuff about readings"
-site: distill::distill_website
+title: "Race, Ethnicity, and Ancestry in Genetic Studies"
+description: "A discussion about some of the ethical issues within the field of statistical genetics."
+output: 
+  distill::distill_article:
+    toc: true
+bibliography: Library.bib
 ---
-
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## R Markdown
+### Introduction
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+Statistical genetics is an important scientific field. It can teach us about our DNA and help us identify differences in the genome that might be contributing to a particular disease or trait. It can also help people learn more about their familial history. However, the field of human genetics has a complex and troubling connection with what has been called an “ideology of race,” the belief that (1) the human species is comprised of scientifically distinguishable racial groups; (2) these groups are morphologically, behaviorally, and intellectually distinct; and (3) these features allow for racial groups to be ordered in a hierarchy of superiority [@brothers_bennett_cho_2021]. These corrupt beliefs came before human genetics emerged as a distinct scientific field and as a result influenced its early development. This mean that the “ideology of race” was treated as a background assumption for genetic science and work reinforced these assumptions [@brothers_bennett_cho_2021]. 
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+### Difference between race, ancestry, and ethnicity
 
-```{r cars}
-summary(cars)
-```
+We often hear the words race, ancestry, and ethnicity used interchangeably in today's society while in reality, this is not the case. *Ancestry* is the relationship with the individual and others who share the same genealogical history. *Race* is a categorization of individuals based on their physical characteristics. Genetics demonstrates that humans cannot be divided into biologically distinct subcategories or races, and any efforts to claim the superiority of humans based on any genetic ancestry have no scientific evidence [@ashg_2020]. Race is a sociological rather than biological concept. *Ethnicity* is a group of people who share the same culture, language, heritage, and customs.
 
-## Including Plots
+### Problems 
 
-You can also embed plots, for example:
+There are many subtle forms of racism in the field of statistical genetics. Certain diseases are misdiagnosed/underdiagnosed because of misconceptions of them as diseases that only pertain to a racial group. For example, there is the so-called “slavery hypothesis,” which posits that US Black populations face an elevated risk of developing hypertension as a result of the selective pressure experienced by their ancestors during the brutal Middle Passage from West Africa to the Americas and their subsequent enslavement [@brothers_bennett_cho_2021]. This hypothesis is unsupported by either genetic or historical evidence so its tenacity among scientists and clinicians reflects beliefs about the association of genetic “defects” within racial groups and racist assumptions rooted in genetic determinism [@brothers_bennett_cho_2021]. Health disparities between populations have stemmed from social, not biological, inequalities.
 
-```{r pressure, echo=FALSE}
-plot(pressure)
-```
+There are also problems on the statistician side. Scientists are trained to evaluate new data to see if they match expectations, but this training can work against us when it intersects with our social biases because we view results that reflect those biases as more likely to be ‘true’ than other results [@long]. Additionally, there is the disparity in the inclusion of non-European populations in genomics research. This is likely part due to researchers' biases but also as a result of the Tuskegee effect, which is a feeling of distrust/unwillingness from Black populations in researchers from historic mistreatment [@brothers_bennett_cho_2021].
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+### Solutions
+
+First, we should explicitly distinguish between variables that derive from non-genetic & reported information versus genetically inferred information. We should also avoid using terms that are historically linked to hierarchical, racial typologies. For example, we should use "White" instead of “Caucasian” when referring to race and “European ancestry” when referring to genetic ancestry [@long]. We should create a panel of experts from biological sciences, social sciences, and humanities to recommend ways for moving past use of race as a tool for laboratory and clinical research [@yodel_roberts_desalle_tishkoff_2016]. We should also use the terms ancestry, population, language, and other variables instead of race. Additionally, given the under representation of Black, Latinx, Asian, and other non-White populations in genetics and genomics research, editors and reviewers should prioritize manuscripts with strong representation of these groups, even when findings replicate earlier findings in White populations [@brothers_bennett_cho_2021]. To go along with this, authors should carefully avoid structuring data tables and other representations of data in such a way as to treat White populations or European ancestry groups as the “normal” in group comparisons [@brothers_bennett_cho_2021]. There is still a long way to go to wipe away the "ideology of race" in the field of statistical genetics, but putting these steps into action can help progress be made.
+
+
