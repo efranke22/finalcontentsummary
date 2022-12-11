@@ -1,7 +1,10 @@
 ---
 title: "Genetic Ancestry & PCA"
-description: "What genetic ancestry is and how to use PCA to incorporate it into statistical analyses"
-site: distill::distill_website
+description: "What genetic ancestry is and how to use PCA to incorporate it into statistical analyses."
+output: 
+  distill::distill_article:
+    toc: true
+bibliography: Library.bib
 ---
 
 ```{r setup, include=FALSE}
@@ -18,7 +21,7 @@ There are difficulties to determining someone's local and global ancestry. It is
 
 ## The Genetic Ancestry of African Americans, Latinos, and European Americans across the U.S.
 
-To learn more about genetic ancestry, we read a paper in class titled "The Genetic Ancestry of African Americans, Latinos, and European Americans Across the United States" published in 2015 and written by Katarzyna Bryc, Eric Y. Durand, Michael J. Macpherson, David Reich, and Joanna Mountain. This study looks at the genetic ancestry of 5,269 African-Americans, 8,663 Latinos, and 148,789 European Americans who are 23andMe customers and shows that historical interactions between the groups are present in the genetic-ancestry of Americans today. This paper was very dense, but I had a few main takeaways from it. 
+To learn more about genetic ancestry, we read a paper in class titled "The Genetic Ancestry of African Americans, Latinos, and European Americans Across the United States" published in 2015 and written by Katarzyna Bryc, Eric Y. Durand, Michael J. Macpherson, David Reich, and Joanna Mountain. This study looks at the genetic ancestry of 5,269 African-Americans, 8,663 Latinos, and 148,789 European Americans who are 23andMe customers and shows that historical interactions between the groups are present in the genetic-ancestry of Americans today [@price_zaitlen_reich_patterson_2010]. This paper was very dense, but I had a few main takeaways from it. 
 
 First, the authors used what they called "Ancestry Composition" which assigns ancestry labels to short local phased genomic regions and produces local ancestry proportions and confidence scores. This method provides ancestry proportions for several worldwide populations at each window the genome. If a window has a majority of a continental ancestry (>51%), that window is counted in the number of windows inherited from the ancestry. So to estimate the proportion of a particular ancestry someone is, you divide the number of windows of that ancestry they have by the total number of windows studied.
 
@@ -49,7 +52,7 @@ Other important terminology related to PCs are scores and loadings. **Loadings**
 
 ## Running PCA on our data
 
-To learn how to run PCA on our dataset, I largely followed [this tutorial](https://www.bioconductor.org/packages/devel/bioc/vignettes/SNPRelate/inst/doc/SNPRelate.html) by Xiuwen Zheng from the Department of Biostatistics at the University of Washington – Seattle.
+To learn how to run PCA on our dataset, I largely followed [this tutorial](https://www.bioconductor.org/packages/devel/bioc/vignettes/SNPRelate/inst/doc/SNPRelate.html) by Xiuwen Zheng from the Department of Biostatistics at the University of Washington – Seattle [@zheng].
 
 Start by loading necessary libraries. If you have trouble installing the SNPRelate package, make sure you follow how to do it exactly [as shown](https://www.bioconductor.org/packages/devel/bioc/vignettes/SNPRelate/inst/doc/SNPRelate.html#installation-of-the-package-snprelate) in the tutorial. 
 
@@ -141,13 +144,16 @@ To incorporate prior population, first load the data:
 ```{r}
 load("/Users/erinfranke/Desktop/GWAStutorial-master/conversionTable.RData")
 
-pathM <- paste("/Users/erinfranke/Desktop/GWAStutorial-master/public/Genomics/108Malay_2527458snps", c(".bed", ".bim", ".fam"), sep = "")
+pathM <- paste("/Users/erinfranke/Desktop/GWAStutorial-master/public/Genomics/108Malay_2527458snps", 
+               c(".bed", ".bim", ".fam"), sep = "")
 SNP_M <- read.plink(pathM[1], pathM[2], pathM[3])
 
-pathI <- paste("/Users/erinfranke/Desktop/GWAStutorial-master/public/Genomics/105Indian_2527458snps", c(".bed", ".bim", ".fam"), sep = "")
+pathI <- paste("/Users/erinfranke/Desktop/GWAStutorial-master/public/Genomics/105Indian_2527458snps",
+               c(".bed", ".bim", ".fam"), sep = "")
 SNP_I <- read.plink(pathI[1], pathI[2], pathI[3])
 
-pathC <- paste("/Users/erinfranke/Desktop/GWAStutorial-master/public/Genomics/110Chinese_2527458snps", c(".bed", ".bim", ".fam"), sep = "")
+pathC <- paste("/Users/erinfranke/Desktop/GWAStutorial-master/public/Genomics/110Chinese_2527458snps", 
+               c(".bed", ".bim", ".fam"), sep = "")
 SNP_C <- read.plink(pathC[1], pathC[2], pathC[3])
 ```
 
@@ -189,8 +195,7 @@ parcoord(pca$eigenvect[,1:16], col = datapop)
 
 ## Incorporating PCA into GWAS 
 
-Having completed PCA, we can now incorporate PC1 and PC2 into our GWAS. This allows us to adjust for the confounding role that ancestry plays in identifying relationships between SNPs and the trait of interest.
-This is important because if I were to create a trait that is correlated with both population *and* a particular SNP, we would expect the p-value for that particular SNP to be significant and easily identifiable. However, when we don't include the top PCs in our marginal regression models we may get additional SNPs that have significant p-values, specifically SNPs that differ the most in minor allele frequency between the three groups. Including PC1 and PC2 will better account for these ancestral differences and reduce the probability of **spurious associations** (2+ variables are associated but not causally related due to an unseen factor).
+Having completed PCA, we can now incorporate PC1 and PC2 into our GWAS. This allows us to adjust for the confounding role that ancestry plays in identifying relationships between SNPs and the trait of interest.This is important because if I were to create a trait that is correlated with both population *and* a particular SNP, we would expect the p-value for that particular SNP to be significant and easily identifiable. However, when we don't include the top PCs in our marginal regression models we may get additional SNPs that have significant p-values, specifically SNPs that differ the most in minor allele frequency between the three groups. Including PC1 and PC2 will better account for these ancestral differences and reduce the probability of **spurious associations** (2+ variables are associated but not causally related due to an unseen factor).
 
 The first step to including principal components in our GWAS is to again convert the SnpMatrix to numeric and generate a trait based on the causal SNP.
 
@@ -206,12 +211,14 @@ y <- X[,'rs3131972'] + rnorm(323, 0, 1.5)
 
 I then took the `member` and `pedigree` columns on the 323 individuals and created a trait varying based on sub population. After that, I added the trait based on the causal SNP *rs3131972* to the trait varying based on sub population to create a trait that varies based on sub population AND one SNP. I sent this file to where the data is stored.
 
-```{r}
+```{r, eval=FALSE}
 set.seed(494)
-rbloggers_popSNP <- cbind(rbloggers_fam %>% dplyr::select(1:2), trait = c(rnorm(n = 108, mean = 0, sd = 1), rnorm(105, -1, sd = 1), rnorm(110, 1, 1)), y) %>%
+rbloggers_popSNP <- cbind(rbloggers_fam %>% dplyr::select(1:2), 
+                          trait = c(rnorm(n = 108, mean = 0, sd = 1), rnorm(105, -1, sd = 1), rnorm(110, 1, 1)), y) %>%
   mutate(trait = trait + y)
 
-write_delim(rbloggers_popSNP, "/Users/erinfranke/Desktop/MACStats/Statistical Genetics/StatGenWillErin/rbloggersSep/rbloggers_popSNP")
+write_delim(rbloggers_popSNP, 
+            "/Users/erinfranke/Desktop/MACStats/Statistical Genetics/StatGenWillErin/rbloggersSep/rbloggers_popSNP")
 ```
 
 To learn how to incorporate principal components in PLINK, I found [this set of exercises](http://sites.tufts.edu/cbi/files/2013/02/GWAS_Exercise6_Stratification.pdf) from Tufts University. 
@@ -219,7 +226,8 @@ To learn how to incorporate principal components in PLINK, I found [this set of 
 I started by running a GWAS in PLINK without PCs using the code `./plink --bfile rbloggersComb --assoc --pheno rbloggers_popSNP --maf 0.05 --out gwasNoPCA`. Next, I read the results into RStudio and created a QQ plot and got a lambda value. This lambda represents the **genomic control (GC)**, which measures the extent of inflation of association based test statistics due to population stratification or other confounders. A value of $\lambda_{GC} \approx 1$ indicates no stratification, while typically $\lambda_{GC} > 1.05$ indicates stratification or other confounders including family structure, cryptic relatedness, or differential bias (spurious differences in allele frequencies between cases and controls due to differences in sample collection, sample preparation, and/or genotyping assay procedures). With a $\lambda_{GC}$ of 1.73 and the QQ plot not fitting the expected distribution, its clear that there is stratification in this data and our p-values are inflated. Hopefully PCA can help account for this.
 
 ```{r}
-results_noPCA <- read_table("/Users/erinfranke/Desktop/MACStats/Statistical Genetics/StatGenWillErin/rbloggersSep/gwasNoPCA.qassoc") %>%
+results_noPCA <- read_table(
+  "/Users/erinfranke/Desktop/MACStats/Statistical Genetics/StatGenWillErin/rbloggersSep/gwasNoPCA.qassoc") %>%
   arrange(P)
 
 head(results_noPCA)
@@ -232,17 +240,20 @@ To run a GWAS with PCs, I created a `pcs.txt` file that includes `member`, `pedi
 ```{r}
 pcs <- cbind(rbloggers_fam %>% dplyr::select(1:2), pc1 = tab$EV1, pc2 = tab$EV2)
 head(pcs)
+```
 
+```{r, eval=FALSE}
 write_delim(pcs, "/Users/erinfranke/Desktop/MACStats/Statistical Genetics/StatGenWillErin/rbloggersSep/pcs")
 ```
 
-Then, I ran `./plink --bfile rbloggersComb --assoc --covar pcs.txt --covar-name pc1, pc2 --pheno rbloggers_popSNP --out gwasPCA` in PLINK and read the results into RStudio below. We can see that the $\lambda_{GC}$ value went down from 1.73 to 1.61. This means that genetic ancestry did have some kind of confounding effect on the relationship between the SNPs and our trait of interest, so it is good we included them.
+Then, I ran `./plink --bfile rbloggersComb --assoc --covar pcs.txt --covar-name pc1, pc2 --pheno` `rbloggers_popSNP --out gwasPCA` in PLINK and read the results into RStudio below. We can see that the $\lambda_{GC}$ value went down from 1.73 to 1.61. This means that genetic ancestry did have some kind of confounding effect on the relationship between the SNPs and our trait of interest, so it is good we included them.
 
 ```{r}
-results_PCA <- read_table("/Users/erinfranke/Desktop/MACStats/Statistical Genetics/StatGenWillErin/rbloggersSep/gwasPCA.qassoc") %>%
+results_PCA <- read_table(
+  "/Users/erinfranke/Desktop/MACStats/Statistical Genetics/StatGenWillErin/rbloggersSep/gwasPCA.qassoc") %>%
   arrange(P)
 head(results_PCA)
 qq.chisq(-2 * log(results_PCA$P), df = 2, pvals = TRUE, overdisp = FALSE, thin = c(0.8, 1000))
 ```
 
-One method to correct for inflated $\lambda_{GC}$ values is to divide association statistics by $\lambda_{GC}$. This usually provides a sufficient correction for stratification in the case of **genetic drift**, meaning random fluctuations in allele frequencies over time due to sampling effects, particularly in small populations. However, in the case of **ancient population divergence** (when populations accumulate independent genetic mutations overtime time and become more different), dividing by $\lambda_{GC}$ is unlikely to be adequate because SNPs with unusual allele frequency differences that lie outside the expected distribution could be this way because of natural selection. Therefore, there need to be additional approaches to accounting for population stratification than dividing association statistics by $\lambda_{GC}$. These approaches include PCA, but also family based association tests and perhaps most effectively mixed models with PC covariates. I won't talk about these now but it is something I'm interested in looking more into in the future!
+One method to correct for inflated $\lambda_{GC}$ values is to divide association statistics by $\lambda_{GC}$. This usually provides a sufficient correction for stratification in the case of **genetic drift**, meaning random fluctuations in allele frequencies over time due to sampling effects, particularly in small populations. However, in the case of **ancient population divergence** (when populations accumulate independent genetic mutations overtime time and become more different), dividing by $\lambda_{GC}$ is unlikely to be adequate because SNPs with unusual allele frequency differences that lie outside the expected distribution could be this way because of natural selection. Therefore, there need to be additional approaches to accounting for population stratification than just dividing association statistics by $\lambda_{GC}$. These approaches include PCA, but also family based association tests and perhaps most effectively mixed models with PC covariates. I think mixed models with PC covariates would really help lower the $\lambda_{GC}$ value of this dataset as that proved the most effective method for accounting for population stratification in the paper, "New approaches to population stratification in genome-wide association studies" [@price_zaitlen_reich_patterson_2010]. I don't know quite how to do this for genetic data yet but I am looking forward to learning more in the future!

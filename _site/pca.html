@@ -86,31 +86,56 @@ code span.vs { color: #20794d; } /* VerbatimString */
 code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 </style>
 
+<style>
+  div.csl-bib-body { }
+  div.csl-entry {
+    clear: both;
+    }
+  .hanging div.csl-entry {
+    margin-left:2em;
+    text-indent:-2em;
+  }
+  div.csl-left-margin {
+    min-width:2em;
+    float:left;
+  }
+  div.csl-right-inline {
+    margin-left:2em;
+    padding-left:1em;
+  }
+  div.csl-indent {
+    margin-left: 2em;
+  }
+</style>
 
   <!--radix_placeholder_meta_tags-->
   <title>Home: Genetic Ancestry &amp; PCA</title>
 
-  <meta property="description" itemprop="description" content="What genetic ancestry is and how to use PCA to incorporate it into statistical analyses"/>
+  <meta property="description" itemprop="description" content="What genetic ancestry is and how to use PCA to incorporate it into statistical analyses."/>
 
 
 
   <!--  https://developers.facebook.com/docs/sharing/webmasters#markup -->
   <meta property="og:title" content="Home: Genetic Ancestry &amp; PCA"/>
   <meta property="og:type" content="article"/>
-  <meta property="og:description" content="What genetic ancestry is and how to use PCA to incorporate it into statistical analyses"/>
+  <meta property="og:description" content="What genetic ancestry is and how to use PCA to incorporate it into statistical analyses."/>
   <meta property="og:locale" content="en_US"/>
   <meta property="og:site_name" content="Home"/>
 
   <!--  https://dev.twitter.com/cards/types/summary -->
   <meta property="twitter:card" content="summary"/>
   <meta property="twitter:title" content="Home: Genetic Ancestry &amp; PCA"/>
-  <meta property="twitter:description" content="What genetic ancestry is and how to use PCA to incorporate it into statistical analyses"/>
+  <meta property="twitter:description" content="What genetic ancestry is and how to use PCA to incorporate it into statistical analyses."/>
 
   <!--/radix_placeholder_meta_tags-->
+  
+  <meta name="citation_reference" content="citation_title=New approaches to population stratification in genome-wide association studies;citation_volume=11;citation_doi=10.1038/nrg2813;citation_author=Alkes L. Price;citation_author=Noah A. Zaitlen;citation_author=David Reich;citation_author=Nick Patterson"/>
+  <meta name="citation_reference" content="citation_title=New approaches to population stratification in genome-wide association studies;citation_volume=11;citation_doi=10.1038/nrg2813;citation_author=Alkes L. Price;citation_author=Noah A. Zaitlen;citation_author=David Reich;citation_author=Nick Patterson"/>
+  <meta name="citation_reference" content="citation_title=Tutorials for the r/bioconductor package SNPRelate;citation_author=Xiuwen Zheng"/>
   <!--radix_placeholder_rmarkdown_metadata-->
 
   <script type="text/json" id="radix-rmarkdown-metadata">
-  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","site"]}},"value":[{"type":"character","attributes":{},"value":["Genetic Ancestry & PCA"]},{"type":"character","attributes":{},"value":["What genetic ancestry is and how to use PCA to incorporate it into statistical analyses"]},{"type":"character","attributes":{},"value":["distill::distill_website"]}]}
+  {"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","output","bibliography"]}},"value":[{"type":"character","attributes":{},"value":["Genetic Ancestry & PCA"]},{"type":"character","attributes":{},"value":["What genetic ancestry is and how to use PCA to incorporate it into statistical analyses."]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["distill::distill_article"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["toc"]}},"value":[{"type":"logical","attributes":{},"value":[true]}]}]},{"type":"character","attributes":{},"value":["Library.bib"]}]}
   </script>
   <!--/radix_placeholder_rmarkdown_metadata-->
   <!--radix_placeholder_navigation_in_header-->
@@ -2073,6 +2098,316 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 
   </script>
 
+  <style type="text/css">
+  /* base variables */
+
+  /* Edit the CSS properties in this file to create a custom
+     Distill theme. Only edit values in the right column
+     for each row; values shown are the CSS defaults.
+     To return any property to the default,
+     you may set its value to: unset
+     All rows must end with a semi-colon.                      */
+
+  /* Optional: embed custom fonts here with `@import`          */
+  /* This must remain at the top of this file.                 */
+
+
+
+  html {
+    /*-- Main font sizes --*/
+    --title-size:      50px;
+    --body-size:       1.06rem;
+    --code-size:       14px;
+    --aside-size:      12px;
+    --fig-cap-size:    13px;
+    /*-- Main font colors --*/
+    --title-color:     #000000;
+    --header-color:    rgba(0, 0, 0, 0.8);
+    --body-color:      rgba(0, 0, 0, 0.8);
+    --aside-color:     rgba(0, 0, 0, 0.6);
+    --fig-cap-color:   rgba(0, 0, 0, 0.6);
+    /*-- Specify custom fonts ~~~ must be imported above   --*/
+    --heading-font:    sans-serif;
+    --mono-font:       monospace;
+    --body-font:       sans-serif;
+    --navbar-font:     sans-serif;  /* websites + blogs only */
+  }
+
+  /*-- ARTICLE METADATA --*/
+  d-byline {
+    --heading-size:    0.6rem;
+    --heading-color:   rgba(0, 0, 0, 0.5);
+    --body-size:       0.8rem;
+    --body-color:      rgba(0, 0, 0, 0.8);
+  }
+
+  /*-- ARTICLE TABLE OF CONTENTS --*/
+  .d-contents {
+    --heading-size:    18px;
+    --contents-size:   13px;
+  }
+
+  /*-- ARTICLE APPENDIX --*/
+  d-appendix {
+    --heading-size:    15px;
+    --heading-color:   rgba(0, 0, 0, 0.65);
+    --text-size:       0.8em;
+    --text-color:      rgba(0, 0, 0, 0.5);
+  }
+
+  /*-- WEBSITE HEADER + FOOTER --*/
+  /* These properties only apply to Distill sites and blogs  */
+
+  .distill-site-header {
+    --title-size:       18px;
+    --text-color:       rgba(255, 255, 255, 0.8);
+    --text-size:        15px;
+    --hover-color:      white;
+    --bkgd-color:       #0F2E3D;
+  }
+
+  .distill-site-footer {
+    --text-color:       rgba(255, 255, 255, 0.8);
+    --text-size:        15px;
+    --hover-color:      white;
+    --bkgd-color:       #0F2E3D;
+  }
+
+  /*-- Additional custom styles --*/
+  /* Add any additional CSS rules below                      */
+  </style>
+  <style type="text/css">@import url('https://fonts.googleapis.com/css2?family=Alata');
+  @import url('https://fonts.googleapis.com/css2?family=Cardo');
+  /* base variables */
+
+  /* Edit the CSS properties in this file to create a custom
+     Distill theme. Only edit values in the right column
+     for each row; values shown are the CSS defaults.
+     To return any property to the default,
+     you may set its value to: unset
+     All rows must end with a semi-colon.                      */
+
+  /* Optional: embed custom fonts here with `@import`          */
+  /* This must remain at the top of this file.                 */
+
+
+
+  html {
+    /*-- Main font sizes --*/
+    --title-size:      50px;
+    --body-size:       1rem;
+    --code-size:       14px;
+    --aside-size:      12px;
+    --fig-cap-size:    13px;
+    /*-- Main font colors --*/
+    --title-color:     #000000;
+    --header-color:    rgba(0, 0, 0, 0.8);
+    --body-color:      rgba(0, 0, 0, 0.8);
+    --aside-color:     rgba(0, 0, 0, 0.6);
+    --fig-cap-color:   rgba(0, 0, 0, 0.6);
+    /*-- Specify custom fonts ~~~ must be imported above   --*/
+    --heading-font:    'Alata', sans-serif;
+    --mono-font:       monospace;
+    --body-font:       'Cardo', serif;
+    --navbar-font:     'Alata', sans-serif; /* websites + blogs only */
+  }
+
+  /*-- ARTICLE METADATA --*/
+  d-byline {
+    --heading-size:    0.6rem;
+    --heading-color:   rgba(0, 0, 0, 0.5);
+    --body-size:       0.8rem;
+    --body-color:      rgba(0, 0, 0, 0.8);
+  }
+
+  /*-- ARTICLE TABLE OF CONTENTS --*/
+  .d-contents {
+    --heading-size:    18px;
+    --contents-size:   13px;
+  }
+
+  /*-- ARTICLE APPENDIX --*/
+  d-appendix {
+    --heading-size:    15px;
+    --heading-color:   rgba(0, 0, 0, 0.65);
+    --text-size:       0.8em;
+    --text-color:      rgba(0, 0, 0, 0.5);
+  }
+
+  /*-- WEBSITE HEADER + FOOTER --*/
+  /* These properties only apply to Distill sites and blogs  */
+
+  .distill-site-header {
+    --title-size:       18px;
+    --text-color:       rgba(255, 255, 255, 0.8);
+    --text-size:        15px;
+    --hover-color:      white;
+    --bkgd-color:       #335022;
+  }
+
+  .distill-site-footer {
+    --text-color:       rgba(255, 255, 255, 0.8);
+    --text-size:        15px;
+    --hover-color:      white;
+    --bkgd-color:       #C56A2E;
+  }
+
+  /*-- Additional custom styles --*/
+  /* Add any additional CSS rules below                      */</style>
+  <style type="text/css">
+  /* base style */
+
+  /* FONT FAMILIES */
+
+  :root {
+    --heading-default: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", Arial, sans-serif;
+    --mono-default: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+    --body-default: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", Arial, sans-serif;
+  }
+
+  body,
+  .posts-list .post-preview p,
+  .posts-list .description p {
+    font-family: var(--body-font), var(--body-default);
+  }
+
+  h1, h2, h3, h4, h5, h6,
+  .posts-list .post-preview h2,
+  .posts-list .description h2 {
+    font-family: var(--heading-font), var(--heading-default);
+  }
+
+  d-article div.sourceCode code,
+  d-article pre code {
+    font-family: var(--mono-font), var(--mono-default);
+  }
+
+
+  /*-- TITLE --*/
+  d-title h1,
+  .posts-list > h1 {
+    color: var(--title-color, black);
+  }
+
+  d-title h1 {
+    font-size: var(--title-size, 50px);
+  }
+
+  /*-- HEADERS --*/
+  d-article h1,
+  d-article h2,
+  d-article h3,
+  d-article h4,
+  d-article h5,
+  d-article h6 {
+    color: var(--header-color, rgba(0, 0, 0, 0.8));
+  }
+
+  /*-- BODY --*/
+  d-article > p,  /* only text inside of <p> tags */
+  d-article > ul, /* lists */
+  d-article > ol {
+    color: var(--body-color, rgba(0, 0, 0, 0.8));
+    font-size: var(--body-size, 1.06rem);
+  }
+
+
+  /*-- CODE --*/
+  d-article div.sourceCode code,
+  d-article pre code {
+    font-size: var(--code-size, 14px);
+  }
+
+  /*-- ASIDE --*/
+  d-article aside {
+    font-size: var(--aside-size, 12px);
+    color: var(--aside-color, rgba(0, 0, 0, 0.6));
+  }
+
+  /*-- FIGURE CAPTIONS --*/
+  figure .caption,
+  figure figcaption,
+  .figure .caption {
+    font-size: var(--fig-cap-size, 13px);
+    color: var(--fig-cap-color, rgba(0, 0, 0, 0.6));
+  }
+
+  /*-- METADATA --*/
+  d-byline h3 {
+    font-size: var(--heading-size, 0.6rem);
+    color: var(--heading-color, rgba(0, 0, 0, 0.5));
+  }
+
+  d-byline {
+    font-size: var(--body-size, 0.8rem);
+    color: var(--body-color, rgba(0, 0, 0, 0.8));
+  }
+
+  d-byline a,
+  d-article d-byline a {
+    color: var(--body-color, rgba(0, 0, 0, 0.8));
+  }
+
+  /*-- TABLE OF CONTENTS --*/
+  .d-contents nav h3 {
+    font-size: var(--heading-size, 18px);
+  }
+
+  .d-contents nav a {
+    font-size: var(--contents-size, 13px);
+  }
+
+  /*-- APPENDIX --*/
+  d-appendix h3 {
+    font-size: var(--heading-size, 15px);
+    color: var(--heading-color, rgba(0, 0, 0, 0.65));
+  }
+
+  d-appendix {
+    font-size: var(--text-size, 0.8em);
+    color: var(--text-color, rgba(0, 0, 0, 0.5));
+  }
+
+  d-appendix d-footnote-list a.footnote-backlink {
+    color: var(--text-color, rgba(0, 0, 0, 0.5));
+  }
+
+  /*-- WEBSITE HEADER + FOOTER --*/
+  .distill-site-header .title {
+    font-size: var(--title-size, 18px);
+    font-family: var(--navbar-font), var(--heading-default);
+  }
+
+  .distill-site-header a,
+  .nav-dropdown .nav-dropbtn {
+    font-family: var(--navbar-font), var(--heading-default);
+  }
+
+  .nav-dropdown .nav-dropbtn {
+    color: var(--text-color, rgba(255, 255, 255, 0.8));
+    font-size: var(--text-size, 15px);
+  }
+
+  .distill-site-header a:hover,
+  .nav-dropdown:hover .nav-dropbtn {
+    color: var(--hover-color, white);
+  }
+
+  .distill-site-header {
+    font-size: var(--text-size, 15px);
+    color: var(--text-color, rgba(255, 255, 255, 0.8));
+    background-color: var(--bkgd-color, #0F2E3D);
+  }
+
+  .distill-site-footer {
+    font-size: var(--text-size, 15px);
+    color: var(--text-color, rgba(255, 255, 255, 0.8));
+    background-color: var(--bkgd-color, #0F2E3D);
+  }
+
+  .distill-site-footer a:hover {
+    color: var(--hover-color, white);
+  }</style>
   <!--/radix_placeholder_distill-->
   <script src="site_libs/header-attrs-2.17/header-attrs.js"></script>
   <script src="site_libs/popper-2.6.0/popper.min.js"></script>
@@ -2094,7 +2429,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <!--radix_placeholder_front_matter-->
 
 <script id="distill-front-matter" type="text/json">
-{"title":"Genetic Ancestry & PCA","description":"What genetic ancestry is and how to use PCA to incorporate it into statistical analyses","authors":[]}
+{"title":"Genetic Ancestry & PCA","description":"What genetic ancestry is and how to use PCA to incorporate it into statistical analyses.","authors":[]}
 </script>
 
 <!--/radix_placeholder_front_matter-->
@@ -2122,17 +2457,34 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <h1>Genetic Ancestry &amp; PCA</h1>
 <!--radix_placeholder_categories-->
 <!--/radix_placeholder_categories-->
-<p>What genetic ancestry is and how to use PCA to incorporate it into statistical analyses</p>
+<p>What genetic ancestry is and how to use PCA to incorporate it into statistical analyses.</p>
 </div>
 
 
 <div class="d-article">
+<div class="d-contents d-contents-float">
+<nav class="l-text toc figcaption" id="TOC">
+<h3>Contents</h3>
+<ul>
+<li><a href="#what-is-genetic-ancestry" id="toc-what-is-genetic-ancestry">What is Genetic Ancestry?</a>
+<ul>
+<li><a href="#the-genetic-ancestry-of-african-americans-latinos-and-european-americans-across-the-u.s." id="toc-the-genetic-ancestry-of-african-americans-latinos-and-european-americans-across-the-u.s.">The Genetic Ancestry of African Americans, Latinos, and European Americans across the U.S.</a></li>
+<li><a href="#genetic-ancestry-and-its-confounding-role-in-gwas" id="toc-genetic-ancestry-and-its-confounding-role-in-gwas">Genetic Ancestry and its confounding role in GWAS</a></li>
+</ul></li>
+<li><a href="#pca-background" id="toc-pca-background">PCA background</a>
+<ul>
+<li><a href="#running-pca-on-our-data" id="toc-running-pca-on-our-data">Running PCA on our data</a></li>
+<li><a href="#incorporating-pca-into-gwas" id="toc-incorporating-pca-into-gwas">Incorporating PCA into GWAS</a></li>
+</ul></li>
+</ul>
+</nav>
+</div>
 <h1 id="what-is-genetic-ancestry">What is Genetic Ancestry?</h1>
 <p>While so far I have mostly talked about using statistics to identify SNPs associated with a particular trait, this is not the only thing statistical geneticists do. Companies like <a href="https://www.23andme.com">23andMe</a> or <a href="https://www.ancestry.com">AncestryDNA</a> profit by selling DNA testing kits and returning the customer with a comprehensive ancestry breakdown. How do they do this?</p>
 <p>What genetic ancestry does is look at the ancestral origin of the genetic material we actually inherited. While we often think of being “1/4 Irish” or “1/8 North African”, we don’t actually inherit exactly 1/4 of our grandparents’ genetic material. As DNA is passed from one generation to the next, <strong>recombination</strong> events happen that shuffle up the genetic material. So while we have the same <em>genealogical ancestry</em> as our siblings, <em>genetic ancestry</em> isn’t the same. We can think of our genetic ancestry in two ways - locally and globally. <strong>Local ancestry</strong> refers to inheriting a specific part of your genome from an ancestor of a particular category. <strong>Global ancestry</strong> looks across the whole genome and refers to inheriting a <em>proportion</em> of your genome from an ancestor of a particular category.</p>
 <p>There are difficulties to determining someone’s local and global ancestry. It is hard to figure out which ancestor you got each portion of your genome from, and you need good information about which ancestry categories those ancestors belonged to. Due to these challenges, the focus is more on which segments of your genome are <em>similar</em> to individuals from a specific category. There are still challenges with this, which include how to define “similarity”, at what level to define categories (Swedish vs Scandinavian vs European), and finding people from each category to compare your genome to. The two large classes of statistical methods that are used to infer genetic similarity are machine learning tools (including PCA, regression forests, and support vector machines) and model-based, biologically informed approaches (including bayesian methods, maximum likelihood estimation, and others).</p>
 <h2 id="the-genetic-ancestry-of-african-americans-latinos-and-european-americans-across-the-u.s.">The Genetic Ancestry of African Americans, Latinos, and European Americans across the U.S.</h2>
-<p>To learn more about genetic ancestry, we read a paper in class titled “The Genetic Ancestry of African Americans, Latinos, and European Americans Across the United States” published in 2015 and written by Katarzyna Bryc, Eric Y. Durand, Michael J. Macpherson, David Reich, and Joanna Mountain. This study looks at the genetic ancestry of 5,269 African-Americans, 8,663 Latinos, and 148,789 European Americans who are 23andMe customers and shows that historical interactions between the groups are present in the genetic-ancestry of Americans today. This paper was very dense, but I had a few main takeaways from it.</p>
+<p>To learn more about genetic ancestry, we read a paper in class titled “The Genetic Ancestry of African Americans, Latinos, and European Americans Across the United States” published in 2015 and written by Katarzyna Bryc, Eric Y. Durand, Michael J. Macpherson, David Reich, and Joanna Mountain. This study looks at the genetic ancestry of 5,269 African-Americans, 8,663 Latinos, and 148,789 European Americans who are 23andMe customers and shows that historical interactions between the groups are present in the genetic-ancestry of Americans today <span class="citation" data-cites="price_zaitlen_reich_patterson_2010">(<a href="#ref-price_zaitlen_reich_patterson_2010" role="doc-biblioref">Price et al. 2010</a>)</span>. This paper was very dense, but I had a few main takeaways from it.</p>
 <p>First, the authors used what they called “Ancestry Composition” which assigns ancestry labels to short local phased genomic regions and produces local ancestry proportions and confidence scores. This method provides ancestry proportions for several worldwide populations at each window the genome. If a window has a majority of a continental ancestry (&gt;51%), that window is counted in the number of windows inherited from the ancestry. So to estimate the proportion of a particular ancestry someone is, you divide the number of windows of that ancestry they have by the total number of windows studied.</p>
 <p>The authors also wanted to understand the time frame of admixture events, and to do so they used simple admixture models and grid search optimization. With this method and their ancestry composition method described above, they were able to come up with some interesting results. They were able to find differences in ancestry proportions between slave and free states and learned 1/5 of Africans have Native American ancestry. For the Latino group, they saw high levels of Iberian ancestry appear in areas of high Native American ancestry. Additionally, the noted that European ancestry not homogenous across US, which likely reflects immigration patterns of different ethnic groups.</p>
 <h2 id="genetic-ancestry-and-its-confounding-role-in-gwas">Genetic Ancestry and its confounding role in GWAS</h2>
@@ -2149,7 +2501,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <p>The number of the PC has some meaning to it - <span class="math inline">\(PC_1\)</span> is the component that explains the most variability in our data when all possible linear combinations are considered. In other words, it has the highest variance. <span class="math inline">\(PC_2\)</span> has the next highest variance, subject to the constraint of being orthogonal to, or uncorrelated with, <span class="math inline">\(PC_1\)</span>. Next is <span class="math inline">\(PC_3\)</span>, which is orthogonal to <span class="math inline">\(PC_2\)</span>, and so forth.</p>
 <p>Other important terminology related to PCs are scores and loadings. <strong>Loadings</strong> are the coefficients <span class="math inline">\(a_{11}, a_{22}\)</span>, etc, which represent the contribution of each of the original variables to the new PC. <strong>Scores</strong> are the values that PCs take when you multiply the loading <span class="math inline">\(a_{pp}\)</span> by the value at that SNP, <span class="math inline">\(x_p\)</span>.</p>
 <h2 id="running-pca-on-our-data">Running PCA on our data</h2>
-<p>To learn how to run PCA on our dataset, I largely followed <a href="https://www.bioconductor.org/packages/devel/bioc/vignettes/SNPRelate/inst/doc/SNPRelate.html">this tutorial</a> by Xiuwen Zheng from the Department of Biostatistics at the University of Washington – Seattle.</p>
+<p>To learn how to run PCA on our dataset, I largely followed <a href="https://www.bioconductor.org/packages/devel/bioc/vignettes/SNPRelate/inst/doc/SNPRelate.html">this tutorial</a> by Xiuwen Zheng from the Department of Biostatistics at the University of Washington – Seattle <span class="citation" data-cites="zheng">(<a href="#ref-zheng" role="doc-biblioref">Zheng, n.d.</a>)</span>.</p>
 <p>Start by loading necessary libraries. If you have trouble installing the SNPRelate package, make sure you follow how to do it exactly <a href="https://www.bioconductor.org/packages/devel/bioc/vignettes/SNPRelate/inst/doc/SNPRelate.html#installation-of-the-package-snprelate">as shown</a> in the tutorial.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
@@ -2298,12 +2650,12 @@ Excluding 0 SNP (monomorphic: TRUE, MAF: NaN, missing rate: NaN)
     # of principal components: 32
 PCA:    the sum of all selected genotypes (0,1,2) = 10950024
 CPU capabilities: Double-Precision SSE2
-Tue Dec  6 15:32:23 2022    (internal increment: 1508)
+Sat Dec 10 18:12:13 2022    (internal increment: 1508)
 
 [..................................................]  0%, ETC: ---        
 [==================================================] 100%, completed, 2s
-Tue Dec  6 15:32:25 2022    Begin (eigenvalues and eigenvectors)
-Tue Dec  6 15:32:25 2022    Done.</code></pre>
+Sat Dec 10 18:12:15 2022    Begin (eigenvalues and eigenvectors)
+Sat Dec 10 18:12:15 2022    Done.</code></pre>
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span><span class='co'># variance proportion (%)</span></span>
 <span><span class='va'>pc.percent</span> <span class='op'>&lt;-</span> <span class='va'>pca</span><span class='op'>$</span><span class='va'>varprop</span><span class='op'>*</span><span class='fl'>100</span></span>
@@ -2331,13 +2683,16 @@ Tue Dec  6 15:32:25 2022    Done.</code></pre>
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span><span class='fu'><a href='https://rdrr.io/r/base/load.html'>load</a></span><span class='op'>(</span><span class='st'>"/Users/erinfranke/Desktop/GWAStutorial-master/conversionTable.RData"</span><span class='op'>)</span></span>
 <span></span>
-<span><span class='va'>pathM</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='st'>"/Users/erinfranke/Desktop/GWAStutorial-master/public/Genomics/108Malay_2527458snps"</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>".bed"</span>, <span class='st'>".bim"</span>, <span class='st'>".fam"</span><span class='op'>)</span>, sep <span class='op'>=</span> <span class='st'>""</span><span class='op'>)</span></span>
+<span><span class='va'>pathM</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='st'>"/Users/erinfranke/Desktop/GWAStutorial-master/public/Genomics/108Malay_2527458snps"</span>, </span>
+<span>               <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>".bed"</span>, <span class='st'>".bim"</span>, <span class='st'>".fam"</span><span class='op'>)</span>, sep <span class='op'>=</span> <span class='st'>""</span><span class='op'>)</span></span>
 <span><span class='va'>SNP_M</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/snpStats/man/read.plink.html'>read.plink</a></span><span class='op'>(</span><span class='va'>pathM</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>]</span>, <span class='va'>pathM</span><span class='op'>[</span><span class='fl'>2</span><span class='op'>]</span>, <span class='va'>pathM</span><span class='op'>[</span><span class='fl'>3</span><span class='op'>]</span><span class='op'>)</span></span>
 <span></span>
-<span><span class='va'>pathI</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='st'>"/Users/erinfranke/Desktop/GWAStutorial-master/public/Genomics/105Indian_2527458snps"</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>".bed"</span>, <span class='st'>".bim"</span>, <span class='st'>".fam"</span><span class='op'>)</span>, sep <span class='op'>=</span> <span class='st'>""</span><span class='op'>)</span></span>
+<span><span class='va'>pathI</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='st'>"/Users/erinfranke/Desktop/GWAStutorial-master/public/Genomics/105Indian_2527458snps"</span>,</span>
+<span>               <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>".bed"</span>, <span class='st'>".bim"</span>, <span class='st'>".fam"</span><span class='op'>)</span>, sep <span class='op'>=</span> <span class='st'>""</span><span class='op'>)</span></span>
 <span><span class='va'>SNP_I</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/snpStats/man/read.plink.html'>read.plink</a></span><span class='op'>(</span><span class='va'>pathI</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>]</span>, <span class='va'>pathI</span><span class='op'>[</span><span class='fl'>2</span><span class='op'>]</span>, <span class='va'>pathI</span><span class='op'>[</span><span class='fl'>3</span><span class='op'>]</span><span class='op'>)</span></span>
 <span></span>
-<span><span class='va'>pathC</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='st'>"/Users/erinfranke/Desktop/GWAStutorial-master/public/Genomics/110Chinese_2527458snps"</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>".bed"</span>, <span class='st'>".bim"</span>, <span class='st'>".fam"</span><span class='op'>)</span>, sep <span class='op'>=</span> <span class='st'>""</span><span class='op'>)</span></span>
+<span><span class='va'>pathC</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste</a></span><span class='op'>(</span><span class='st'>"/Users/erinfranke/Desktop/GWAStutorial-master/public/Genomics/110Chinese_2527458snps"</span>, </span>
+<span>               <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>".bed"</span>, <span class='st'>".bim"</span>, <span class='st'>".fam"</span><span class='op'>)</span>, sep <span class='op'>=</span> <span class='st'>""</span><span class='op'>)</span></span>
 <span><span class='va'>SNP_C</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/pkg/snpStats/man/read.plink.html'>read.plink</a></span><span class='op'>(</span><span class='va'>pathC</span><span class='op'>[</span><span class='fl'>1</span><span class='op'>]</span>, <span class='va'>pathC</span><span class='op'>[</span><span class='fl'>2</span><span class='op'>]</span>, <span class='va'>pathC</span><span class='op'>[</span><span class='fl'>3</span><span class='op'>]</span><span class='op'>)</span></span></code></pre>
 </div>
 </div>
@@ -2389,8 +2744,7 @@ Tue Dec  6 15:32:25 2022    Done.</code></pre>
 <p><img src="pca_files/figure-html5/unnamed-chunk-10-1.png" width="624" /></p>
 </div>
 <h2 id="incorporating-pca-into-gwas">Incorporating PCA into GWAS</h2>
-<p>Having completed PCA, we can now incorporate PC1 and PC2 into our GWAS. This allows us to adjust for the confounding role that ancestry plays in identifying relationships between SNPs and the trait of interest.
-This is important because if I were to create a trait that is correlated with both population <em>and</em> a particular SNP, we would expect the p-value for that particular SNP to be significant and easily identifiable. However, when we don’t include the top PCs in our marginal regression models we may get additional SNPs that have significant p-values, specifically SNPs that differ the most in minor allele frequency between the three groups. Including PC1 and PC2 will better account for these ancestral differences and reduce the probability of <strong>spurious associations</strong> (2+ variables are associated but not causally related due to an unseen factor).</p>
+<p>Having completed PCA, we can now incorporate PC1 and PC2 into our GWAS. This allows us to adjust for the confounding role that ancestry plays in identifying relationships between SNPs and the trait of interest.This is important because if I were to create a trait that is correlated with both population <em>and</em> a particular SNP, we would expect the p-value for that particular SNP to be significant and easily identifiable. However, when we don’t include the top PCs in our marginal regression models we may get additional SNPs that have significant p-values, specifically SNPs that differ the most in minor allele frequency between the three groups. Including PC1 and PC2 will better account for these ancestral differences and reduce the probability of <strong>spurious associations</strong> (2+ variables are associated but not causally related due to an unseen factor).</p>
 <p>The first step to including principal components in our GWAS is to again convert the SnpMatrix to numeric and generate a trait based on the causal SNP.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
@@ -2407,17 +2761,20 @@ This is important because if I were to create a trait that is correlated with bo
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span><span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>494</span><span class='op'>)</span></span>
-<span><span class='va'>rbloggers_popSNP</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>cbind</a></span><span class='op'>(</span><span class='va'>rbloggers_fam</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>2</span><span class='op'>)</span>, trait <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span>n <span class='op'>=</span> <span class='fl'>108</span>, mean <span class='op'>=</span> <span class='fl'>0</span>, sd <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='fl'>105</span>, <span class='op'>-</span><span class='fl'>1</span>, sd <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='fl'>110</span>, <span class='fl'>1</span>, <span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span>, <span class='va'>y</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
+<span><span class='va'>rbloggers_popSNP</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/cbind.html'>cbind</a></span><span class='op'>(</span><span class='va'>rbloggers_fam</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span> <span class='fu'>dplyr</span><span class='fu'>::</span><span class='fu'><a href='https://dplyr.tidyverse.org/reference/select.html'>select</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fl'>2</span><span class='op'>)</span>, </span>
+<span>                          trait <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span>n <span class='op'>=</span> <span class='fl'>108</span>, mean <span class='op'>=</span> <span class='fl'>0</span>, sd <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='fl'>105</span>, <span class='op'>-</span><span class='fl'>1</span>, sd <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/stats/Normal.html'>rnorm</a></span><span class='op'>(</span><span class='fl'>110</span>, <span class='fl'>1</span>, <span class='fl'>1</span><span class='op'>)</span><span class='op'>)</span>, <span class='va'>y</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
 <span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/mutate.html'>mutate</a></span><span class='op'>(</span>trait <span class='op'>=</span> <span class='va'>trait</span> <span class='op'>+</span> <span class='va'>y</span><span class='op'>)</span></span>
 <span></span>
-<span><span class='fu'><a href='https://readr.tidyverse.org/reference/write_delim.html'>write_delim</a></span><span class='op'>(</span><span class='va'>rbloggers_popSNP</span>, <span class='st'>"/Users/erinfranke/Desktop/MACStats/Statistical Genetics/StatGenWillErin/rbloggersSep/rbloggers_popSNP"</span><span class='op'>)</span></span></code></pre>
+<span><span class='fu'><a href='https://readr.tidyverse.org/reference/write_delim.html'>write_delim</a></span><span class='op'>(</span><span class='va'>rbloggers_popSNP</span>, </span>
+<span>            <span class='st'>"/Users/erinfranke/Desktop/MACStats/Statistical Genetics/StatGenWillErin/rbloggersSep/rbloggers_popSNP"</span><span class='op'>)</span></span></code></pre>
 </div>
 </div>
 <p>To learn how to incorporate principal components in PLINK, I found <a href="http://sites.tufts.edu/cbi/files/2013/02/GWAS_Exercise6_Stratification.pdf">this set of exercises</a> from Tufts University.</p>
 <p>I started by running a GWAS in PLINK without PCs using the code <code>./plink --bfile rbloggersComb --assoc --pheno rbloggers_popSNP --maf 0.05 --out gwasNoPCA</code>. Next, I read the results into RStudio and created a QQ plot and got a lambda value. This lambda represents the <strong>genomic control (GC)</strong>, which measures the extent of inflation of association based test statistics due to population stratification or other confounders. A value of <span class="math inline">\(\lambda_{GC} \approx 1\)</span> indicates no stratification, while typically <span class="math inline">\(\lambda_{GC} &gt; 1.05\)</span> indicates stratification or other confounders including family structure, cryptic relatedness, or differential bias (spurious differences in allele frequencies between cases and controls due to differences in sample collection, sample preparation, and/or genotyping assay procedures). With a <span class="math inline">\(\lambda_{GC}\)</span> of 1.73 and the QQ plot not fitting the expected distribution, its clear that there is stratification in this data and our p-values are inflated. Hopefully PCA can help account for this.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>results_noPCA</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://readr.tidyverse.org/reference/read_table.html'>read_table</a></span><span class='op'>(</span><span class='st'>"/Users/erinfranke/Desktop/MACStats/Statistical Genetics/StatGenWillErin/rbloggersSep/gwasNoPCA.qassoc"</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>results_noPCA</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://readr.tidyverse.org/reference/read_table.html'>read_table</a></span><span class='op'>(</span></span>
+<span>  <span class='st'>"/Users/erinfranke/Desktop/MACStats/Statistical Genetics/StatGenWillErin/rbloggersSep/gwasNoPCA.qassoc"</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
 <span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/arrange.html'>arrange</a></span><span class='op'>(</span><span class='va'>P</span><span class='op'>)</span></span>
 <span></span>
 <span><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>results_noPCA</span><span class='op'>)</span></span></code></pre>
@@ -2451,14 +2808,17 @@ M11050407 M11050407 M11050407 -0.03566775 0.08688487
 M11070602 M11070602 M11070602 -0.03317120 0.08035539
 M11060912 M11060912 M11060912 -0.01784295 0.05161642
 M11060920 M11060920 M11060920 -0.02643969 0.05688225</code></pre>
+</div>
+<div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span><span class='fu'><a href='https://readr.tidyverse.org/reference/write_delim.html'>write_delim</a></span><span class='op'>(</span><span class='va'>pcs</span>, <span class='st'>"/Users/erinfranke/Desktop/MACStats/Statistical Genetics/StatGenWillErin/rbloggersSep/pcs"</span><span class='op'>)</span></span></code></pre>
 </div>
 </div>
-<p>Then, I ran <code>./plink --bfile rbloggersComb --assoc --covar pcs.txt --covar-name pc1, pc2 --pheno rbloggers_popSNP --out gwasPCA</code> in PLINK and read the results into RStudio below. We can see that the <span class="math inline">\(\lambda_{GC}\)</span> value went down from 1.73 to 1.61. This means that genetic ancestry did have some kind of confounding effect on the relationship between the SNPs and our trait of interest, so it is good we included them.</p>
+<p>Then, I ran <code>./plink --bfile rbloggersComb --assoc --covar pcs.txt --covar-name pc1, pc2 --pheno</code> <code>rbloggers_popSNP --out gwasPCA</code> in PLINK and read the results into RStudio below. We can see that the <span class="math inline">\(\lambda_{GC}\)</span> value went down from 1.73 to 1.61. This means that genetic ancestry did have some kind of confounding effect on the relationship between the SNPs and our trait of interest, so it is good we included them.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>results_PCA</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://readr.tidyverse.org/reference/read_table.html'>read_table</a></span><span class='op'>(</span><span class='st'>"/Users/erinfranke/Desktop/MACStats/Statistical Genetics/StatGenWillErin/rbloggersSep/gwasPCA.qassoc"</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
+<pre class="sourceCode r"><code class="sourceCode r"><span><span class='va'>results_PCA</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://readr.tidyverse.org/reference/read_table.html'>read_table</a></span><span class='op'>(</span></span>
+<span>  <span class='st'>"/Users/erinfranke/Desktop/MACStats/Statistical Genetics/StatGenWillErin/rbloggersSep/gwasPCA.qassoc"</span><span class='op'>)</span> <span class='op'><a href='https://magrittr.tidyverse.org/reference/pipe.html'>%&gt;%</a></span></span>
 <span>  <span class='fu'><a href='https://dplyr.tidyverse.org/reference/arrange.html'>arrange</a></span><span class='op'>(</span><span class='va'>P</span><span class='op'>)</span></span>
 <span><span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>results_PCA</span><span class='op'>)</span></span></code></pre>
 </div>
@@ -2474,12 +2834,20 @@ M11060920 M11060920 M11060920 -0.02643969 0.05688225</code></pre>
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span><span class='fu'><a href='https://rdrr.io/pkg/snpStats/man/qq.chisq.html'>qq.chisq</a></span><span class='op'>(</span><span class='op'>-</span><span class='fl'>2</span> <span class='op'>*</span> <span class='fu'><a href='https://rdrr.io/r/base/Log.html'>log</a></span><span class='op'>(</span><span class='va'>results_PCA</span><span class='op'>$</span><span class='va'>P</span><span class='op'>)</span>, df <span class='op'>=</span> <span class='fl'>2</span>, pvals <span class='op'>=</span> <span class='cn'>TRUE</span>, overdisp <span class='op'>=</span> <span class='cn'>FALSE</span>, thin <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>0.8</span>, <span class='fl'>1000</span><span class='op'>)</span><span class='op'>)</span></span></code></pre>
 </div>
-<p><img src="pca_files/figure-html5/unnamed-chunk-15-1.png" width="624" /></p>
+<p><img src="pca_files/figure-html5/unnamed-chunk-16-1.png" width="624" /></p>
 <pre><code>           N      omitted       lambda 
 1.651345e+06 0.000000e+00 1.613123e+00 </code></pre>
 </div>
-<p>One method to correct for inflated <span class="math inline">\(\lambda_{GC}\)</span> values is to divide association statistics by <span class="math inline">\(\lambda_{GC}\)</span>. This usually provides a sufficient correction for stratification in the case of <strong>genetic drift</strong>, meaning random fluctuations in allele frequencies over time due to sampling effects, particularly in small populations. However, in the case of <strong>ancient population divergence</strong> (when populations accumulate independent genetic mutations overtime time and become more different), dividing by <span class="math inline">\(\lambda_{GC}\)</span> is unlikely to be adequate because SNPs with unusual allele frequency differences that lie outside the expected distribution could be this way because of natural selection. Therefore, there need to be additional approaches to accounting for population stratification than dividing association statistics by <span class="math inline">\(\lambda_{GC}\)</span>. These approaches include PCA, but also family based association tests and perhaps most effectively mixed models with PC covariates. I won’t talk about these now but it is something I’m interested in looking more into in the future!</p>
+<p>One method to correct for inflated <span class="math inline">\(\lambda_{GC}\)</span> values is to divide association statistics by <span class="math inline">\(\lambda_{GC}\)</span>. This usually provides a sufficient correction for stratification in the case of <strong>genetic drift</strong>, meaning random fluctuations in allele frequencies over time due to sampling effects, particularly in small populations. However, in the case of <strong>ancient population divergence</strong> (when populations accumulate independent genetic mutations overtime time and become more different), dividing by <span class="math inline">\(\lambda_{GC}\)</span> is unlikely to be adequate because SNPs with unusual allele frequency differences that lie outside the expected distribution could be this way because of natural selection. Therefore, there need to be additional approaches to accounting for population stratification than just dividing association statistics by <span class="math inline">\(\lambda_{GC}\)</span>. These approaches include PCA, but also family based association tests and perhaps most effectively mixed models with PC covariates. I think mixed models with PC covariates would really help lower the <span class="math inline">\(\lambda_{GC}\)</span> value of this dataset as that proved the most effective method for accounting for population stratification in the paper, “New approaches to population stratification in genome-wide association studies” <span class="citation" data-cites="price_zaitlen_reich_patterson_2010">(<a href="#ref-price_zaitlen_reich_patterson_2010" role="doc-biblioref">Price et al. 2010</a>)</span>. I don’t know quite how to do this for genetic data yet but I am looking forward to learning more in the future!</p>
 <div class="sourceCode" id="cb14"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
+<div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography">
+<div id="ref-price_zaitlen_reich_patterson_2010" class="csl-entry" role="doc-biblioentry">
+Price, Alkes L., Noah A. Zaitlen, David Reich, and Nick Patterson. 2010. <span>“New Approaches to Population Stratification in Genome-Wide Association Studies.”</span> <em>Nature Reviews Genetics</em> 11 (7): 459–63. <a href="https://doi.org/10.1038/nrg2813">https://doi.org/10.1038/nrg2813</a>.
+</div>
+<div id="ref-zheng" class="csl-entry" role="doc-biblioentry">
+Zheng, Xiuwen. n.d. <span>“Tutorials for the r/Bioconductor Package SNPRelate.”</span> <em>Tutorials for the R/Bioconductor Package Snprelate</em>. <a href="https://www.bioconductor.org/packages/devel/bioc/vignettes/SNPRelate/inst/doc/SNPRelate.html">https://www.bioconductor.org/packages/devel/bioc/vignettes/SNPRelate/inst/doc/SNPRelate.html</a>.
+</div>
+</div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
 </div>
@@ -2500,7 +2868,10 @@ M11060920 M11060920 M11060920 -0.02643969 0.05688225</code></pre>
 <!--radix_placeholder_site_after_body-->
 <!--/radix_placeholder_site_after_body-->
 <!--radix_placeholder_appendices-->
-<div class="appendix-bottom"></div>
+<div class="appendix-bottom">
+<h3 id="references">References</h3>
+<div id="references-listing"></div>
+</div>
 <!--/radix_placeholder_appendices-->
 <!--radix_placeholder_navigation_after_body-->
 <!--/radix_placeholder_navigation_after_body-->

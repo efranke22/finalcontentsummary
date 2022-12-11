@@ -203,7 +203,7 @@ Had we ran the code above, we could plot the results in a similar matter as we d
 all.results %>%
   mutate(minuslogp = -log10(P.Value),
          chr = as.factor(chromosome)) %>%
-  ggplot(aes(x = chr, y = minuslogp, group = interaction(chr, position), color = chr)) + #interaction prevents chromosomes from overlapping
+  ggplot(aes(x = chr, y = minuslogp, group = interaction(chr, position), color = chr)) + 
   geom_point(position = position_dodge(0.8)) +
   scale_color_manual(values=natparks.pals("DeathValley",22))+
   labs(x = 'chromosome', y = expression(paste('-log'[10],'(p-value)')))+
@@ -236,7 +236,8 @@ I then selected the `pedigree` and `member` columns from the `rbloggers_fam` tab
 
 ```{r}
 set.seed(494)
-rbloggers_poptrait <- cbind(rbloggers_fam %>% select(1:2), trait = c(rnorm(n = 108, mean = 0, sd = 1), rnorm(105, -1, sd = 1), rnorm(110, 1, 1)))
+rbloggers_poptrait <- cbind(rbloggers_fam %>% select(1:2), 
+                            trait = c(rnorm(n = 108, mean = 0, sd = 1), rnorm(105, -1, sd = 1), rnorm(110, 1, 1)))
 
 head(rbloggers_poptrait)
 ```
@@ -252,7 +253,8 @@ In PLINK, I then ran the command `./plink --bfile rbloggersComb --assoc --adjust
 This command creates two files, one in which GWAS in ran without any adjustments (`as2.qassoc`) and one where it is ran with adjustments (`as2.qassoc.adjusted`). The file without adjustments returns a row for each of our original 2,527,458 SNPs. Monomorphic SNPs return a `NA` value for the information we care about (the t-statistic and p-value of the test). The file with adjustments removes all monomorphic SNPs from the data for us. It returns an unadjusted p-value for each SNP (`UNADJ`) and an adjusted p-value (`GC`). These p-values are quite different, as shown by the density plots below. 
 
 ```{r}
-rbloggersSep_adjusted <- read_table("/Users/erinfranke/Desktop/MACStats/Statistical Genetics/StatGenWillErin/rbloggersSep/as2.qassoc.adjusted")
+rbloggersSep_adjusted <- read_table(
+  "/Users/erinfranke/Desktop/MACStats/Statistical Genetics/StatGenWillErin/rbloggersSep/as2.qassoc.adjusted")
 head(rbloggersSep_adjusted)
 
 ggplot(rbloggersSep_adjusted, aes(x=UNADJ))+
