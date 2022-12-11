@@ -1,7 +1,7 @@
 ---
 title: "Welcome"
 description: |
-  This website represents a summary of what I have learned in Stat 494 Statistical Genetics!
+  This website was created by Erin Franke and represents a summary of what I have learned in Stat 494 Statistical Genetics!
 site: distill::distill_website
 ---
 
