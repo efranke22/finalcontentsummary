@@ -122,7 +122,7 @@ $$X\boldsymbol{\beta} = \begin{bmatrix}
 \beta_1 \\
 \end{bmatrix}$$
 
-Executing this multiplication, we just get $1 * \beta_0 = 0$. The is problematic because we have linear dependence. You can get the column of minor allele counts by multiplying the intercept column by 0 - in other words, the minor allele count column is a linear combination of the intercept column. This makes our design matrix not be full rank, making $X^TX$ not invertible and the least squares estimator not defined.
+This problematic because we have linear dependence. You can get the column of minor allele counts by multiplying the intercept column by 0 - in other words, the minor allele count column is a linear combination of the intercept column. This makes our design matrix not be full rank, making $X^TX$ not invertible and the least squares estimator not defined.
 
 Given all these reasons, we remove SNPs with a MAF of 0 using the code below.
 
